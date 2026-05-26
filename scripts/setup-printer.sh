@@ -42,7 +42,7 @@ resolve_printer_config() {
   if is_placeholder_uri "$PRINTER_URI"; then
     echo "[INFO] TEST_PRINTER_URI é placeholder — usando fallback cups-pdf para teste sem hardware"
     PRINTER_URI="cups-pdf:/"
-    PRINTER_DRIVER="cups-pdf"
+    PRINTER_DRIVER="lsb/usr/cups-pdf/CUPS-PDF_noopt.ppd"
   fi
 
   if [[ "$PRINTER_URI" == socket://* ]] && [[ "$PRINTER_DRIVER" == "everywhere" ]]; then

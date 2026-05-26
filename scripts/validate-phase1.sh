@@ -163,7 +163,7 @@ run_quick() {
   check_file_exists "docker-compose.yml" "required"
   check_file_exists ".env.example" "required"
   check_file_exists "cups/Dockerfile" "required"
-  check_file_exists "scripts/setup-printer.sh" "optional"
+  check_file_exists "scripts/setup-printer.sh" "required"
 
   check_env_example_keys
   check_allowed_network

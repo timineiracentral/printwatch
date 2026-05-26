@@ -156,7 +156,7 @@ docker compose exec cups lpstat -p "$PRINTER_NAME"
 **Fallback sem hardware (cups-pdf):**
 
 ```bash
-docker compose exec cups lpadmin -p test_printer -v cups-pdf:/ -m cups-pdf -E
+docker compose exec cups lpadmin -p test_printer -v cups-pdf:/ -m lsb/usr/cups-pdf/CUPS-PDF_noopt.ppd -E
 docker compose exec cups cupsaccept test_printer
 docker compose exec cups cupsenable test_printer
 ```

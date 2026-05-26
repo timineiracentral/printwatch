@@ -19,7 +19,7 @@
 
 - [x] **SERVER-01**: CUPS configurado como print server intermediário acessível via IPP na porta 631 pela faixa REDACTED_IP/16
 - [x] **SERVER-02**: `PageLogFormat` configurado explicitamente no `cupsd.conf` para garantir o formato esperado pelo parser
-- [ ] **SERVER-03**: Suporte a impressoras HP e Samsung conectadas por IP (protocolo IPP ou socket)
+- [x] **SERVER-03**: Suporte a impressoras HP e Samsung conectadas por IP (protocolo IPP ou socket)
 - [ ] **SERVER-04**: Interface para adicionar impressoras via URI (IPP, socket) com listagem de status (online/offline)
 
 ### Dashboard Web (DASH)
@@ -45,7 +45,7 @@
 ### Deploy e Configuração (DEPLOY)
 
 - [x] **DEPLOY-01**: Deploy reproduzível via `docker compose up -d` em Ubuntu 22.04 LTS
-- [ ] **DEPLOY-02**: Arquivo `.env.example` documenta todas as variáveis de ambiente configuráveis
+- [x] **DEPLOY-02**: Arquivo `.env.example` documenta todas as variáveis de ambiente configuráveis
 - [ ] **DEPLOY-03**: Script de setup configura o ambiente do zero (instala Docker, clona repositório, inicializa)
 - [ ] **DEPLOY-04**: Documentação de configuração dos clientes Windows (adicionar impressora IPP com URL `http://<ip-da-vm>:631/printers/<nome>`)
 

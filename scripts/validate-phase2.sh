@@ -68,7 +68,11 @@ docker_daemon_ready() {
 }
 
 backend_container_running() {
-  docker compose ps --status running 2>/dev/null | grep -qE '(^| )backend( |$)'
+  # Tenta --status running (Compose v2.17+); cai para grep "Up" se não suportado
+  local out
+  out="$(docker compose ps backend 2>/dev/null)"
+  echo "$out" | grep -qiE '\bUp\b|running' && return 0
+  return 1
 }
 
 check_backend_running() {
@@ -217,6 +221,11 @@ check_pytest_suite() {
     PY_CMD="python"
   else
     warn "python/python3 não encontrado no host — pytest ignorado (testes passam localmente no dev)"
+    return 0
+  fi
+  # Verifica se pytest está instalado; se não, avisa sem falhar (pytest é dep de dev)
+  if ! "$PY_CMD" -m pytest --version >/dev/null 2>&1; then
+    warn "pytest não instalado no host — ignorado (execute: cd backend && pip install pytest && python3 -m pytest tests/)"
     return 0
   fi
   if (

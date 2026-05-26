@@ -10,11 +10,14 @@ from watchdog.observers.inotify import InotifyObserver
 from app.core.config import settings
 from app.db.repository import PrintJobRepository
 from app.db.session import SessionLocal
+from app.services.retention import purge_old_jobs
 from app.services.tail_reader import TailReader
 from app.watcher.checkpoint import CheckpointRepository
 from app.watcher.handler import PageLogHandler
 
 logger = logging.getLogger(__name__)
+
+logging.basicConfig(level=logging.INFO)
 
 _observer: InotifyObserver | None = None
 
@@ -22,6 +25,17 @@ _observer: InotifyObserver | None = None
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     global _observer
+
+    session = SessionLocal()
+    try:
+        deleted = purge_old_jobs(session, settings.log_retention_days)
+        logger.info(
+            "startup purge: %d record(s) deleted (retention %d days)",
+            deleted,
+            settings.log_retention_days,
+        )
+    finally:
+        session.close()
 
     checkpoint_repo = CheckpointRepository(settings.log_path)
     tail_reader = TailReader(settings.log_path, checkpoint_repo)

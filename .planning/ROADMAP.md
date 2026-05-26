@@ -11,7 +11,7 @@
 | # | Fase | Goal | Requirements | Success Criteria |
 |---|------|------|--------------|-----------------|
 | 1 | Infrastructure & Print Server | VM Ubuntu + CUPS recebendo jobs IPP | SERVER-01, SERVER-02, SERVER-03, DEPLOY-01, DEPLOY-02 | ✓ Complete (2026-05-26) |
-| 2 | Log Pipeline & Data Layer | 5/5 | Complete   | 2026-05-26 |
+| 2 | Log Pipeline & Data Layer | Jobs capturados e persistidos no banco | CAPTURE-01, CAPTURE-02, CAPTURE-03, CAPTURE-04, DATA-01, DATA-02, DATA-03, EXTEND-01, EXTEND-02, EXTEND-03 | ✓ Complete (2026-05-26 — functional with known gaps) |
 | 3 | Backend API | API REST servindo dados com filtros | DASH-06 (performance), EXPORT-01, EXPORT-02 | 3 |
 | 4 | Dashboard Web | Interface completa para o admin de TI | DASH-01, DASH-02, DASH-03, DASH-04, DASH-05 | 4 |
 | 5 | Client Config & Hardening | PCs Windows integrados, deploy documentado | SERVER-04, DEPLOY-03, DEPLOY-04 | 4 |

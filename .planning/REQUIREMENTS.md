@@ -13,7 +13,7 @@
 - [x] **CAPTURE-01**: Sistema registra cada job de impressão contendo: `timestamp`, `username` (formato `DOMINIO\usuario` do AD), `printer`, `job_name`, `pages`, `copies`, `media`, `sides`, `color_mode` (quando disponível — HP/Samsung via CUPS), `host_origin` (IP ou hostname do cliente Windows)
 - [x] **CAPTURE-02**: Captura ocorre em tempo real — job aparece no dashboard em até 30 segundos após ser enviado pelo cliente Windows
 - [x] **CAPTURE-03**: Em caso de restart do serviço, o watcher retoma da última posição lida (sem duplicar nem perder registros)
-- [ ] **CAPTURE-04**: Se o serviço do dashboard/backend cair, a impressão física continua funcionando normalmente (CUPS é independente)
+- [x] **CAPTURE-04**: Se o serviço do dashboard/backend cair, a impressão física continua funcionando normalmente (CUPS é independente)
 
 ### Print Server (SERVER)
 
@@ -40,7 +40,7 @@
 
 - [ ] **DATA-01**: Logs retidos por no mínimo 1 ano por padrão (configurável via variável de ambiente `LOG_RETENTION_DAYS`)
 - [ ] **DATA-02**: Reiniciar a VM não perde nenhum log já registrado (volumes Docker persistentes)
-- [ ] **DATA-03**: Banco SQLite com permissões restritivas (600) — não acessível diretamente pela rede
+- [x] **DATA-03**: Banco SQLite com permissões restritivas (600) — não acessível diretamente pela rede
 
 ### Deploy e Configuração (DEPLOY)
 
@@ -53,7 +53,7 @@
 
 - [ ] **EXTEND-01**: Coluna `status` na tabela `print_jobs` (valores: `allowed`/`blocked`/`pending`) — sempre `allowed` no MVP, preparada para Fase 2
 - [ ] **EXTEND-02**: Tabela `policies` criada no banco desde o início (vazia no MVP)
-- [ ] **EXTEND-03**: Hook `pre_process_job(job_data)` no log_watcher que retorna `True` sempre no MVP — ponto de extensão para políticas na Fase 2
+- [x] **EXTEND-03**: Hook `pre_process_job(job_data)` no log_watcher que retorna `True` sempre no MVP — ponto de extensão para políticas na Fase 2
 
 ---
 

@@ -10,9 +10,9 @@
 
 ### Captura de Jobs (CAPTURE)
 
-- [ ] **CAPTURE-01**: Sistema registra cada job de impressão contendo: `timestamp`, `username` (formato `DOMINIO\usuario` do AD), `printer`, `job_name`, `pages`, `copies`, `media`, `sides`, `color_mode` (quando disponível — HP/Samsung via CUPS), `host_origin` (IP ou hostname do cliente Windows)
-- [ ] **CAPTURE-02**: Captura ocorre em tempo real — job aparece no dashboard em até 30 segundos após ser enviado pelo cliente Windows
-- [ ] **CAPTURE-03**: Em caso de restart do serviço, o watcher retoma da última posição lida (sem duplicar nem perder registros)
+- [x] **CAPTURE-01**: Sistema registra cada job de impressão contendo: `timestamp`, `username` (formato `DOMINIO\usuario` do AD), `printer`, `job_name`, `pages`, `copies`, `media`, `sides`, `color_mode` (quando disponível — HP/Samsung via CUPS), `host_origin` (IP ou hostname do cliente Windows)
+- [x] **CAPTURE-02**: Captura ocorre em tempo real — job aparece no dashboard em até 30 segundos após ser enviado pelo cliente Windows
+- [x] **CAPTURE-03**: Em caso de restart do serviço, o watcher retoma da última posição lida (sem duplicar nem perder registros)
 - [ ] **CAPTURE-04**: Se o serviço do dashboard/backend cair, a impressão física continua funcionando normalmente (CUPS é independente)
 
 ### Print Server (SERVER)

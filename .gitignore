@@ -1,3 +1,4 @@
+# Secrets — nunca versionar credenciais (D-19)
 .env
 .env.local
 .env.development.local
@@ -6,3 +7,42 @@
 .env.development
 .env.test
 .env.production
+*.pem
+*.key
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Python (Fase 2+)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Node (Fase 4+)
+node_modules/
+dist/
+build/
+
+# Docker local overrides
+docker-compose.override.yml
+
+# Runtime / logs locais
+*.log
+logs/
+
+# SQLite local (usar volume Docker em produção)
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE (config local, não compartilhada)
+.idea/
+.vscode/settings.json

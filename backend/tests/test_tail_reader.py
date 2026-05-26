@@ -1,9 +1,6 @@
 from __future__ import annotations
 
 import os
-from unittest.mock import patch
-
-import pytest
 
 from app.services.tail_reader import TailReader
 from tests.conftest import CaptureState, StubStateRepo

@@ -7,6 +7,8 @@ export LOG_RETENTION_DAYS="${LOG_RETENTION_DAYS:-90}"
 
 mkdir -p "$(dirname "$DB_PATH")"
 
+python -c "import app.db.session"  # noqa: F401 — create_all + ensure DB file exists
+
 if [[ -f "$DB_PATH" ]]; then
   chmod 600 "$DB_PATH"
 fi

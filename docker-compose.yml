@@ -1,5 +1,5 @@
-# PrintWatch — Docker Compose (Fase 1: somente CUPS)
-# D-01/D-02: backend, frontend e nginx entram nas Fases 2–4 — sem stubs ativos (D-03).
+# PrintWatch — Docker Compose (Fase 1: CUPS; Fase 2: backend)
+# D-01/D-02: frontend e nginx entram nas Fases 4–5 — sem stubs ativos (D-03).
 
 services:
   cups:
@@ -16,9 +16,23 @@ services:
       - cups_spool:/var/spool/cups
     restart: unless-stopped
 
-  # Fase 2+: backend (log-watcher + FastAPI; montará cups_logs:ro e db_data)
+  backend:
+    build: ./backend
+    env_file: .env
+    environment:
+      DB_PATH: ${DB_PATH:-/app/data/printwatch.db}
+      LOG_PATH: ${LOG_PATH:-/var/log/cups/page_log}
+      LOG_RETENTION_DAYS: ${LOG_RETENTION_DAYS:-90}
+    volumes:
+      - cups_logs:/var/log/cups:ro
+      - db_data:/app/data
+    restart: unless-stopped
+    depends_on:
+      - cups
+
   # Fase 4+: frontend + nginx (proxy :80 → dashboard + API)
 
 volumes:
   cups_logs:
   cups_spool:
+  db_data:

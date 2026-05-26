@@ -38,13 +38,14 @@
 4. Um job de teste enviado via IPP gera linha no `page_log` no formato esperado
 5. `.env.example` contém todas as variáveis necessárias com valores de exemplo
 
-**Plans:** 4 plans
+**Plans:** 5 plans
 
 Plans:
 - [x] 01-01-PLAN.md — Scaffold deploy: compose (só CUPS), .env.example, validate-phase1.sh Wave 0
 - [x] 01-02-PLAN.md — Container CUPS: Dockerfile, ACL REDACTED_IP/16, PageLogFormat, entrypoint
 - [x] 01-03-PLAN.md — setup-printer.sh idempotente + docs preparação VM (VM_HOST, printwatch)
-- [ ] 01-04-PLAN.md — Validação E2E: job local lp, page_log regex, checkpoint job remoto IPP
+- [ ] 01-04-PLAN.md — Validação E2E: job local lp, page_log regex, checkpoint job remoto IPP *(Tasks 1–2 ✓; Task 3 bloqueada — aguarda 01-05)*
+- [ ] 01-05-PLAN.md — **Deploy VM real:** SSH, Docker/Compose, bootstrap CUPS, rede/firewall, test_printer *(pré-requisito 01-04 Task 3)*
 
 ---
 

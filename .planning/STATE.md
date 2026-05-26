@@ -2,22 +2,28 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Executing
-last_updated: "2026-05-26T16:43:00.000Z"
+status: Blocked — VM deploy pending
+last_updated: "2026-05-26T17:30:00.000Z"
 progress:
   total_phases: 1
   completed_phases: 0
-  total_plans: 4
+  total_plans: 5
   completed_plans: 3
-  percent: 75
-current_plan: 4
+  percent: 60
+current_plan: 5
 current_phase: 01-infrastructure-print-server
+blocker:
+  id: B-01-04-VM
+  plan: "01-04"
+  task: 3
+  reason: "VM VM_HOST não provisionada — validação IPP remota impossível"
+  resolution_plan: "01-05"
 ---
 
 # STATE — PrintWatch
 
 **Última atualização:** 2026-05-26  
-**Fase atual:** Fase 1 — Infrastructure & Print Server (Plan 03 concluído)
+**Fase atual:** Fase 1 — bloqueada aguardando deploy VM real
 
 ---
 
@@ -25,14 +31,20 @@ current_phase: 01-infrastructure-print-server
 
 | Item | Status |
 |------|--------|
-| PROJECT.md | ✓ Criado |
-| config.json | ✓ Criado |
-| REQUIREMENTS.md | ✓ Criado (23 requisitos) |
-| ROADMAP.md | ✓ Criado (5 fases) |
 | Fase 1 Plan 01 | ✓ Scaffold deploy |
 | Fase 1 Plan 02 | ✓ Container CUPS |
 | Fase 1 Plan 03 | ✓ setup-printer + VM docs |
-| Próxima ação | Executar Plan 04 (validação E2E page_log) |
+| Fase 1 Plan 04 | ⏸ Parcial (2/3) — Task 3 bloqueada |
+| Fase 1 Plan 05 | ○ **Próximo** — Deploy VM VM_HOST |
+| Próxima ação | `/gsd-execute-phase 1` (executa 01-05) |
+
+---
+
+## Bloqueio ativo
+
+**ID:** B-01-04-VM  
+**Causa:** Trabalho até aqui foi local/dev. VM Ubuntu real sem Docker, CUPS ou impressora cadastrada.  
+**Resolução:** Plano 01-05 inserido — bootstrap VM → depois retomar 01-04 Task 3 (IPP Windows).
 
 ---
 
@@ -40,7 +52,7 @@ current_phase: 01-infrastructure-print-server
 
 | # | Nome | Status |
 |---|------|--------|
-| 1 | Infrastructure & Print Server | Em execução (3/4 plans) |
+| 1 | Infrastructure & Print Server | Em execução (3/5 plans; 1 parcial) |
 | 2 | Log Pipeline & Data Layer | Pendente |
 | 3 | Backend API | Pendente |
 | 4 | Dashboard Web | Pendente |
@@ -59,6 +71,7 @@ current_phase: 01-infrastructure-print-server
 - validate-phase1.sh WARN quando Docker offline — não FAIL
 - Fallback cups-pdf usa PPD lsb/usr/cups-pdf/CUPS-PDF_noopt.ppd
 - setup-printer detecta placeholder URI e aplica fallback automaticamente
+- **2026-05-26:** Deploy VM real (01-05) é pré-requisito explícito antes de validação IPP remota (01-04 Task 3)
 
 ## Performance Metrics
 
@@ -67,9 +80,10 @@ current_phase: 01-infrastructure-print-server
 | 01-01 | 8min | 3 | 3 |
 | 01-02 | 18min | 3 | 5 |
 | 01-03 | 28min | 3 | 5 |
+| 01-04 | — | 2/3 | 3 (parcial) |
 
 ## Session Continuity
 
-Last session: 2026-05-26T16:43:00.000Z
-Stopped at: Completed 01-03-PLAN.md
-Resume file: None
+Last session: 2026-05-26T17:30:00.000Z
+Stopped at: Checkpoint 01-04 Task 3 blocked — VM not provisioned
+Resume file: .planning/phases/01-infrastructure-print-server/.continue-here.md

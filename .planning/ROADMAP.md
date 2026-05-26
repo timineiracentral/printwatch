@@ -10,7 +10,7 @@
 
 | # | Fase | Goal | Requirements | Success Criteria |
 |---|------|------|--------------|-----------------|
-| 1 | Infrastructure & Print Server | VM configurada, CUPS capturando jobs | SERVER-01, SERVER-02, SERVER-03, DEPLOY-01, DEPLOY-02 | 5 |
+| 1 | Infrastructure & Print Server | 1/4 | In Progress|  |
 | 2 | Log Pipeline & Data Layer | Jobs capturados e persistidos no banco | CAPTURE-01, CAPTURE-02, CAPTURE-03, CAPTURE-04, DATA-01, DATA-02, DATA-03, EXTEND-01, EXTEND-02, EXTEND-03 | 4 |
 | 3 | Backend API | API REST servindo dados com filtros | DASH-06 (performance), EXPORT-01, EXPORT-02 | 3 |
 | 4 | Dashboard Web | Interface completa para o admin de TI | DASH-01, DASH-02, DASH-03, DASH-04, DASH-05 | 4 |
@@ -41,7 +41,7 @@
 **Plans:** 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Scaffold deploy: compose (só CUPS), .env.example, validate-phase1.sh Wave 0
+- [x] 01-01-PLAN.md — Scaffold deploy: compose (só CUPS), .env.example, validate-phase1.sh Wave 0
 - [ ] 01-02-PLAN.md — Container CUPS: Dockerfile, ACL REDACTED_IP/16, PageLogFormat, entrypoint
 - [ ] 01-03-PLAN.md — setup-printer.sh idempotente + docs preparação VM (VM_HOST, printwatch)
 - [ ] 01-04-PLAN.md — Validação E2E: job local lp, page_log regex, checkpoint job remoto IPP

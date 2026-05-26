@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-last_updated: "2026-05-26T20:10:00.000Z"
+last_updated: "2026-05-26T20:15:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 2
@@ -16,7 +16,7 @@ gaps_open: 2
 # STATE — PrintWatch
 
 **Última atualização:** 2026-05-26  
-**Fase atual:** Fase 2 completa (functional with known data-quality gaps) — próxima: Fase 3 (Backend API)
+**Fase atual:** Fase 3 (Backend API) — contexto capturado (`03-CONTEXT.md`), pronta para `/gsd-plan-phase 3`
 
 ---
 
@@ -34,7 +34,8 @@ gaps_open: 2
 | Fase 2 Plan 03 | ✓ Repository + watcher pipeline |
 | Fase 2 Plan 04 | ✓ Retention purge no startup |
 | Fase 2 Plan 05 | ✓ validate-phase2 + checkpoint humano (aprovado 2026-05-26) |
-| Próxima ação | `/gsd-discuss-phase 3` — Backend API |
+| Fase 3 Discussão | ✓ Contexto capturado (`03-CONTEXT.md` + `03-DISCUSSION-LOG.md`) — 2026-05-26 |
+| Próxima ação | `/gsd-plan-phase 3` — Backend API |
 
 ---
 
@@ -51,7 +52,7 @@ gaps_open: 2
 |---|------|--------|
 | 1 | Infrastructure & Print Server | ✓ Completa (5/5 plans) |
 | 2 | Log Pipeline & Data Layer | ✓ Completa (5/5 plans) — functional with known data-quality gaps |
-| 3 | Backend API | Pendente |
+| 3 | Backend API | Em planejamento — contexto capturado (D-01–D-34) |
 | 4 | Dashboard Web | Pendente |
 | 5 | Client Config & Hardening | Pendente |
 
@@ -81,6 +82,16 @@ gaps_open: 2
 - **2026-05-26:** Fase 2 aprovada (functional with known data-quality gaps): GAP-02-01 (parser printer quote) e GAP-02-02 (username sem domínio AD) registrados para resolver na Fase 3
 - **2026-05-26:** D-14 (`DOMAIN\usuario` no page_log) marcada para revisão — evidência atual mostra `user.example` sem domínio; investigar antes de alterar parser
 - **2026-05-26:** Incidente Windows Internet Print Provider (porta órfã `0x0000000d`) — não é bug do projeto, é estado local; runbook de troubleshooting na Fase 5
+- **2026-05-26 (Fase 3 discuss):** API agregada **por job** (não por página); chave de agregação `(printer_normalized, job_id, username, job_name, strftime('%Y-%m-%d %H:%M', timestamp))`; `pages = COUNT(*)`
+- **2026-05-26 (Fase 3 discuss):** Banco em **UTC**, API converte para **America/Sao_Paulo** apenas na serialização e na interpretação de `date_from`/`date_to`
+- **2026-05-26 (Fase 3 discuss):** CSV em **UTF-8 com BOM**, separador `;`, cabeçalhos pt-BR, `StreamingResponse`, cap 100k linhas
+- **2026-05-26 (Fase 3 discuss):** `/stats/summary` — "hoje"/"mês" em **calendário local** America/Sao_Paulo; top usuários/impressoras **por total de páginas** (default top=5); janelas hoje+mês+total
+- **2026-05-26 (Fase 3 discuss):** `/printers` via `DISTINCT printer FROM print_jobs` — sem acoplamento com runtime CUPS (online/offline → Fase 5 SERVER-04)
+- **2026-05-26 (Fase 3 discuss):** Prefixo de rotas **`/api/v1/*`** (versionado); Swagger habilitado em `/api/v1/docs`; CORS via env `ALLOWED_ORIGINS` (sem wildcard); manter `/healthz` e adicionar `/api/v1/health` com `db_reachable`+`watcher_alive`
+- **2026-05-26 (Fase 3 discuss):** GAP-02-01 **corrigir agora** — `normalize_printer_name()` no parser + backfill idempotente no SQLite + teste regressão
+- **2026-05-26 (Fase 3 discuss):** GAP-02-02 **investigação observacional primeiro** — coletar `access_log`, `page_log` bruto, `Get-PrintJob` IPP Windows; username AS-IS até evidência conclusiva; não bloqueia Fase 3
+- **2026-05-26 (Fase 3 discuss):** Índices SQLite via migration idempotente no `lifespan` startup (`CREATE INDEX IF NOT EXISTS`): `timestamp`, `(username, timestamp)`, `(printer, timestamp)`, `(job_id)` — sem índice funcional sobre `strftime` ainda
+- **2026-05-26 (Fase 3 discuss):** Reutilizar `PrintJobRepository` existente — **NÃO** criar segunda camada repository paralela; services simples + queries SQLAlchemy explícitas (modelo `app/services/retention.py`)
 
 ## Performance Metrics
 
@@ -106,6 +117,6 @@ gaps_open: 2
 
 ## Session Continuity
 
-Last session: 2026-05-26T20:10:00.000Z
-Stopped at: Fase 2 aprovada com gaps; pronto para `/gsd-discuss-phase 3`
-Resume file: .planning/phases/02-log-pipeline-data-layer/02-VERIFICATION.md
+Last session: 2026-05-26T20:15:00.000Z
+Stopped at: Fase 3 context capturado (D-01–D-34); pronto para `/gsd-plan-phase 3`
+Resume file: .planning/phases/03-backend-api/03-CONTEXT.md

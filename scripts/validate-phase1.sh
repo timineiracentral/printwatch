@@ -104,17 +104,71 @@ check_compose_single_service() {
   fi
 }
 
+docker_daemon_ready() {
+  command -v docker >/dev/null 2>&1 || return 1
+  docker info >/dev/null 2>&1
+}
+
+cups_container_running() {
+  docker compose ps --status running 2>/dev/null | grep -qE '(^| )cups( |$)'
+}
+
+check_cups_runtime() {
+  if ! docker_daemon_ready; then
+    warn "Docker offline — pulando checks de container (cupsd -t, :631, ACL)"
+    return
+  fi
+
+  if ! cups_container_running; then
+    warn "Container cups não está running — pulando checks de container"
+    return
+  fi
+
+  if docker compose exec -T cups cupsd -t >/dev/null 2>&1; then
+    pass "cupsd -t válido no container"
+  else
+    fail "cupsd -t falhou no container"
+  fi
+
+  if docker compose exec -T cups grep -q 'PageLogFormat "%p %u %j %T %P %C' /etc/cups/cupsd.conf 2>/dev/null; then
+    pass "PageLogFormat ativo em /etc/cups/cupsd.conf"
+  else
+    fail "PageLogFormat ausente ou vazio em cupsd.conf"
+  fi
+
+  local http_code
+  http_code="$(curl -sf -o /dev/null -w '%{http_code}' http://127.0.0.1:631/ 2>/dev/null || echo "000")"
+  if [[ "$http_code" == "200" ]]; then
+    pass "CUPS responde HTTP 200 em :631"
+  else
+    fail "CUPS não responde HTTP 200 em :631 (código: ${http_code})"
+  fi
+
+  if docker compose exec -T cups grep -q 'Allow from REDACTED_IP/16' /etc/cups/cupsd.conf 2>/dev/null; then
+    pass "ACL Allow from REDACTED_IP/16 presente em cupsd.conf"
+  else
+    fail "ACL REDACTED_IP/16 ausente em cupsd.conf"
+  fi
+
+  if docker compose exec -T cups grep -q '192.168.0.0/16' /etc/cups/cupsd.conf 2>/dev/null; then
+    fail "cupsd.conf contém range RFC1918 genérico 192.168.0.0/16 (D-06)"
+  else
+    pass "cupsd.conf sem range 192.168.0.0/16 (D-06)"
+  fi
+}
+
 run_quick() {
   echo "=== PrintWatch validate-phase1 (Wave 0 --quick) ==="
 
   check_file_exists "docker-compose.yml" "required"
   check_file_exists ".env.example" "required"
-  check_file_exists "cups/Dockerfile" "optional"
+  check_file_exists "cups/Dockerfile" "required"
   check_file_exists "scripts/setup-printer.sh" "optional"
 
   check_env_example_keys
   check_allowed_network
   check_compose_single_service
+  check_cups_runtime
 
   echo "=== Resumo: ${FAILURES} FAIL, ${WARNINGS} WARN ==="
   if [[ "$FAILURES" -gt 0 ]]; then

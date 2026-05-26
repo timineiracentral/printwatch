@@ -2,6 +2,8 @@
 
 Checklist operacional para preparar a VM Ubuntu 22.04 existente no XCP-ng e implantar o serviço CUPS da Fase 1.
 
+> **Deploy automatizado:** para a sequência completa na VM (SSH → clone → bootstrap → rede), use o **[Runbook de deploy](vm-deploy-runbook.md)** com `./scripts/bootstrap-vm.sh` e `./scripts/verify-vm-network.sh`. Este documento cobre **preparação manual** (hostname, netplan, passos equivalentes sem script).
+
 **Objetivo:** chegar a `docker compose up` → impressora cadastrada → fila CUPS pronta para jobs e `page_log`.
 
 ---
@@ -195,6 +197,7 @@ Conforme D-22, **não** incluir neste checklist:
 
 ## Referências
 
+- [vm-deploy-runbook.md](vm-deploy-runbook.md) — deploy automatizado na VM VM_HOST
 - [README.md](../README.md) — quick start
 - [.env.example](../.env.example) — variáveis documentadas (DEPLOY-02)
 - [SPEC.md](../SPEC.md) §3.1 — container CUPS e PageLogFormat

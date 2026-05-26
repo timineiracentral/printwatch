@@ -73,6 +73,15 @@ Plans:
 3. Com o container backend parado, um job enviado ao CUPS é impresso fisicamente sem erro
 4. VM reiniciada — todos os jobs anteriores estão no banco intactos
 
+**Plans:** 5 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Infra Docker backend + modelos SQLAlchemy (PrintJob, CaptureState, Policy) + docker-compose + .env.example
+- [ ] 02-02-PLAN.md — TDD: parser PAGE_LOG_REGEX + TailReader inode/offset com testes pytest
+- [ ] 02-03-PLAN.md — Repository INSERT idempotente + PageLogHandler + FastAPI lifespan watcher (pipeline end-to-end)
+- [ ] 02-04-PLAN.md — retention.py purge por LOG_RETENTION_DAYS + integração no lifespan startup
+- [ ] 02-05-PLAN.md — validate-phase2.sh Nyquist + checkpoint humano job Windows AD
+
 ---
 
 ## Fase 3: Backend API

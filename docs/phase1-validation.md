@@ -157,6 +157,32 @@ curl -s -o /dev/null -w "%{http_code}" http://VM_HOST:631/
 
 ---
 
+## Seção 5 — Troubleshooting: impressão física não sai
+
+Se o job remoto IPP aparece no `access_log` e no `page_log`, mas **nada imprime na impressora física**, verifique o URI **backend** (CUPS → impressora), não a URL do cliente Windows.
+
+| Camada | URI / URL correto |
+|--------|-------------------|
+| Cliente Windows → CUPS | `http://VM_HOST:631/printers/test_printer` |
+| CUPS → impressora física (`TEST_PRINTER_URI`) | `ipp://PRINTER_HOST:631/ipp/print` |
+
+**Sintoma:** `page_log` registra o job; `access_log` mostra `successful-ok`; papel não sai.
+
+**Causa comum:** `TEST_PRINTER_URI` sem porta explícita (ex.: `ipp://PRINTER_HOST/ipp/print`).
+
+**Correção na VM:**
+
+```bash
+# Editar .env: TEST_PRINTER_URI=ipp://<IP_IMPRESSORA>:631/ipp/print
+./scripts/setup-printer.sh
+# ou manualmente:
+docker compose exec cups lpadmin -p test_printer -v ipp://PRINTER_HOST:631/ipp/print -E
+```
+
+Reimprimir página de teste do Windows e confirmar saída física.
+
+---
+
 ## Referências
 
 - [scripts/validate-phase1.sh](../scripts/validate-phase1.sh) — suite automatizada

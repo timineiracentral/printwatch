@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready — 01-04 Task 3 IPP remoto
-last_updated: "2026-05-26T18:25:00.000Z"
+status: Phase 1 complete — ready for Phase 2
+last_updated: "2026-05-26T17:55:43.952Z"
 progress:
   total_phases: 1
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 5
-  completed_plans: 4
-  percent: 0
+  completed_plans: 5
+  percent: 100
 ---
 
 # STATE — PrintWatch
 
 **Última atualização:** 2026-05-26  
-**Fase atual:** Fase 1 — VM deploy concluído; retomar validação IPP remota (01-04 Task 3)
+**Fase atual:** Fase 1 completa — iniciar Fase 2 (Log Pipeline & Data Layer)
 
 ---
 
@@ -26,9 +26,9 @@ progress:
 | Fase 1 Plan 01 | ✓ Scaffold deploy |
 | Fase 1 Plan 02 | ✓ Container CUPS |
 | Fase 1 Plan 03 | ✓ setup-printer + VM docs |
-| Fase 1 Plan 04 | ⏸ Parcial (2/3) — Task 3 desbloqueada |
+| Fase 1 Plan 04 | ✓ Validação E2E (local + IPP remoto) |
 | Fase 1 Plan 05 | ✓ Deploy VM VM_HOST |
-| Próxima ação | Retomar 01-04 Task 3 — job remoto IPP Windows ([phase1-validation.md](../docs/phase1-validation.md) §2) |
+| Próxima ação | `/gsd-discuss-phase 2` ou `/gsd-plan-phase 2` |
 
 ---
 
@@ -43,7 +43,7 @@ progress:
 
 | # | Nome | Status |
 |---|------|--------|
-| 1 | Infrastructure & Print Server | Em execução (4/5 plans; 1 parcial) |
+| 1 | Infrastructure & Print Server | ✓ Completa (5/5 plans) |
 | 2 | Log Pipeline & Data Layer | Pendente |
 | 3 | Backend API | Pendente |
 | 4 | Dashboard Web | Pendente |
@@ -64,6 +64,8 @@ progress:
 - setup-printer detecta placeholder URI e aplica fallback automaticamente
 - **2026-05-26:** Deploy VM real (01-05) é pré-requisito explícito antes de validação IPP remota (01-04 Task 3)
 - **2026-05-26:** VM printwatch operacional — preferir Docker CE existente sobre apt docker.io (conflito containerd)
+- **2026-05-26:** TEST_PRINTER_URI backend deve usar porta :631 (`ipp://host:631/ipp/print`) para impressão física HP/Samsung
+- **2026-05-26:** Username IPP Windows registra como `DOMAIN\usuario` no page_log — formato D-14 válido
 
 ## Performance Metrics
 
@@ -72,11 +74,11 @@ progress:
 | 01-01 | 8min | 3 | 3 |
 | 01-02 | 18min | 3 | 5 |
 | 01-03 | 28min | 3 | 5 |
-| 01-04 | — | 2/3 | 3 (parcial) |
+| 01-04 | 45min | 3 | 3 |
 | 01-05 | 25min | 3 | 4 |
 
 ## Session Continuity
 
-Last session: 2026-05-26T18:25:00.000Z
-Stopped at: Completed 01-05 — resume 01-04 Task 3 (IPP Windows)
-Resume file: .planning/phases/01-infrastructure-print-server/.continue-here.md
+Last session: 2026-05-26T19:30:00.000Z
+Stopped at: Completed 01-04 — Fase 1 infra completa
+Resume file: None

@@ -109,6 +109,33 @@ Plans:
 3. `GET /stats/summary` retorna jobs e páginas de hoje, mês e top 5 usuários corretamente
 4. `GET /health` retorna 200 OK quando todos os serviços estão saudáveis
 
+**Plans:** 6 plans
+
+**Wave 1** *(paralela — sem dependências entre si)*
+
+Plans:
+- [ ] 03-01-PLAN.md — Infra rotas: CORS, docs_url=/api/v1/docs, get_db_dep, ensure_indexes no lifespan, expor porta 8000, watcher/status singleton Wave 1
+- [ ] 03-02-PLAN.md — GAP-02-01: normalize_printer_name (TDD) + parser fix + backfill script idempotente + investigação observacional Wave 1
+
+**Wave 2** *(paralela — todos dependem do Plan 01)*
+
+Plans:
+- [ ] 03-03-PLAN.md — Endpoints leitura: GET /api/v1/jobs (agregação D-04 + filtros + paginação), /jobs/{id}, /printers (DISTINCT — sem CUPS), /health (db+watcher) Wave 2
+- [ ] 03-04-PLAN.md — GET /api/v1/stats/summary: 3 buckets (hoje, mes, total) em América/Sao_Paulo; top-N por SUM(pages) reutilizando _build_aggregated_subquery Wave 2
+- [ ] 03-05-PLAN.md — GET /api/v1/export/csv: StreamingResponse + BOM UTF-8 + separador ; + cabeçalhos pt-BR + cap 100k + yield_per Wave 2
+
+**Wave 3** *(sequencial — depende de tudo)*
+
+Plans:
+- [ ] 03-06-PLAN.md — validate-phase3.sh (16 checks Nyquist + checkpoint humano #17) + investigação GAP-02-02 (username AD) + fechar gap no STATE Wave 3
+
+**Cross-cutting constraints** *(must_haves.truths em ≥2 plans)*
+
+- API agregada por job via `_build_aggregated_subquery` (D-04/D-05/D-11) — usado por Plans 03, 04, 05
+- Timezone America/Sao_Paulo apenas na borda HTTP (banco UTC) — Plans 03, 04, 05
+- Reutilizar `PrintJobRepository` existente; services simples — Plans 03, 04, 05 (D-31)
+- Sem novas dependências em `backend/requirements.txt` — Plans 01–06
+
 ---
 
 ## Fase 4: Dashboard Web

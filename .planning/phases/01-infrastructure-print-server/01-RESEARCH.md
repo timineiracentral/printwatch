@@ -489,22 +489,19 @@ TEST_PRINTER_DRIVER=everywhere
 | A4 | Container bridge Docker alcança impressoras na LAN REDACTED_LAN | Architecture | Pode precisar `network_mode: host` — validar na VM |
 | A5 | `@SYSTEM` inclui usuário criado em `lpadmin` | Pattern 5 | Admin web pode falhar autenticação |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Impressora física disponível para teste?**
-   - What we know: HP ou Samsung por IP (D-12)
-   - What's unclear: IP/URI exato e suporte IPP Everywhere
-   - Recommendation: parametrizar no `.env`; fallback `cups-pdf` para CI/sanidade local
+   - **Resolução:** Parametrizar `TEST_PRINTER_URI` no `.env`. Fallback `printer-driver-cups-pdf` / fila `cups-pdf` para sanidade local sem hardware. Job remoto IPP (D-13 modo 2) continua **obrigatório** no gate da fase — requer impressora real ou fila IPP acessível na LAN REDACTED_LAN.
+   - **Decisão locked:** Plan 03 usa fallback cups-pdf para dev; Plan 04 checkpoint exige job remoto IPP antes de fechar fase.
 
 2. **Docker bridge vs host network para alcançar impressoras?**
-   - What we know: Impressoras na mesma LAN REDACTED_LAN
-   - What's unclear: Routing XCP-ng → container → impressora
-   - Recommendation: default bridge; escalar para `network_mode: host` só se `lpadmin`/job falhar por rota
+   - **Resolução:** Default **bridge** (`ports: 631:631`). Escalar para `network_mode: host` **somente** se jobs falharem por rota container→impressora na VM XCP-ng (documentar no SUMMARY se aplicado).
+   - **Decisão locked:** Não usar host network na Fase 1 salvo falha comprovada na validação.
 
 3. **Formato exato do username no job Windows real**
-   - What we know: D-14 exige `DOMINIO\usuario`; PROJECT.md marca risco alto
-   - What's unclear: Comportamento com IPP Class Driver vs driver vendor
-   - Recommendation: documentar resultado observado; normalização fica Fase 2
+   - **Resolução:** D-14 exige `DOMINIO\usuario` como critério ideal. Se Windows enviar formato diferente, **anotar no SUMMARY da Plan 04** e aceitar gate com username presente (não vazio) — normalização completa fica Fase 2.
+   - **Decisão locked:** Job remoto obrigatório; formato exato de username é observável/documentável, não bloqueia fase se linha page_log existir com user não-vazio.
 
 ## Environment Availability
 

@@ -11,7 +11,7 @@
 | # | Fase | Goal | Requirements | Success Criteria |
 |---|------|------|--------------|-----------------|
 | 1 | Infrastructure & Print Server | VM Ubuntu + CUPS recebendo jobs IPP | SERVER-01, SERVER-02, SERVER-03, DEPLOY-01, DEPLOY-02 | ✓ Complete (2026-05-26) |
-| 2 | Log Pipeline & Data Layer | 3/5 | In Progress|  |
+| 2 | Log Pipeline & Data Layer | 5/5 | Complete   | 2026-05-26 |
 | 3 | Backend API | API REST servindo dados com filtros | DASH-06 (performance), EXPORT-01, EXPORT-02 | 3 |
 | 4 | Dashboard Web | Interface completa para o admin de TI | DASH-01, DASH-02, DASH-03, DASH-04, DASH-05 | 4 |
 | 5 | Client Config & Hardening | PCs Windows integrados, deploy documentado | SERVER-04, DEPLOY-03, DEPLOY-04 | 4 |
@@ -80,7 +80,7 @@ Plans:
 - [x] 02-02-PLAN.md — TDD: parser PAGE_LOG_REGEX + TailReader inode/offset com testes pytest
 - [x] 02-03-PLAN.md — Repository INSERT idempotente + PageLogHandler + FastAPI lifespan watcher (pipeline end-to-end)
 - [x] 02-04-PLAN.md — retention.py purge por LOG_RETENTION_DAYS + integração no lifespan startup
-- [ ] 02-05-PLAN.md — validate-phase2.sh Nyquist + checkpoint humano job Windows AD
+- [x] 02-05-PLAN.md — validate-phase2.sh Nyquist + checkpoint humano job Windows AD
 
 ---
 

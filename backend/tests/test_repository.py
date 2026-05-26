@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
-from sqlalchemy.pool import NullPool
+from sqlalchemy.pool import StaticPool
 
 from app.db import models  # noqa: F401
 from app.db.base import Base
@@ -17,7 +17,7 @@ from app.db.repository import PrintJobRepository
 def engine_in_memory():
     engine = create_engine(
         "sqlite:///:memory:",
-        poolclass=NullPool,
+        poolclass=StaticPool,
         connect_args={"check_same_thread": False},
     )
     Base.metadata.create_all(engine)

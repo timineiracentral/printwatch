@@ -79,7 +79,7 @@ Plans:
 - [x] 02-01-PLAN.md — Infra Docker backend + modelos SQLAlchemy (PrintJob, CaptureState, Policy) + docker-compose + .env.example
 - [x] 02-02-PLAN.md — TDD: parser PAGE_LOG_REGEX + TailReader inode/offset com testes pytest
 - [x] 02-03-PLAN.md — Repository INSERT idempotente + PageLogHandler + FastAPI lifespan watcher (pipeline end-to-end)
-- [ ] 02-04-PLAN.md — retention.py purge por LOG_RETENTION_DAYS + integração no lifespan startup
+- [x] 02-04-PLAN.md — retention.py purge por LOG_RETENTION_DAYS + integração no lifespan startup
 - [ ] 02-05-PLAN.md — validate-phase2.sh Nyquist + checkpoint humano job Windows AD
 
 ---

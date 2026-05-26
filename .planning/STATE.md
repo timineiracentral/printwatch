@@ -3,19 +3,19 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: milestone_complete
-last_updated: "2026-05-26T20:22:00.000Z"
+last_updated: "2026-05-26T21:18:00.000Z"
 progress:
   total_phases: 2
   completed_phases: 1
   total_plans: 10
-  completed_plans: 7
-  percent: 70
+  completed_plans: 8
+  percent: 80
 ---
 
 # STATE — PrintWatch
 
 **Última atualização:** 2026-05-26  
-**Fase atual:** Fase 2 em progresso (3/5 plans) — Log Pipeline & Data Layer
+**Fase atual:** Fase 2 em progresso (4/5 plans) — Log Pipeline & Data Layer
 
 ---
 
@@ -31,7 +31,8 @@ progress:
 | Fase 2 Plan 01 | ✓ Backend + SQLite |
 | Fase 2 Plan 02 | ✓ Parser + TailReader TDD |
 | Fase 2 Plan 03 | ✓ Repository + watcher pipeline |
-| Próxima ação | Executar 02-04 (retention) |
+| Fase 2 Plan 04 | ✓ Retention purge no startup |
+| Próxima ação | Executar 02-05 (validate-phase2) |
 
 ---
 
@@ -47,7 +48,7 @@ progress:
 | # | Nome | Status |
 |---|------|--------|
 | 1 | Infrastructure & Print Server | ✓ Completa (5/5 plans) |
-| 2 | Log Pipeline & Data Layer | Em progresso (3/5) |
+| 2 | Log Pipeline & Data Layer | Em progresso (4/5) |
 | 3 | Backend API | Pendente |
 | 4 | Dashboard Web | Pendente |
 | 5 | Client Config & Hardening | Pendente |
@@ -73,6 +74,8 @@ progress:
 - **2026-05-26:** Parser retorna None para linhas fora do PAGE_LOG_REGEX (nunca propaga ao banco)
 - **2026-05-26:** Pipeline end-to-end: InotifyObserver em /var/log/cups + filtro page_log + INSERT idempotente
 - **2026-05-26:** /healthz expõe watcher alive para probe Docker (exceção D-12)
+- **2026-05-26:** purge_old_jobs no lifespan com cutoff UTC; LOG_RETENTION_DAYS default 90
+- **2026-05-26:** logging.basicConfig(INFO) para logs de purge/watcher no docker compose
 
 ## Performance Metrics
 
@@ -86,9 +89,10 @@ progress:
 | 02-01 | 18min | 2 | 14 |
 | 02-02 | 12min | 2 | 9 |
 | 02-03 | 22min | 2 | 7 |
+| 02-04 | 18min | 2 | 3 |
 
 ## Session Continuity
 
-Last session: 2026-05-26T20:22:00.000Z
-Stopped at: Completed 02-03-PLAN.md
-Resume file: .planning/phases/02-log-pipeline-data-layer/02-03-SUMMARY.md
+Last session: 2026-05-26T21:18:00.000Z
+Stopped at: Completed 02-04-PLAN.md
+Resume file: .planning/phases/02-log-pipeline-data-layer/02-04-SUMMARY.md

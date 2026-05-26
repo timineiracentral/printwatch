@@ -38,8 +38,8 @@
 
 ### Retenção e Persistência (DATA)
 
-- [ ] **DATA-01**: Logs retidos por no mínimo 1 ano por padrão (configurável via variável de ambiente `LOG_RETENTION_DAYS`)
-- [ ] **DATA-02**: Reiniciar a VM não perde nenhum log já registrado (volumes Docker persistentes)
+- [x] **DATA-01**: Logs retidos por no mínimo 1 ano por padrão (configurável via variável de ambiente `LOG_RETENTION_DAYS`)
+- [x] **DATA-02**: Reiniciar a VM não perde nenhum log já registrado (volumes Docker persistentes)
 - [x] **DATA-03**: Banco SQLite com permissões restritivas (600) — não acessível diretamente pela rede
 
 ### Deploy e Configuração (DEPLOY)

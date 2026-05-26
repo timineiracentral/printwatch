@@ -198,3 +198,4 @@ Conforme D-22, **não** incluir neste checklist:
 - [README.md](../README.md) — quick start
 - [.env.example](../.env.example) — variáveis documentadas (DEPLOY-02)
 - [SPEC.md](../SPEC.md) §3.1 — container CUPS e PageLogFormat
+- [docs/phase1-validation.md](phase1-validation.md) — validação E2E job local + IPP remoto (D-13, D-14)

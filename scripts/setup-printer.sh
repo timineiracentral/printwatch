@@ -89,6 +89,12 @@ fi
 
 cupsaccept \"\${PRINTER_NAME}\"
 cupsenable \"\${PRINTER_NAME}\"
+
+# PPD Samsung/HP costuma default Gray — força cor em filas com hardware real.
+if [[ \"\${PRINTER_URI}\" != cups-pdf:* ]]; then
+  lpoptions -p \"\${PRINTER_NAME}\" -o ColorModel=Color -o print-color-mode=color 2>/dev/null || true
+fi
+
 lpstat -p \"\${PRINTER_NAME}\"
 "
 }
@@ -99,6 +105,9 @@ main() {
   ensure_cups_running
   run_lpadmin_idempotent
   echo "[OK] Impressora ${PRINTER_NAME} pronta (URI: ${PRINTER_URI})"
+  if [[ "${PRINTER_URI}" != cups-pdf:* ]]; then
+    echo "[INFO] Padrão de fila: ColorModel=Color (impressão colorida)"
+  fi
 }
 
 main "$@"

@@ -8,6 +8,7 @@ from app.api.v1 import (
     jobs,
     printers,
     stats,
+    users,
 )
 
 api_v1_router = APIRouter()
@@ -19,6 +20,7 @@ api_v1_router.include_router(
 api_v1_router.include_router(
     departments.router, prefix="/departments", tags=["departments"]
 )
+api_v1_router.include_router(users.router, prefix="/users", tags=["users"])
 api_v1_router.include_router(stats.router, prefix="/stats", tags=["stats"])
 api_v1_router.include_router(export.router, prefix="/export", tags=["export"])
 api_v1_router.include_router(health.router, prefix="/health", tags=["health"])

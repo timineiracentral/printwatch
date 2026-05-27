@@ -27,3 +27,12 @@ def get_db() -> Generator[Session, None, None]:
         yield db
     finally:
         db.close()
+
+
+def get_db_dep() -> Generator[Session, None, None]:
+    """Generator para FastAPI Depends() — injeta Session em endpoints."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

@@ -4,6 +4,8 @@ import re
 from datetime import datetime
 from typing import Any, Optional
 
+from app.services.normalization import normalize_printer_name
+
 PAGE_LOG_REGEX = re.compile(
     r"^(\S+)\s+(\S+)\s+(\d+)\s+\[(.+?)\]\s+total\s+(\d+)\s+(\S+)\s+(\S+)\s+(.+?)\s+(\S+)\s+(\S+)$"
 )
@@ -19,7 +21,7 @@ def parse_page_log_line(line: str) -> Optional[dict[str, Any]]:
     if m is None:
         return None
     return {
-        "printer": m.group(1),
+        "printer": normalize_printer_name(m.group(1)),
         "username": m.group(2),
         "job_id": int(m.group(3)),
         "timestamp": datetime.strptime(m.group(4), "%d/%b/%Y:%H:%M:%S %z"),

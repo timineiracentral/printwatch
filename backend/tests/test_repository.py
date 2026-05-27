@@ -41,7 +41,7 @@ def repo() -> PrintJobRepository:
 def sample_job() -> dict:
     return {
         "printer": "test_printer",
-        "username": "DOMAIN\usuario",
+        "username": "DOMAIN\\usuario",
         "job_id": 42,
         "timestamp": datetime(2026, 5, 26, 14, 30, 0, tzinfo=timezone.utc),
         "pages": 3,

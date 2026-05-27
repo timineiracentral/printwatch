@@ -1,5 +1,8 @@
 import { AppShell } from './components/layout/AppShell'
 import { PageHeader } from './components/layout/PageHeader'
+import { FilterBar } from './components/filters/FilterBar'
+import { JobsPagination } from './components/jobs/JobsPagination'
+import { JobsTable } from './components/jobs/JobsTable'
 import { SummaryCards } from './components/summary/SummaryCards'
 import { Button } from './components/ui/Button'
 
@@ -17,11 +20,13 @@ export default function App() {
         />
       }
     >
-      <div className="flex flex-col gap-6">
+      <div className="flex min-h-0 flex-1 flex-col gap-6">
         <SummaryCards />
-        <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 text-sm text-[var(--text-secondary)]">
-          Filtros e tabela serão adicionados no próximo passo.
-        </div>
+        <FilterBar />
+        <section className="flex min-h-[480px] flex-1 flex-col gap-3">
+          <JobsTable />
+          <JobsPagination />
+        </section>
       </div>
     </AppShell>
   )

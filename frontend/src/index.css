@@ -48,4 +48,21 @@ body {
   .skeleton-pulse {
     animation: none;
   }
+
+  .table-progress-indeterminate {
+    animation: none;
+  }
+}
+
+@keyframes table-progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+.table-progress-indeterminate {
+  animation: table-progress-indeterminate 1.2s ease-in-out infinite;
 }

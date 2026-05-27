@@ -11,7 +11,7 @@ progress:
   total_plans: 23
   completed_plans: 24
   percent: 25
-stopped_at: Phase 5 complete — Phase 5.2 scoped (ACCESS-01–05)
+stopped_at: Phase 5.2 context gathered — ready to plan
 ---
 
 # STATE — PrintWatch
@@ -24,9 +24,9 @@ stopped_at: Phase 5 complete — Phase 5.2 scoped (ACCESS-01–05)
 
 ## Current Position
 
-**Phase:** 5.2 (scoped) → 6
+**Phase:** 5.2
 **Plan:** Not started
-**Status:** Phase 5 complete; 5.2 requirements captured  
+**Status:** Context gathered — ready for `/gsd-plan-phase 5.2`  
 **Last activity:** 2026-05-27
 
 ---
@@ -46,7 +46,7 @@ See: `.planning/PROJECT.md`
 | Fase | Nome | Status |
 |------|------|--------|
 | 5 | Master Data & Organization | ✅ Complete (7/7 plans) |
-| 5.2 | User–Printer Access Policy | 📋 Scoped (ACCESS-01–05) |
+| 5.2 | User–Printer Access Policy | ✅ Context (ACCESS-01–05) |
 | 6 | Costing & Chargeback | 📋 Scoped |
 | 7 | Manager Analytics | 📋 Scoped |
 | 8 | Fleet Health & Toner | 📋 Scoped |
@@ -55,12 +55,8 @@ See: `.planning/PROJECT.md`
 
 ## Próxima ação
 
-1. `/gsd-discuss-phase 5.2` ou `/gsd-plan-phase 5.2` — ACCESS policy
-2. `/gsd-plan-phase 6` — após 5.2
-
-## Pending Todos
-
-- Política de acesso usuário–impressora (Fase 5.2) — `.planning/todos/pending/2026-05-27-user-printer-access-policy-phase-5-2.md`
+1. `/gsd-plan-phase 5.2` — gerar plans (contexto em `phases/05-2-user-printer-access-policy/05.2-CONTEXT.md`)
+2. `/gsd-plan-phase 6` — após 5.2 executada
 
 ---
 
@@ -87,13 +83,14 @@ Archives: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`
 - `normalize_printer_name` em módulo compartilhado
 - Sem auth v1.5; nginx basic auth futuro sem refactor app
 
-## Decisões Fase 5.2 (política de acesso — 2026-05-27)
+## Decisões Fase 5.2 (context 2026-05-27)
 
-- Permissão N:N User ↔ Printer (`user_printer_access`), não por departamento
-- Modelo permissivo: sem atribuição ou job fora da lista não bloqueia impressão
-- 1 fila CUPS : 1 impressora registry; escolha no Windows IPP; PrintWatch audita fila
-- Export roteiro TI; flag read-only outside_policy em jobs/export
-- Bloqueio CUPS → v2.5 POLICY
+- Escrita só na ficha usuário; impressora read-only + links
+- Atribuições ilimitadas; multi-select pesquisável; uso recente no topo
+- Export TI: CSV + imprimível, mesmo dataset (8 campos)
+- outside_policy: badge discreto + filtro + coluna opcional; regra estrita
+- Só unmapped-queues; labels Fila detectada/mapeada/não cadastrada
+- Ver `phases/05-2-user-printer-access-policy/05.2-CONTEXT.md` (D-01–D-34)
 
 ---
 

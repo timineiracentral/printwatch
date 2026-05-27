@@ -82,10 +82,10 @@
 
 ### Costing (COST) — Fase 6
 
-- [ ] **COST-01**: Admin can configure global cost per page for monochrome and color
-- [ ] **COST-02**: System calculates estimated job cost from page count, color mode, and active rates
+- [x] **COST-01**: Admin can configure global cost per page for monochrome and color
+- [x] **COST-02**: System calculates estimated job cost from page count, color mode, and active rates
 - [ ] **COST-03**: API exposes cost fields on job list and detail when rates configured
-- [ ] **COST-04**: Stats endpoint supports aggregation of cost by department, user, and cost center
+- [x] **COST-04**: Stats endpoint supports aggregation of cost by department, user, and cost center
 
 ### Chargeback (CHRG) — Fase 6
 
@@ -272,7 +272,8 @@ PrintJob ──audit──> printer_id + username ──soft match──> policy
 | DATA-04 – DATA-07 | 5 | Pending |
 | SERVER-04 | 5 | Complete |
 | ACCESS-01 – ACCESS-05 | 5.2 | Pending |
-| COST-01 – COST-04 | 6 | Pending |
+| COST-01, COST-02, COST-04 | 6 | Complete |
+| COST-03, CHRG-01 – CHRG-04 | 6 | Pending |
 | CHRG-01 – CHRG-04 | 6 | Pending |
 | ANAL-01 – ANAL-05 | 7 | Pending |
 | FLEET-01 – FLEET-05 | 8 | Pending |

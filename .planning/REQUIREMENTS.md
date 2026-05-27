@@ -54,10 +54,10 @@
 
 ### Data & Schema (DATA)
 
-- [ ] **DATA-04**: Alembic migrations manage new tables: `printers`, `departments`, `cost_centers`, `users`
-- [ ] **DATA-05**: `print_jobs.printer_id` nullable FK added without breaking existing ingest
-- [ ] **DATA-06**: SQLite WAL mode enabled for concurrent reads during backfill (if not already)
-- [ ] **DATA-07**: Schema supports soft-delete (`is_active`) on master data entities
+- [x] **DATA-04**: Alembic migrations manage new tables: `printers`, `departments`, `cost_centers`, `users`
+- [x] **DATA-05**: `print_jobs.printer_id` nullable FK added without breaking existing ingest
+- [x] **DATA-06**: SQLite WAL mode enabled for concurrent reads during backfill (if not already)
+- [x] **DATA-07**: Schema supports soft-delete (`is_active`) on master data entities
 
 ### Server (SERVER) — deferred from v1.0
 

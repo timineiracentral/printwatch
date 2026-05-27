@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Management Platform
 status: executing
-last_updated: "2026-05-27T21:45:00.000Z"
-last_activity: 2026-05-27 — executed 06-03
+last_updated: "2026-05-27T23:10:00.000Z"
+last_activity: 2026-05-27 — executed 06-05
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 17
-  completed_plans: 17
-  percent: 94
+  completed_phases: 3
+  total_plans: 22
+  completed_plans: 22
+  percent: 100
 ---
 
 # STATE — PrintWatch
@@ -23,12 +23,12 @@ progress:
 
 ## Current Position
 
-Phase: 06 (costing-chargeback) — EXECUTING
+Phase: 06 (costing-chargeback) — COMPLETE
 Plan: 5 of 5
 **Phase:** 6
-**Plan:** 06-05 next (Settings Tarifas + UI jobs custo/correção)
-**Status:** Plan 06-03 complete — `06-03-SUMMARY.md`
-**Last activity:** 2026-05-27 — executed 06-03
+**Plan:** 06-05 complete — `06-05-SUMMARY.md`
+**Status:** All plans executed; ready for phase verification
+**Last activity:** 2026-05-27 — executed 06-05
 
 ---
 
@@ -48,7 +48,7 @@ See: `.planning/PROJECT.md`
 |------|------|--------|
 | 5 | Master Data & Organization | ✅ Complete (7/7 plans) |
 | 5.2 | User–Printer Access Policy | ✅ Executed (5/5 plans) — UAT pendente |
-| 6 | Costing & Chargeback | 🔄 Executing (4/5 plans) |
+| 6 | Costing & Chargeback | ✅ Complete (5/5 plans) |
 | 7 | Manager Analytics | 📋 Scoped |
 | 8 | Fleet Health & Toner | 📋 Scoped |
 
@@ -56,8 +56,9 @@ See: `.planning/PROJECT.md`
 
 ## Próxima ação
 
-1. Executar plano **06-05** — Settings Tarifas + coluna custo Jobs + correção manual UI
+1. Verificar fase 06 (`/gsd-verify-work` ou UAT costing)
 2. UAT Fase 5.2 em `05.2-HUMAN-UAT.md` (se ainda pendente)
+3. Planejar/executar Fase 07 Manager Analytics
 
 ---
 
@@ -97,9 +98,9 @@ Archives: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`
 
 ## Session Continuity
 
-Last session: 2026-05-27T21:45:00.000Z
-Stopped at: Completed 06-03-PLAN.md
-Resume: Execute 06-05-PLAN.md
+Last session: 2026-05-27T23:10:00.000Z
+Stopped at: Completed 06-05-PLAN.md
+Resume: Phase 06 verification or Phase 07 planning
 
 ## Performance Metrics
 
@@ -114,6 +115,8 @@ Resume: Execute 06-05-PLAN.md
 | Phase 06-costing-chargeback P01 | 25min | 3 tasks | 8 files |
 | Phase 06-costing-chargeback P02 | 35min | 2 tasks | 6 files |
 | Phase 06-costing-chargeback P03 | 25min | 3 tasks | 6 files |
+| Phase 06-costing-chargeback P04 | 25min | 2 tasks | 3 files |
+| Phase 06-costing-chargeback P05 | 35min | 3 tasks | 13 files |
 
 ## Decisions
 
@@ -129,3 +132,6 @@ Resume: Execute 06-05-PLAN.md
 - [Phase 06 Plan 02]: cost_service rate_at/line_cost; API /cost-rates; stats_service sem custo
 - [Phase 06 Plan 03]: JobOut billable/custo; GET/PATCH /jobs/lines; PATCH color_mode_source=manual
 - [Phase 06 Plan 04]: chargeback CSV CC/dept; default mês corrente; buckets via aggregate_cost_by_dimension
+- [Phase 06 Plan 05]: Exports chargeback na JobsPage para herdar filtros URL de período
+- [Phase 06 Plan 05]: Toggle custo em localStorage printwatch.showCostColumn (default false)
+- [Phase 06 Plan 05]: CostRatesPage /settings/cost-rates; ColorModeCorrectionModal para linhas pendentes

@@ -110,7 +110,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 **Goal:** Tarifas mono/color configuráveis; custo estimado por job; relatórios e export CSV de chargeback interno por departamento e centro de custo.
 
 **Requirements:** COST-01–04, CHRG-01–04  
-**Plans:** 4/5 plans executed (06-01 ✅, 06-02 ✅, 06-03 ✅, 06-04 ✅)
+**Plans:** 5/5 plans complete
 
 | Wave | Plans | Entrega |
 |------|-------|---------|
@@ -174,7 +174,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
 | 5 | v1.5 | 7/7 | Complete    | 2026-05-27 |
 | 5.2 | v1.5 | 5/5 | Planned | 2026-05-27 |
-| 6 | v1.5 | 8 | 1/5 | Executing |
+| 6 | v1.5 | 5/5 | Complete   | 2026-05-27 |
 | 7 | v1.5 | 5 | — | Scoped |
 | 8 | v1.5 | 9 | — | Scoped |
 

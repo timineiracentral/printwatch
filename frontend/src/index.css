@@ -29,3 +29,23 @@ body {
   background-color: var(--bg-canvas);
   color: var(--text-primary);
 }
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skeleton-pulse {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-pulse {
+    animation: none;
+  }
+}

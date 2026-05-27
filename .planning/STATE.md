@@ -86,9 +86,9 @@ Archives: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`
 
 ## Session Continuity
 
-Last session: 2026-05-27T15:18:28.263Z
-Stopped at: Completed 05-03-PLAN.md
-Resume: Execute 05-04-PLAN.md
+Last session: 2026-05-27T17:35:00.000Z
+Stopped at: Completed 05-06-PLAN.md
+Resume: Execute 05-07-PLAN.md
 
 ## Performance Metrics
 
@@ -98,6 +98,7 @@ Resume: Execute 05-04-PLAN.md
 | Phase 05-master-data-organization P02 | 15min | 2 tasks | 6 files |
 | Phase 05-master-data-organization P03 | 20min | 2 tasks | 6 files |
 | Phase 05-master-data-organization P05 | 25min | 2 tasks | 7 files |
+| Phase 05-master-data-organization P06 | 35min | 2 tasks | 8 files |
 
 ## Decisions
 
@@ -106,3 +107,5 @@ Resume: Execute 05-04-PLAN.md
 - [Phase 05-master-data-organization]: Registry /api/v1/printers substitui DISTINCT legado; unmapped-queues para onboarding D-12
 - [Phase 05 Plan 05]: printer_matcher isolado do watcher; batch 500 + loop 60s
 - [Phase 05 Plan 05]: on-save via BackgroundTasks com SessionLocal própria
+- [Phase 05 Plan 06]: CSV import strict=false partial commit; strict=true rollback total
+- [Phase 05 Plan 06]: Templates CSV downloadáveis; upsert por natural key com relatório por linha

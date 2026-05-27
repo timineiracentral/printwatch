@@ -19,7 +19,7 @@ component: backend/app/services/parser.py
 Jobs gravados no banco mostram campo `printer` com aspa dupla no início:
 
 ```
-2026-05-26 19:58:49 | felipe.jardim | "test_printer | Página de teste | pages=0 | status=allowed
+2026-05-26 19:58:49 | user.example | "test_printer | Página de teste | pages=0 | status=allowed
 ```
 
 Esperado: `printer = test_printer` (sem aspa).
@@ -85,7 +85,7 @@ VM_HOST capturada e anexada à investigação.
 - `backend/tests/test_parser.py::test_parser_strips_printer_quote_regression_gap_02_01`
   — teste de regressão com a linha bruta capturada do page_log real.
 
-**Estado final do DB observado (VM VM_HOST):**
+**Estado final do DB observado (VM_HOST):**
 
 | Item | Antes | Depois |
 |---|---|---|

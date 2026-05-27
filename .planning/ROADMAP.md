@@ -150,6 +150,8 @@ Plans:
 - DASH-03: Tabela paginada com todos os jobs, colunas: Data/Hora, Usuário, Impressora, Arquivo, Páginas, Papel, Origem
 - DASH-04: Filtros: date range, usuário, impressora
 - DASH-05: Busca por nome de arquivo
+- DASH-06: Dashboard carrega em < 2s com até 50.000 registros (paginação server-side + índices Fase 3)
+- EXPORT-01: Botão exportar CSV com filtros ativos
 
 **Success Criteria:**
 1. Dashboard abre em < 2 segundos em browser na rede local apuntando para `http://<ip-vm>`
@@ -157,6 +159,29 @@ Plans:
 3. Filtro por usuário + impressora retorna apenas os jobs correspondentes na tabela
 4. Busca por nome de arquivo parcial retorna resultados corretos
 5. Botão exportar CSV com filtros ativos faz download do arquivo correto
+
+**Plans:** 7 plans
+
+**Wave 1** *(sequencial — infra walking skeleton)*
+
+Plans:
+- [ ] 04-01-PLAN.md — Scaffold Vite React-TS + Tailwind v4 + Vitest libs (filters, dates, media)
+
+**Wave 2** *(paralela — 04-02, 04-03 e 04-07 dependem de 04-01)*
+
+Plans:
+- [ ] 04-07-PLAN.md — nginx :80 + docker-compose + validate-phase4.sh Wave 0 (DASH-01 infra)
+- [ ] 04-02-PLAN.md — API client, tipos Pydantic, hooks TanStack Query, URL filters, debounce
+- [ ] 04-03-PLAN.md — Shell AppShell/Sidebar + primitivos UI Apple/PaperCut
+
+**Wave 3** *(04-04 → 04-05 sequencial; 04-06 após ambos)*
+
+Plans:
+- [ ] 04-04-PLAN.md — SummaryCards DASH-02 via stats/summary
+- [ ] 04-05-PLAN.md — FilterBar + JobsTable + paginação server-side *(blocked on 04-04 — App.tsx)*
+- [ ] 04-06-PLAN.md — Export CSV + validate completo + checkpoint humano (EXPORT-01)
+
+**Cross-cutting:** Decisões D-01..D-67 em `04-CONTEXT.md`; contratos API Fase 3; sem React Router/MUI/auth/charts.
 
 ---
 

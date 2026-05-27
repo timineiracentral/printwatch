@@ -755,14 +755,14 @@ export function PrinterCombobox({
 | A3 | `VITE_API_BASE_URL` vazio → `/api/v1` relativo | API client | Dev sem proxy precisa env explícita |
 | A4 | Vitest para Wave 0 tests | Validation | Planner escolhe runner se diferente |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Backend `ports: 8000` no compose hoje?**
-   - What we know: Fase 3 CONTEXT pediu exposição para curl; Fase 4 D-56 sugere remover do host.
-   - Recommendation: Remover `ports` do backend; manter acesso interno `backend:8000`; documentar `docker compose exec` para debug.
+1. **Backend `ports: 8000` no compose hoje?** — **RESOLVED**
+   - **Decisão:** Remover `ports: 8000:8000` do serviço `backend` ao adicionar nginx (D-56). API acessível via `http://localhost/api/v1/*` (nginx) ou `docker compose exec backend curl http://127.0.0.1:8000/api/v1/health` para debug direto.
+   - **Rationale:** Única porta pública do dashboard é :80; evita expor API sem proxy em produção.
 
-2. **Inter vs system font**
-   - Discretion D-05 — default system stack per UI-SPEC.
+2. **Inter vs system font** — **RESOLVED**
+   - **Decisão:** System font stack per D-05 / UI-SPEC (`system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`). Inter **não** adicionar no MVP.
 
 ## Environment Availability
 

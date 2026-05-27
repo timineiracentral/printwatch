@@ -2,21 +2,21 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in_progress
-last_updated: "2026-05-26T20:15:00.000Z"
+status: Ready to execute
+stopped_at: Phase 4 UI-SPEC approved
+last_updated: "2026-05-27T13:27:29.606Z"
 progress:
-  total_phases: 5
+  total_phases: 4
   completed_phases: 2
-  total_plans: 10
+  total_plans: 23
   completed_plans: 10
-  percent: 40
-gaps_open: 0
+  percent: 43
 ---
 
 # STATE — PrintWatch
 
 **Última atualização:** 2026-05-27  
-**Fase atual:** Fase 3 (Backend API) — Wave 2 entregue; Plan 03-06 em andamento (validate + GAP-02-02 fechado)
+**Fase atual:** Fase 4 (Dashboard Web) — planejada; pronta para execução
 
 ---
 
@@ -38,7 +38,10 @@ gaps_open: 0
 | Fase 3 Pesquisa | ✓ `03-RESEARCH.md` (FastAPI 0.136 + SQLAlchemy 2.0 + Pydantic 2.13 via context7 MCP) — 2026-05-26 |
 | Fase 3 Planejamento | ✓ 6 plans em 3 waves (`03-01..03-06-PLAN.md`) — 2026-05-26 |
 | Fase 3 execução | Wave 1–2 concluídas; `validate-phase3.sh --quick` OK na VM; GAP-02-02 investigado e fechado (03-06) |
-| Próxima ação | Checkpoint humano #17 + `03-VERIFICATION.md`; depois fechar Fase 3 |
+| Fase 4 Discussão | ✓ Contexto capturado (`04-CONTEXT.md` + `04-DISCUSSION-LOG.md`) — 2026-05-27 |
+| Fase 4 UI-SPEC | ✓ `04-UI-SPEC.md` aprovado (6/6 dimensões) — 2026-05-27 |
+| Fase 4 Planejamento | ✓ 6 plans em 3 waves (`04-01..04-06-PLAN.md`) — 2026-05-27 |
+| Próxima ação | `/gsd-execute-phase 4` |
 
 ---
 
@@ -56,7 +59,7 @@ gaps_open: 0
 | 1 | Infrastructure & Print Server | ✓ Completa (5/5 plans) |
 | 2 | Log Pipeline & Data Layer | ✓ Completa (5/5 plans) — functional with known data-quality gaps |
 | 3 | Backend API | Planejada — 6 plans em 3 waves (Wave 1: 01 infra + 02 GAP-01; Wave 2: 03 jobs/printers/health + 04 stats + 05 export csv; Wave 3: 06 validate + GAP-02) |
-| 4 | Dashboard Web | Pendente |
+| 4 | Dashboard Web | Discussão ✓ + UI-SPEC ✓ — pronto para planejar |
 | 5 | Client Config & Hardening | Pendente |
 
 ---
@@ -97,6 +100,7 @@ gaps_open: 0
 - **2026-05-26 (Fase 3 discuss):** Reutilizar `PrintJobRepository` existente — **NÃO** criar segunda camada repository paralela; services simples + queries SQLAlchemy explícitas (modelo `app/services/retention.py`)
 - **2026-05-26 (Fase 3 plan):** Estrutura final: 6 plans em 3 waves; Wave 1 paralela = infra rotas (01) + GAP-02-01 (02); Wave 2 paralela = jobs/printers/health (03) + stats (04) + export csv (05); Wave 3 sequencial = validate-phase3 + investigação GAP-02-02 (06)
 - **2026-05-26 (Fase 3 plan):** Sem deps novas em requirements.txt — FastAPI 0.136.3 + SQLAlchemy 2.0.50 + Pydantic 2.13.4 cobrem CORS, StreamingResponse, Generic[T], yield_per nativamente; CSV é escrita manual (sem pandas)
+- **2026-05-27 (Fase 4 discuss):** Visual Apple HIG + acento PaperCut `#00AE5B`; cards = jobs/páginas hoje + top mês (`mes.top_*[0]` com "Nome — N páginas"); presets Hoje/7d/Mês + date custom; impressora = dropdown `/printers` exato; tabela ~40px semi-compact; nginx :80 nesta fase; `formatMediaLabel` mapa local; stack React+Vite+TS+Tailwind+TanStack Query; sem charts/auth/TLS/websocket
 
 ## Performance Metrics
 
@@ -124,6 +128,6 @@ Nenhum gap aberto (`gaps_open: 0`).
 
 ## Session Continuity
 
-Last session: 2026-05-26T20:55:00.000Z
-Stopped at: Fase 3 planejamento concluído (6 plans, RESEARCH + 6 PLANs commitados); próximo passo `/gsd-execute-phase 3`
-Resume file: .planning/phases/03-backend-api/03-01-PLAN.md
+Last session: 2026-05-27T12:00:00.000Z
+Stopped at: Phase 4 UI-SPEC approved
+Resume file: .planning/phases/04-dashboard-web/04-UI-SPEC.md

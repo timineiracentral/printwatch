@@ -1,7 +1,8 @@
 # ROADMAP — PrintWatch
 
 **Projeto:** PrintWatch — gestão e auditoria de impressão self-hosted  
-**Milestone ativa:** v1.5 Management Platform (planejamento)
+**Milestone ativa:** v1.5 Management Platform  
+**Última atualização:** 2026-05-27
 
 ---
 
@@ -10,16 +11,16 @@
 | Versão | Nome | Fases | Status | Arquivo |
 |--------|------|-------|--------|---------|
 | **v1.0** | Audit Platform | 1–4 | ✅ Shipped 2026-05-27 | [milestones/v1.0-ROADMAP.md](milestones/v1.0-ROADMAP.md) |
-| **v1.5** | Management Platform | 5+ | 📋 Planejamento | — |
+| **v1.5** | Management Platform | 5–8 | 📋 Planejamento | este arquivo |
 | **v2.0** | Operations & Insights | TBD | 📋 Futuro | — |
 | **v3.0** | Production & Control | TBD | 📋 Futuro | — |
 
 ---
 
-## ✅ v1.0 Audit Platform (SHIPPED 2026-05-27)
+## ✅ v1.0 Audit Platform (SHIPPED)
 
 <details>
-<summary>Fases 1–4 — auditoria de impressão ponta-a-ponta</summary>
+<summary>Fases 1–4</summary>
 
 | # | Fase | Plans | Concluída |
 |---|------|-------|-----------|
@@ -28,54 +29,113 @@
 | 3 | Backend API | 6/6 | 2026-05-27 |
 | 4 | Dashboard Web | 7/7 | 2026-05-27 |
 
-**Entregue:** CUPS → watcher → SQLite → API `/api/v1` → dashboard React (filtros, stats, CSV).
-
-Requisitos arquivados: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
+Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 
 </details>
 
 ---
 
-## 📋 v1.5 Management Platform (próxima)
+## 📋 v1.5 Management Platform
 
-**Promessa:** Cadastro de impressoras e organização (departamentos/usuários), custos por página mono/color, analytics por departamento e base para inventário operacional.
+**Promessa:** Cadastro operacional (impressoras, departamentos, usuários, centros de custo), custos e chargeback interno, analytics gerencial e saúde da frota — mantendo captura append-only e impressão sempre disponível.
 
-**Não inclui nesta milestone:** LDAP, cotas/bloqueio ativo, deploy/hardening final (v3.0).
+**Princípios:** Monólito · SQLite · Docker Compose · PaperCut-like ops · sem overengineering
 
-### Direção das fases (rascunho — detalhar via `/gsd-new-milestone`)
+**Research:** `.planning/research/SUMMARY.md`  
+**Requirements:** `.planning/REQUIREMENTS.md` (47 REQ)
 
-| # | Fase (provisória) | Foco |
-|---|-------------------|------|
-| 5 | Master Data & Organization | CRUD impressoras, departamentos, usuários; backfill `printer_id` |
-| 6 | Costing & Chargeback | Tarifas mono/color; stats/export por dept/usuário |
-| 7 | Manager Analytics | Dashboard gerencial; insights de consumo |
-| 8 | Fleet Health & Toner | Status online/offline; SNMP toner (opt-in) |
+---
 
-**Requisitos herdados da antiga Fase 5:** SERVER-04 → Fase 5; DEPLOY-03/04 → milestone v3.0.
+### Phase 5: Master Data & Organization
 
-**Próximo passo:** `/gsd-new-milestone` → requirements v1.5 → redesign completo do roadmap.
+**Goal:** Admin cadastra impressoras, departamentos, centros de custo e usuários; importa CSV; jobs históricos e novos vinculam a `printer_id` sem alterar o hot path do watcher.
+
+**Requirements:** ORG-01–09, INV-01–06, IMPORT-01–05, SETTINGS-01–04, DATA-04–07, SERVER-04  
+**Plans:** 0 (aguardando discussão arquitetural + `/gsd-plan-phase 5`)
+
+**Success criteria:**
+1. Admin CRUD completo para printers, departments, cost-centers, users via Settings UI
+2. CSV import com validação por linha e templates downloadáveis
+3. `printer_id` preenchido em jobs novos (matcher) e backfill executável para histórico
+4. Watcher e impressão física inalterados quando backend/settings indisponíveis
+5. Audit dashboard (jobs) permanece funcional com nova navegação Settings
+6. CC e Department gerenciados como entidades independentes
+
+**Discussão:** `.planning/phases/05-master-data-organization/05-CONTEXT.md`
+
+---
+
+### Phase 6: Costing & Chargeback
+
+**Goal:** Tarifas mono/color configuráveis; custo estimado por job; relatórios e export CSV de chargeback interno por departamento e centro de custo.
+
+**Requirements:** COST-01–04, CHRG-01–04
+
+**Success criteria:**
+1. Admin define tarifa global mono e color
+2. Lista de jobs exibe custo estimado quando rates configurados
+3. Export chargeback CSV por CC e por departamento com split mono/color
+4. Bucket "não atribuído" visível para jobs/usuários sem cadastro
+5. Nenhuma geração de fatura ou integração contábil
+
+---
+
+### Phase 7: Manager Analytics
+
+**Goal:** Dashboard gerencial com consumo, custo, rankings e comparação período a período.
+
+**Requirements:** ANAL-01–05
+
+**Success criteria:**
+1. Rota `/manager` com cards de período (páginas + custo)
+2. Top 10 usuários, impressoras e departamentos
+3. Comparativo vs período anterior
+4. Carregamento < 3s para janela de 90 dias (dataset típico)
+5. Separado do audit jobs table
+
+---
+
+### Phase 8: Fleet Health & Toner
+
+**Goal:** Status online/offline por impressora (CUPS/IPP → ping); toner SNMP opt-in como telemetria.
+
+**Requirements:** FLEET-01–05, TONER-01–04
+
+**Success criteria:**
+1. Fleet overview com status e última verificação
+2. Checker em background — falha não afeta captura/API core
+3. Status primário via CUPS/IPP; fallback ping IP
+4. Toner % por impressora com SNMP habilitado
+5. Sem módulo de estoque de consumíveis
 
 ---
 
 ## Progress
 
-| Fase | Milestone | Plans | Status | Completed |
-|------|-----------|-------|--------|-----------|
-| 1. Infrastructure & Print Server | v1.0 | 5/5 | Complete | 2026-05-26 |
-| 2. Log Pipeline & Data Layer | v1.0 | 5/5 | Complete | 2026-05-26 |
-| 3. Backend API | v1.0 | 6/6 | Complete | 2026-05-27 |
-| 4. Dashboard Web | v1.0 | 7/7 | Complete | 2026-05-27 |
-| 5+. Management Platform | v1.5 | — | Not started | — |
+| Fase | Milestone | REQ | Plans | Status |
+|------|-----------|-----|-------|--------|
+| 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
+| 5 | v1.5 | 28 | — | 📋 Requirements ✓ — arch discuss |
+| 6 | v1.5 | 8 | — | Scoped |
+| 7 | v1.5 | 5 | — | Scoped |
+| 8 | v1.5 | 9 | — | Scoped |
 
 ---
 
-## Fora de escopo (v1.5 inicial)
+## Fora de escopo (v1.5)
 
-- Microserviços / message bus
-- PostgreSQL (reavaliar só com evidência de escala)
-- Paridade completa PaperCut (chargeback contábil, follow-me, driver store)
-- Multi-site / agentes remotos
+- Microserviços, PostgreSQL, LDAP, auth, cotas com bloqueio
+- Faturamento contábil, estoque de toner
+- DEPLOY-03/04 → v3.0
+- Paridade PaperCut enterprise
 
 ---
 
-*Última atualização: 2026-05-27 — milestone v1.0 encerrada*
+## Próximos passos
+
+1. **Discussão arquitetural Fase 5** — `05-CONTEXT.md` (agora)
+2. `/gsd-discuss-phase 5` — opcional, formaliza decisões
+3. `/gsd-plan-phase 5` — **somente após** arquitetura aprovada
+
+---
+*Roadmap v1.5 — 2026-05-27*

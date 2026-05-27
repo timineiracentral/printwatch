@@ -1,18 +1,42 @@
 # PrintWatch — Project Context
 
-**Versão:** 1.5 (em planejamento)  
-**Última milestone:** v1.0 Audit Platform — shipped 2026-05-27  
-**Status:** Brownfield — plataforma de auditoria operacional; evoluindo para gestão
+**Versão:** 1.5 (planejamento)  
+**Milestone ativa:** v1.5 Management Platform  
+**Última milestone shipped:** v1.0 Audit Platform — 2026-05-27  
+**Status:** Brownfield — evoluindo de auditoria para gestão operacional
 
 ---
 
 ## What This Is
 
-PrintWatch é um sistema self-hosted de **auditoria e gestão de impressão**. Atua como print server intermediário (CUPS): jobs passam pela VM, são registrados em SQLite e expostos via API e dashboard na rede local.
+PrintWatch é um sistema self-hosted de **auditoria e gestão de impressão**. Atua como print server intermediário (CUPS): jobs passam pela VM, são registrados em SQLite e expostos via API e dashboards na rede local.
 
 **Core Value (v1.0 — entregue):** Registrar 100% dos jobs com rastreabilidade (quem, o quê, quando, quantas páginas) sem interromper a impressão física.
 
-**Core Value (v1.5 — próximo):** Transformar logs em **gestão operacional** — impressoras e departamentos cadastrados, custos por página, visão gerencial de consumo.
+**Core Value (v1.5 — ativo):** Transformar logs em **gestão operacional** — cadastro de impressoras e organização, custos por página, chargeback interno, analytics gerencial e saúde da frota — experiência PaperCut-like sem paridade enterprise.
+
+---
+
+## Current Milestone: v1.5 Management Platform
+
+**Goal:** Evoluir de plataforma de auditoria para plataforma de gestão operacional de impressão, preservando monólito, SQLite, Docker Compose e pipeline append-only que nunca bloqueia impressão.
+
+**Target features:**
+- Cadastro formal de impressoras (inventário, metadados, vínculo fila CUPS)
+- Departamentos, usuários e centros de custo (entidades distintas)
+- Import CSV de organização (antes de LDAP)
+- Tarifas mono/color, custo por job, chargeback interno (relatórios/CSV)
+- Dashboard gerencial (consumo, tops, comparativos)
+- Fleet: status online/offline (CUPS/IPP primário, ping IP fallback)
+- Toner: telemetria SNMP opt-in (sem controle de estoque)
+- UI de configuração (Settings) complementando dashboard de auditoria
+
+**Diretrizes arquiteturais (v1.5):**
+- SQLite + monólito + Docker Compose — sem microserviços
+- Cadastro e analytics **não podem impactar** captura de jobs (watcher isolado)
+- Pipeline append-only; falhas em settings/analytics não bloqueiam impressão
+- CC ≠ departamento; chargeback = alocação interna, não faturamento contábil
+- Inventário = impressoras; toner = monitoramento apenas
 
 ---
 
@@ -27,9 +51,9 @@ PrintWatch é um sistema self-hosted de **auditoria e gestão de impressão**. A
 | Deploy | Docker Compose (cups + backend + nginx) |
 | Validação | VM real; jobs Windows; checkpoint humano aprovado |
 
-**Arquitetura:** Monólito brownfield em Docker Compose. SQLite adequado para 20–100 usuários. Sem auth no dashboard (rede local).
+**Schema atual:** `print_jobs`, `capture_state`, `policies` — sem FKs de organização.
 
-**Dívida aceita:** Username sem prefixo AD via IPP; `/printers` = DISTINCT do log (sem inventário); retenção default 90 dias via env.
+**Dívida aceita:** `/printers` = DISTINCT do log; username AS-IS do CUPS; retenção default 90 dias via env.
 
 ---
 
@@ -49,38 +73,33 @@ PrintWatch é um sistema self-hosted de **auditoria e gestão de impressão**. A
 
 ## Requirements
 
+Ver `.planning/REQUIREMENTS.md` (milestone v1.5). Resumo:
+
 ### Validated (v1.0)
 
-- ✓ Captura completa de jobs (CAPTURE-01–04) — Fases 1–2
-- ✓ CUPS + deploy Compose (SERVER-01–03, DEPLOY-01–02) — Fase 1
-- ✓ Persistência e retenção (DATA-01–03) — Fase 2
-- ✓ API REST com filtros, stats, CSV (EXPORT, DASH-06) — Fase 3
-- ✓ Dashboard web com filtros e export (DASH-01–06) — Fase 4
-- ✓ Extensibilidade schema (EXTEND-01–03) — Fase 2
-- ✓ Impressão física independente do backend (CAPTURE-04)
+- ✓ CAPTURE, SERVER-01–03, DATA, EXPORT, DASH, DEPLOY-01–02, EXTEND — Fases 1–4
 
-### Active (v1.5 — a definir via `/gsd-new-milestone`)
+### Active (v1.5)
 
-- [ ] Cadastro formal de impressoras (inventário, metadados, vínculo CUPS)
-- [ ] Departamentos e associação usuário → departamento
-- [ ] Custos por página mono/color e relatórios por departamento
-- [ ] Dashboard gerencial (consumo, tops, comparativos)
-- [ ] Status online/offline de impressoras
-- [ ] Monitoramento de toner (SNMP, opt-in)
-- [ ] Import CSV de usuários/departamentos (antes de LDAP)
+- Fase 5: Master Data & Organization (ORG, INV, IMPORT, SETTINGS, DATA-04+)
+- Fase 6: Costing & Chargeback (COST, CHRG)
+- Fase 7: Manager Analytics (ANAL)
+- Fase 8: Fleet Health & Toner (FLEET, TONER)
 
-### Out of Scope (atualizado)
+### Out of Scope (v1.5)
 
 | Item | Razão |
 |------|-------|
-| Autenticação dashboard | v3.0 ou rede + nginx basic auth |
-| Cotas e bloqueio ativo | v2.5+ Policy context |
+| Autenticação dashboard | v3.0 ou nginx basic auth |
+| Cotas e bloqueio ativo | v2.5+ Policy |
 | LDAP/AD sync | Após master data manual estável |
 | PostgreSQL | Só com evidência de escala |
-| Multi-site | Ambiente único |
-| App mobile | Perfil admin browser |
-| API pública externa | Integrações futuras |
-| Paridade PaperCut completa | Subset pragmático |
+| Faturamento/billing contábil | Chargeback = relatório interno apenas |
+| Estoque de toner/consumíveis | Toner = telemetria SNMP opt-in |
+| Microserviços / message bus | Contradiz princípios |
+| Multi-site, app mobile | Futuro |
+| Paridade PaperCut enterprise | Subset pragmático |
+| DEPLOY-03/04 | v3.0 Production |
 
 ---
 
@@ -90,19 +109,20 @@ PrintWatch é um sistema self-hosted de **auditoria e gestão de impressão**. A
 |--------|-----------|
 | Print Server | CUPS 2.4+ |
 | Log Watcher | Python 3 + watchdog |
-| Banco | SQLite (SQLAlchemy) |
+| Banco | SQLite (SQLAlchemy + Alembic) |
 | Backend | FastAPI |
 | Frontend | React + Vite + TailwindCSS v4 |
+| Fleet/Toner | IPP/CUPS + ping + pysnmp (opt-in) |
 | Deploy | Docker Compose + nginx |
 
 ---
 
 ## Usuários
 
-| Perfil | v1.0 | v1.5+ |
-|--------|------|-------|
-| Admin TI | Histórico, filtros, CSV | + cadastro impressoras/org |
-| Gestor | — | Dashboard consumo/custo |
+| Perfil | v1.0 | v1.5 |
+|--------|------|------|
+| Admin TI | Histórico, filtros, CSV | + Settings, cadastro, import |
+| Gestor | — | Dashboard gerencial, custos |
 | Usuário final | Transparente | Transparente |
 
 ---
@@ -114,29 +134,30 @@ PrintWatch é um sistema self-hosted de **auditoria e gestão de impressão**. A
 | Linux/CUPS vs Windows Server | ✓ CUPS na VM dedicada |
 | SQLite vs PostgreSQL | ✓ SQLite v1.0–v1.5 |
 | 1 linha/página na ingestão | ✓ Agregação na API |
-| Username AS-IS (sem domínio artificial) | ✓ GAP-02-02 fechado |
-| Milestone v1.0 = Fases 1–4 apenas | ✓ Fase 5 antiga descontinuada |
-| Próxima milestone v1.5 Management | ✓ Master data antes de hardening |
+| Username AS-IS | ✓ GAP-02-02 fechado |
+| CC separado de Department | ✓ v1.5 — nem todo dept é CC contábil |
+| Chargeback interno apenas | ✓ CSV/relatórios, sem fatura |
+| Fleet: CUPS/IPP → ping → SNMP toner | ✓ v1.5 híbrido simples |
+| Master data antes de costing/analytics | ✓ Fase 5 primeiro |
 
 ---
 
-## Next Milestone Goals (v1.5)
+## Evolution
 
-1. Entidades de domínio: `printers`, `departments`, `users`, `cost_rates`
-2. APIs e UI de configuração (settings)
-3. Custo e analytics por departamento/usuário
-4. Base para fleet health (sem overengineering)
+Este documento evolui em transições de fase e limites de milestone.
 
-**Comando:** `/gsd-new-milestone`
+**Após cada fase** (`/gsd-transition`): requisitos validados → Validated; novos → Active; decisões → Key Decisions.
+
+**Após cada milestone** (`/gsd-complete-milestone`): revisão completa; Core Value; Out of Scope.
 
 ---
 
 <details>
-<summary>Histórico v1.0 (inicialização Maio 2026)</summary>
+<summary>Histórico v1.0 (Maio 2026)</summary>
 
-Projeto iniciado como MVP de monitoramento substituindo PaperCut em PME. Roadmap original tinha 5 fases; Fases 1–4 entregaram a Audit Platform. Requisitos v1.0 arquivados em `.planning/milestones/v1.0-REQUIREMENTS.md`.
+MVP substituindo PaperCut em PME. Fases 1–4 = Audit Platform. Artefatos: `.planning/milestones/v1.0-*`.
 
 </details>
 
 ---
-*Last updated: 2026-05-27 after v1.0 milestone*
+*Last updated: 2026-05-27 — milestone v1.5 initialized*

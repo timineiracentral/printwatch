@@ -32,9 +32,13 @@ Histórico de milestones entregues.
 
 ---
 
-## v1.5 — Management Platform (planned)
+## v1.5 — Management Platform (active)
 
-**Status:** 📋 Não iniciada  
-**Próximo passo:** `/gsd-new-milestone`
+**Started:** 2026-05-27  
+**Status:** 📋 Planejamento — Fase 5 requirements definidos  
+**Phases:** 5–8 (continuação numérica)  
+**Próximo passo:** Discussão arquitetural Fase 5 → `/gsd-plan-phase 5`
 
-Direção acordada: master data (impressoras, departamentos, usuários), custos mono/color, analytics gerencial, inventário e monitoramento operacional — sem overengineering enterprise.
+**Escopo:** Master data (impressoras, dept, usuários, CC), costing/chargeback interno, analytics gerencial, fleet online/offline, toner SNMP opt-in.
+
+**Artefatos:** `.planning/REQUIREMENTS.md`, `.planning/ROADMAP.md`, `.planning/research/`

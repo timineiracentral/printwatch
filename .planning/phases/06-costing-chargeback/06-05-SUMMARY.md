@@ -86,7 +86,7 @@ completed: 2026-05-27
 3. **Task 3: Links export chargeback** - `6c84f7d` (feat)
 4. **Fix Badge TS** - `5c1b838` (fix)
 
-**Plan metadata:** pending
+**Plan metadata:** `f3d0dd6` (docs: complete plan)
 
 ## Files Created/Modified
 

@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready to execute
-last_updated: "2026-05-27T13:30:22.160Z"
+status: Phase 4 complete — ready for verify-work
+last_updated: "2026-05-27T14:35:00.000Z"
 progress:
-  total_phases: 4
-  completed_phases: 2
-  total_plans: 23
-  completed_plans: 10
-  percent: 43
+  total_phases: 5
+  completed_phases: 4
+  total_plans: 28
+  completed_plans: 17
+  percent: 61
 ---
 
 # STATE — PrintWatch
 
 **Última atualização:** 2026-05-27  
-**Fase atual:** Fase 4 (Dashboard Web) — planejada; pronta para execução
+**Fase atual:** Fase 4 (Dashboard Web) — execução completa (7/7 plans); pronta para `/gsd-verify-work`
 
 ---
 
@@ -39,8 +39,9 @@ progress:
 | Fase 3 execução | Wave 1–2 concluídas; `validate-phase3.sh --quick` OK na VM; GAP-02-02 investigado e fechado (03-06) |
 | Fase 4 Discussão | ✓ Contexto capturado (`04-CONTEXT.md` + `04-DISCUSSION-LOG.md`) — 2026-05-27 |
 | Fase 4 UI-SPEC | ✓ `04-UI-SPEC.md` aprovado (6/6 dimensões) — 2026-05-27 |
-| Fase 4 Planejamento | ✓ 6 plans em 3 waves (`04-01..04-06-PLAN.md`) — 2026-05-27 |
-| Próxima ação | `/gsd-execute-phase 4` |
+| Fase 4 Planejamento | ✓ 7 plans em 3 waves (`04-01..04-07-PLAN.md`) — 2026-05-27 |
+| Fase 4 Plan 06 | ✓ Export CSV + validate-phase4 + checkpoint humano (VM VM_HOST) — 2026-05-27 |
+| Próxima ação | `/gsd-verify-work` (Fase 4) |
 
 ---
 
@@ -58,7 +59,7 @@ progress:
 | 1 | Infrastructure & Print Server | ✓ Completa (5/5 plans) |
 | 2 | Log Pipeline & Data Layer | ✓ Completa (5/5 plans) — functional with known data-quality gaps |
 | 3 | Backend API | Planejada — 6 plans em 3 waves (Wave 1: 01 infra + 02 GAP-01; Wave 2: 03 jobs/printers/health + 04 stats + 05 export csv; Wave 3: 06 validate + GAP-02) |
-| 4 | Dashboard Web | Discussão ✓ + UI-SPEC ✓ — pronto para planejar |
+| 4 | Dashboard Web | ✓ Completa (7/7 plans) — checkpoint humano aprovado 2026-05-27 |
 | 5 | Client Config & Hardening | Pendente |
 
 ---
@@ -100,6 +101,7 @@ progress:
 - **2026-05-26 (Fase 3 plan):** Estrutura final: 6 plans em 3 waves; Wave 1 paralela = infra rotas (01) + GAP-02-01 (02); Wave 2 paralela = jobs/printers/health (03) + stats (04) + export csv (05); Wave 3 sequencial = validate-phase3 + investigação GAP-02-02 (06)
 - **2026-05-26 (Fase 3 plan):** Sem deps novas em requirements.txt — FastAPI 0.136.3 + SQLAlchemy 2.0.50 + Pydantic 2.13.4 cobrem CORS, StreamingResponse, Generic[T], yield_per nativamente; CSV é escrita manual (sem pandas)
 - **2026-05-27 (Fase 4 discuss):** Visual Apple HIG + acento PaperCut `#00AE5B`; cards = jobs/páginas hoje + top mês (`mes.top_*[0]` com "Nome — N páginas"); presets Hoje/7d/Mês + date custom; impressora = dropdown `/printers` exato; tabela ~40px semi-compact; nginx :80 nesta fase; `formatMediaLabel` mapa local; stack React+Vite+TS+Tailwind+TanStack Query; sem charts/auth/TLS/websocket
+- **2026-05-27 (Fase 4 plan 06):** Export CSV no header via `ExportCsvButton` — filtros URL sem page/size; erros 400 cap e rede via ErrorBanner; checkpoint ROADMAP crit. 1-5 aprovado na VM (`04-VERIFICATION.md`)
 
 ## Performance Metrics
 
@@ -115,6 +117,7 @@ progress:
 | 02-03 | 22min | 2 | 7 |
 | 02-04 | 18min | 2 | 3 |
 | 02-05 | 25min | 2 | 1 + checkpoint humano (aprovado) |
+| 04-06 | 45min | 3 | 5 + checkpoint humano (aprovado VM) |
 
 ## Gaps Abertos
 
@@ -127,6 +130,6 @@ Nenhum gap aberto (`gaps_open: 0`).
 
 ## Session Continuity
 
-Last session: 2026-05-27T12:00:00.000Z
-Stopped at: Phase 4 UI-SPEC approved
-Resume file: .planning/phases/04-dashboard-web/04-UI-SPEC.md
+Last session: 2026-05-27T14:35:00.000Z
+Stopped at: Completed 04-06-PLAN.md
+Resume file: None

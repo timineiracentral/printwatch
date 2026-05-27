@@ -24,16 +24,16 @@
 
 ### Dashboard Web (DASH)
 
-- [ ] **DASH-01**: Dashboard acessível via browser (HTTP porta 80) em qualquer máquina da rede REDACTED_IP/16
+- [x] **DASH-01**: Dashboard acessível via browser (HTTP porta 80) em qualquer máquina da rede REDACTED_IP/16
 - [ ] **DASH-02**: Cards de sumário na página principal: total de jobs hoje, total de páginas hoje, top usuário do mês, top impressora
 - [ ] **DASH-03**: Tabela paginada com todos os jobs (mais recentes primeiro), colunas: Data/Hora, Usuário, Impressora, Arquivo, Páginas, Papel, Origem
 - [ ] **DASH-04**: Filtros: por intervalo de data (date range), por usuário, por impressora
 - [ ] **DASH-05**: Busca por nome de arquivo/documento
-- [ ] **DASH-06**: Dashboard carrega em menos de 2 segundos com até 50.000 registros
+- [x] **DASH-06**: Dashboard carrega em menos de 2 segundos com até 50.000 registros
 
 ### Exportação (EXPORT)
 
-- [ ] **EXPORT-01**: Botão de exportar CSV com os filtros ativos aplicados
+- [x] **EXPORT-01**: Botão de exportar CSV com os filtros ativos aplicados
 - [ ] **EXPORT-02**: CSV abre corretamente no Excel/LibreOffice com todos os campos e encoding correto (UTF-8 BOM ou compatível)
 
 ### Retenção e Persistência (DATA)

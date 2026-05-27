@@ -13,7 +13,7 @@
 | 1 | Infrastructure & Print Server | VM Ubuntu + CUPS recebendo jobs IPP | SERVER-01, SERVER-02, SERVER-03, DEPLOY-01, DEPLOY-02 | ✓ Complete (2026-05-26) |
 | 2 | Log Pipeline & Data Layer | Jobs capturados e persistidos no banco | CAPTURE-01, CAPTURE-02, CAPTURE-03, CAPTURE-04, DATA-01, DATA-02, DATA-03, EXTEND-01, EXTEND-02, EXTEND-03 | ✓ Complete (2026-05-26 — functional with known gaps) |
 | 3 | Backend API | API REST servindo dados com filtros | DASH-06 (performance), EXPORT-01, EXPORT-02 | 3 |
-| 4 | Dashboard Web | 6/7 | In Progress|  |
+| 4 | Dashboard Web | 7/7 | Complete   | 2026-05-27 |
 | 5 | Client Config & Hardening | PCs Windows integrados, deploy documentado | SERVER-04, DEPLOY-03, DEPLOY-04 | 4 |
 
 ---
@@ -179,7 +179,7 @@ Plans:
 Plans:
 - [x] 04-04-PLAN.md — SummaryCards DASH-02 via stats/summary
 - [x] 04-05-PLAN.md — FilterBar + JobsTable + paginação server-side *(blocked on 04-04 — App.tsx)*
-- [ ] 04-06-PLAN.md — Export CSV + validate completo + checkpoint humano (EXPORT-01)
+- [x] 04-06-PLAN.md — Export CSV + validate completo + checkpoint humano (EXPORT-01)
 
 **Cross-cutting:** Decisões D-01..D-67 em `04-CONTEXT.md`; contratos API Fase 3; sem React Router/MUI/auth/charts.
 

@@ -10,13 +10,13 @@ progress:
   total_plans: 10
   completed_plans: 10
   percent: 40
-gaps_open: 2
+gaps_open: 0
 ---
 
 # STATE — PrintWatch
 
-**Última atualização:** 2026-05-26  
-**Fase atual:** Fase 3 (Backend API) — contexto capturado (`03-CONTEXT.md`), pronta para `/gsd-plan-phase 3`
+**Última atualização:** 2026-05-27  
+**Fase atual:** Fase 3 (Backend API) — Wave 2 entregue; Plan 03-06 em andamento (validate + GAP-02-02 fechado)
 
 ---
 
@@ -37,7 +37,8 @@ gaps_open: 2
 | Fase 3 Discussão | ✓ Contexto capturado (`03-CONTEXT.md` + `03-DISCUSSION-LOG.md`) — 2026-05-26 |
 | Fase 3 Pesquisa | ✓ `03-RESEARCH.md` (FastAPI 0.136 + SQLAlchemy 2.0 + Pydantic 2.13 via context7 MCP) — 2026-05-26 |
 | Fase 3 Planejamento | ✓ 6 plans em 3 waves (`03-01..03-06-PLAN.md`) — 2026-05-26 |
-| Próxima ação | `/gsd-execute-phase 3` — executar Wave 1 (Plans 01 + 02) |
+| Fase 3 execução | Wave 1–2 concluídas; `validate-phase3.sh --quick` OK na VM; GAP-02-02 investigado e fechado (03-06) |
+| Próxima ação | Checkpoint humano #17 + `03-VERIFICATION.md`; depois fechar Fase 3 |
 
 ---
 
@@ -74,7 +75,7 @@ gaps_open: 2
 - **2026-05-26:** Deploy VM real (01-05) é pré-requisito explícito antes de validação IPP remota (01-04 Task 3)
 - **2026-05-26:** VM printwatch operacional — preferir Docker CE existente sobre apt docker.io (conflito containerd)
 - **2026-05-26:** TEST_PRINTER_URI backend deve usar porta :631 (`ipp://host:631/ipp/print`) para impressão física HP/Samsung
-- **2026-05-26:** Username IPP Windows registra como `DOMAIN\usuario` no page_log — formato D-14 válido
+- **2026-05-26 → 2026-05-27:** D-14 revisada (Fase 3 plan 06) — jobs IPP Windows atuais chegam ao `page_log` como `user.example` **sem** prefixo `DOMAIN\`; parser persiste AS-IS; **não** concatenar domínio artificialmente; 53 jobs históricos com `DOMAIN\user.example` preservados no SQLite; enriquecimento LDAP/AD = v2
 - **2026-05-26:** TailReader state_repo usa get()/upsert(inode, byte_offset) — CheckpointRepository no Plano 03
 - **2026-05-26:** Parser retorna None para linhas fora do PAGE_LOG_REGEX (nunca propaga ao banco)
 - **2026-05-26:** Pipeline end-to-end: InotifyObserver em /var/log/cups + filtro page_log + INSERT idempotente
@@ -82,7 +83,7 @@ gaps_open: 2
 - **2026-05-26:** purge_old_jobs no lifespan com cutoff UTC; LOG_RETENTION_DAYS default 90
 - **2026-05-26:** logging.basicConfig(INFO) para logs de purge/watcher no docker compose
 - **2026-05-26:** Fase 2 aprovada (functional with known data-quality gaps): GAP-02-01 (parser printer quote) e GAP-02-02 (username sem domínio AD) registrados para resolver na Fase 3
-- **2026-05-26:** D-14 (`DOMAIN\usuario` no page_log) marcada para revisão — evidência atual mostra `user.example` sem domínio; investigar antes de alterar parser
+- **2026-05-27 (Fase 3 plan 06):** GAP-02-02 fechado — classificação (a); recomendação (1); evidência em `03-INVESTIGATION-username-ad.md`
 - **2026-05-26:** Incidente Windows Internet Print Provider (porta órfã `0x0000000d`) — não é bug do projeto, é estado local; runbook de troubleshooting na Fase 5
 - **2026-05-26 (Fase 3 discuss):** API agregada **por job** (não por página); chave de agregação `(printer_normalized, job_id, username, job_name, strftime('%Y-%m-%d %H:%M', timestamp))`; `pages = COUNT(*)`
 - **2026-05-26 (Fase 3 discuss):** Banco em **UTC**, API converte para **America/Sao_Paulo** apenas na serialização e na interpretação de `date_from`/`date_to`
@@ -114,10 +115,12 @@ gaps_open: 2
 
 ## Gaps Abertos
 
-| ID | Tipo | Resolve em | Descrição |
-|----|------|-----------|-----------|
-| GAP-02-01 | bug | Fase 3 | Parser captura aspa inicial em `printer` |
-| GAP-02-02 | investigation | Fase 3 | Username sem domínio AD — investigar antes de mudar código |
+Nenhum gap aberto (`gaps_open: 0`).
+
+| ID | Status | Resolvido em |
+|----|--------|--------------|
+| GAP-02-01 | ✓ resolved | 03-02 (`normalize_printer_name` + backfill) |
+| GAP-02-02 | ✓ resolved | 03-06 (investigação observacional; username AS-IS) |
 
 ## Session Continuity
 

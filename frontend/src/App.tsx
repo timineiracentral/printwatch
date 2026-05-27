@@ -1,24 +1,24 @@
-import { useUrlFilters } from './hooks/useUrlFilters'
-import { useJobs } from './hooks/useJobs'
-import { useStatsSummary } from './hooks/useStatsSummary'
+import { AppShell } from './components/layout/AppShell'
+import { PageHeader } from './components/layout/PageHeader'
+import { Button } from './components/ui/Button'
 
 export default function App() {
-  const { filters } = useUrlFilters()
-  const jobs = useJobs(filters)
-  const stats = useStatsSummary()
-
   return (
-    <main className="flex min-h-screen items-center justify-center p-6">
-      <pre className="text-sm text-[var(--text-secondary)]">
-        {JSON.stringify(
-          {
-            jobsTotal: jobs.data?.total ?? null,
-            hojeJobs: stats.data?.hoje.jobs ?? null,
-          },
-          null,
-          2,
-        )}
-      </pre>
-    </main>
+    <AppShell
+      header={
+        <PageHeader
+          title="Histórico de impressão"
+          actions={
+            <Button variant="secondary" disabled>
+              Exportar CSV
+            </Button>
+          }
+        />
+      }
+    >
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 text-sm text-[var(--text-secondary)]">
+        Cards, filtros e tabela serão adicionados nos próximos passos.
+      </div>
+    </AppShell>
   )
 }

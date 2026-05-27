@@ -1,5 +1,7 @@
-import { getJson } from './client'
+import { fetchPrintersRegistry } from './settings/printers'
+import type { PrinterRead } from '../types/api'
 
-export function fetchPrinters(): Promise<string[]> {
-  return getJson<string[]>('/printers')
+/** Registry canônico — substitui DISTINCT legado (Fase 5). */
+export function fetchPrinters(): Promise<PrinterRead[]> {
+  return fetchPrintersRegistry(true)
 }

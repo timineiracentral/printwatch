@@ -8,20 +8,43 @@ import {
 import { ChevronDown, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { usePrinters } from '../../hooks/usePrinters'
+import { normalizePrinterName } from '../../lib/normalize'
+import type { PrinterRead } from '../../types/api'
 
 export interface PrinterComboboxProps {
   value?: string
   onChange: (printer: string | undefined) => void
 }
 
+function printerFilterValue(p: PrinterRead): string {
+  return normalizePrinterName(p.cups_queue_name)
+}
+
+function printerLabel(p: PrinterRead): string {
+  const name = p.display_name.trim()
+  return name || p.cups_queue_name
+}
+
 export function PrinterCombobox({ value, onChange }: PrinterComboboxProps) {
   const { data: printers = [], isLoading } = usePrinters()
   const [query, setQuery] = useState('')
 
+  const byFilterValue = useMemo(() => {
+    const map = new Map<string, PrinterRead>()
+    for (const p of printers) {
+      map.set(printerFilterValue(p), p)
+    }
+    return map
+  }, [printers])
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return printers
-    return printers.filter((name) => name.toLowerCase().includes(q))
+    return printers.filter((p) => {
+      const label = printerLabel(p).toLowerCase()
+      const queue = p.cups_queue_name.toLowerCase()
+      return label.includes(q) || queue.includes(q)
+    })
   }, [printers, query])
 
   return (
@@ -40,7 +63,11 @@ export function PrinterCombobox({ value, onChange }: PrinterComboboxProps) {
             'placeholder:text-[var(--text-tertiary)]',
             'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]',
           ].join(' ')}
-          displayValue={(name: string | null) => name ?? ''}
+          displayValue={(filterVal: string | null) => {
+            if (!filterVal) return ''
+            const p = byFilterValue.get(filterVal)
+            return p ? printerLabel(p) : filterVal
+          }}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Selecionar impressora…"
           aria-label="Impressora"
@@ -79,15 +106,23 @@ export function PrinterCombobox({ value, onChange }: PrinterComboboxProps) {
               Nenhuma impressora encontrada
             </div>
           ) : (
-            filtered.map((name) => (
-              <ComboboxOption
-                key={name}
-                value={name}
-                className="cursor-pointer px-3 py-2 text-sm text-[var(--text-primary)] data-focus:bg-[var(--accent-tint)] data-focus:text-[var(--accent)]"
-              >
-                {name}
-              </ComboboxOption>
-            ))
+            filtered.map((p) => {
+              const filterVal = printerFilterValue(p)
+              return (
+                <ComboboxOption
+                  key={p.id}
+                  value={filterVal}
+                  className="cursor-pointer px-3 py-2 text-sm text-[var(--text-primary)] data-focus:bg-[var(--accent-tint)] data-focus:text-[var(--accent)]"
+                >
+                  <span className="font-medium">{printerLabel(p)}</span>
+                  {p.display_name.trim() && p.cups_queue_name !== p.display_name ? (
+                    <span className="ml-2 text-xs text-[var(--text-tertiary)]">
+                      {p.cups_queue_name}
+                    </span>
+                  ) : null}
+                </ComboboxOption>
+              )
+            })
           )}
         </ComboboxOptions>
       </div>

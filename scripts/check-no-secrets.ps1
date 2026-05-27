@@ -7,19 +7,16 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
-if (-not (Test-Path (Join-Path $root ".git"))) {
-    $root = Split-Path $PSScriptRoot -Parent
-}
+$root = Split-Path $PSScriptRoot -Parent
 
 Set-Location $root
 
 $patterns = @(
     @{ Name = "IP VM real (10.35.11.x)"; Regex = "10\.35\.11\.\d{1,3}" },
-    @{ Name = "Segmento de rede corporativo (REDACTED_LAN)"; Regex = "10\.35\.x(?!\.x)" },
-    @{ Name = "Placeholder vazado 192.0.2.50"; Regex = "10\.35\.x\.x" },
-    @{ Name = "Usuario SSH real"; Regex = "admin-user" },
-    @{ Name = "Email/operador real"; Regex = "felipe\.jardim|Maria Silva" }
+    @{ Name = "Segmento de rede corporativo (10.35.x)"; Regex = "10\.35\.x(?!\.x)" },
+    @{ Name = "Placeholder vazado 10.35.x.x"; Regex = "10\.35\.x\.x" },
+    @{ Name = "Usuario SSH real"; Regex = "felipe-dev" },
+    @{ Name = "Email/operador real"; Regex = "felipe\.jardim|Felipe Jardim" }
 )
 
 $skipPathRegex = @(

@@ -89,6 +89,7 @@ def engine_memory():
 def db_session(engine_memory) -> Generator[Session, None, None]:
     """Session function-scope com cleanup das tabelas após cada teste."""
     from app.db import models  # noqa: F401
+    from app.db.base import Base
 
     SessionLocal = sessionmaker(bind=engine_memory)
     sess = SessionLocal()
@@ -97,7 +98,7 @@ def db_session(engine_memory) -> Generator[Session, None, None]:
     finally:
         sess.rollback()
         # Limpa dados entre testes — schema persiste session-wide.
-        for tbl in reversed(models.Base.metadata.sorted_tables):
+        for tbl in reversed(Base.metadata.sorted_tables):
             sess.execute(tbl.delete())
         sess.commit()
         sess.close()

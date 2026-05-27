@@ -36,3 +36,15 @@ def ensure_indexes(engine: Engine) -> None:
     logger.info(
         "ensure_indexes: applied %d index DDL statements", len(_INDEX_STATEMENTS)
     )
+
+
+def ensure_wal_mode(engine: Engine) -> None:
+    """Habilita SQLite WAL se ainda não estiver ativo (D-22)."""
+    with engine.connect() as conn:
+        mode = conn.execute(text("PRAGMA journal_mode")).scalar()
+        if str(mode).lower() != "wal":
+            conn.execute(text("PRAGMA journal_mode=WAL"))
+            conn.commit()
+            logger.info("ensure_wal_mode: journal_mode switched to WAL")
+        else:
+            logger.info("ensure_wal_mode: journal_mode already WAL")

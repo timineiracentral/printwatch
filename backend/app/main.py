@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1 import api_v1_router
 from app.core.config import settings
-from app.db.migrations import ensure_indexes
+from app.db.migrations import ensure_indexes, ensure_wal_mode
 from app.db.repository import PrintJobRepository
 from app.db.session import SessionLocal, engine
 from app.services.retention import purge_old_jobs
@@ -35,6 +35,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         InotifyObserver = None  # type: ignore[assignment,misc]
 
     ensure_indexes(engine)
+    ensure_wal_mode(engine)
 
     session = SessionLocal()
     try:
@@ -86,7 +87,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=_origins,
     allow_credentials=False,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE"],
     allow_headers=["*"],
 )
 

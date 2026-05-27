@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Management Platform
-status: planning
-last_updated: 2026-05-27T21:00:00.000Z
+status: ready_to_execute
+last_updated: 2026-05-27T23:30:00.000Z
 progress:
-  total_phases: 4
-  completed_phases: 0
-  total_plans: 0
+  total_phases: 8
+  completed_phases: 4
+  total_plans: 7
   completed_plans: 0
   percent: 0
-stopped_at: "Phase 5 architecture gate closed — ready for /gsd-plan-phase 5"
+stopped_at: "Phase 5 planned — 7 plans in 4 waves"
 ---
 
 # STATE — PrintWatch
@@ -23,10 +23,10 @@ stopped_at: "Phase 5 architecture gate closed — ready for /gsd-plan-phase 5"
 
 ## Current Position
 
-**Phase:** 5 — Master Data & Organization (not started)  
-**Plan:** —  
-**Status:** ✅ Architecture approved — ready for `/gsd-plan-phase 5`  
-**Last activity:** 2026-05-27 — Phase 5 discussion gate closed (05-CONTEXT.md, 05-DISCUSSION-LOG.md)
+**Phase:** 5 — Master Data & Organization  
+**Plan:** 7 plans (05-01 … 05-07) em 4 waves  
+**Status:** ✅ Planned — ready for `/gsd-execute-phase 5`  
+**Last activity:** 2026-05-27 — `/gsd-plan-phase 5` (RESEARCH, UI-SPEC, VALIDATION, 7× PLAN)
 
 ---
 
@@ -44,7 +44,7 @@ See: `.planning/PROJECT.md`
 
 | Fase | Nome | Status |
 |------|------|--------|
-| 5 | Master Data & Organization | ✅ Arch approved — plan next |
+| 5 | Master Data & Organization | ✅ Planned (7 plans) |
 | 6 | Costing & Chargeback | 📋 Scoped |
 | 7 | Manager Analytics | 📋 Scoped |
 | 8 | Fleet Health & Toner | 📋 Scoped |
@@ -53,8 +53,8 @@ See: `.planning/PROJECT.md`
 
 ## Próxima ação
 
-1. `/gsd-plan-phase 5` — gerar plans da Fase 5
-2. Contexto: `.planning/phases/05-master-data-organization/05-CONTEXT.md` (31 decisões D-01–D-31)
+1. `/gsd-execute-phase 5` — executar 7 plans (waves 1→4)
+2. Artefatos: `.planning/phases/05-master-data-organization/05-*-PLAN.md`
 
 ---
 

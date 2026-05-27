@@ -51,7 +51,14 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 **Goal:** Admin cadastra impressoras, departamentos, centros de custo e usuários; importa CSV; jobs históricos e novos vinculam a `printer_id` sem alterar o hot path do watcher.
 
 **Requirements:** ORG-01–09, INV-01–06, IMPORT-01–05, SETTINGS-01–04, DATA-04–07, SERVER-04  
-**Plans:** 0 (arquitetura aprovada 2026-05-27 — aguardando `/gsd-plan-phase 5`)
+**Plans:** 7 plans em 4 waves (2026-05-27)
+
+| Wave | Plans | Entrega |
+|------|-------|---------|
+| 1 | 05-01 | Alembic + schema mestre + CORS + WAL |
+| 2 | 05-02, 05-03, 05-04 | normalize core + CRUD printers + CRUD org |
+| 3 | 05-05, 05-06 | matcher/backfill + import CSV |
+| 4 | 05-07 | Settings UI + react-router + FilterBar registry |
 
 **Success criteria:**
 1. Admin CRUD completo para printers, departments, cost-centers, users via Settings UI
@@ -116,7 +123,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | Fase | Milestone | REQ | Plans | Status |
 |------|-----------|-----|-------|--------|
 | 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
-| 5 | v1.5 | 28 | — | ✅ Arch approved — plan next |
+| 5 | v1.5 | 28 | 7/7 | ✅ Planned — execute next |
 | 6 | v1.5 | 8 | — | Scoped |
 | 7 | v1.5 | 5 | — | Scoped |
 | 8 | v1.5 | 9 | — | Scoped |

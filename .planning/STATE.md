@@ -3,15 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Management Platform
 status: executing
-stopped_at: Completed 06-02-PLAN.md
-last_updated: "2026-05-27T21:10:00.000Z"
-last_activity: 2026-05-27
+last_updated: "2026-05-27T22:25:00.000Z"
+last_activity: 2026-05-27 — executed 06-04
 progress:
   total_phases: 5
-  completed_phases: 1
-  total_plans: 5
-  completed_plans: 2
-  percent: 40
+  completed_phases: 2
+  total_plans: 17
+  completed_plans: 15
+  percent: 88
 ---
 
 # STATE — PrintWatch
@@ -25,11 +24,11 @@ progress:
 ## Current Position
 
 Phase: 06 (costing-chargeback) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 **Phase:** 6
-**Plan:** 06-03 next (jobs enrichment + PATCH color-mode)
-**Status:** Plan 06-02 complete — `06-02-SUMMARY.md`  
-**Last activity:** 2026-05-27 — executed 06-02
+**Plan:** 06-03 or 06-05 next (jobs enrichment / UI tarifas)
+**Status:** Plan 06-04 complete — `06-04-SUMMARY.md`  
+**Last activity:** 2026-05-27 — executed 06-04
 
 ---
 
@@ -49,7 +48,7 @@ See: `.planning/PROJECT.md`
 |------|------|--------|
 | 5 | Master Data & Organization | ✅ Complete (7/7 plans) |
 | 5.2 | User–Printer Access Policy | ✅ Executed (5/5 plans) — UAT pendente |
-| 6 | Costing & Chargeback | 🔄 Executing (2/5 plans) |
+| 6 | Costing & Chargeback | 🔄 Executing (3/5 plans) |
 | 7 | Manager Analytics | 📋 Scoped |
 | 8 | Fleet Health & Toner | 📋 Scoped |
 
@@ -57,7 +56,7 @@ See: `.planning/PROJECT.md`
 
 ## Próxima ação
 
-1. Executar plano **06-03** — JobOut custo/páginas faturáveis + PATCH color-mode
+1. Executar plano **06-03** ou **06-05** — jobs custo / UI tarifas
 2. UAT Fase 5.2 em `05.2-HUMAN-UAT.md` (se ainda pendente)
 
 ---

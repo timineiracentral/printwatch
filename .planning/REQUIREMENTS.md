@@ -89,10 +89,10 @@
 
 ### Chargeback (CHRG) — Fase 6
 
-- [ ] **CHRG-01**: Admin can export chargeback CSV for a date range grouped by cost center
-- [ ] **CHRG-02**: Admin can export chargeback CSV grouped by department
-- [ ] **CHRG-03**: Chargeback export includes page counts (mono/color split), estimated cost, and unassigned bucket
-- [ ] **CHRG-04**: Chargeback is internal reporting only — no invoice generation or accounting integration
+- [x] **CHRG-01**: Admin can export chargeback CSV for a date range grouped by cost center
+- [x] **CHRG-02**: Admin can export chargeback CSV grouped by department
+- [x] **CHRG-03**: Chargeback export includes page counts (mono/color split), estimated cost, and unassigned bucket
+- [x] **CHRG-04**: Chargeback is internal reporting only — no invoice generation or accounting integration
 
 ---
 
@@ -273,8 +273,8 @@ PrintJob ──audit──> printer_id + username ──soft match──> policy
 | SERVER-04 | 5 | Complete |
 | ACCESS-01 – ACCESS-05 | 5.2 | Pending |
 | COST-01, COST-02, COST-04 | 6 | Complete |
-| COST-03, CHRG-01 – CHRG-04 | 6 | Pending |
-| CHRG-01 – CHRG-04 | 6 | Pending |
+| COST-03 | 6 | Pending |
+| CHRG-01 – CHRG-04 | 6 | Complete |
 | ANAL-01 – ANAL-05 | 7 | Pending |
 | FLEET-01 – FLEET-05 | 8 | Pending |
 | TONER-01 – TONER-04 | 8 | Pending |

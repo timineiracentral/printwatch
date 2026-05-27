@@ -2,6 +2,17 @@ import { format, parseISO } from 'date-fns'
 
 const numberFormatter = new Intl.NumberFormat('pt-BR')
 
+const brlFormatter = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+export function formatBrl(value: number): string {
+  return brlFormatter.format(value)
+}
+
 export function formatNumberPtBr(n: number): string {
   return numberFormatter.format(n)
 }

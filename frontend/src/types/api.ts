@@ -6,13 +6,49 @@ export interface JobOut {
   username: string
   job_id: number
   job_name?: string | null
+  minute_bucket?: string | null
   timestamp: string
   pages: number
+  pages_billable?: number
+  pages_pending_color?: number
+  pages_mono?: number
+  pages_color?: number
+  estimated_cost?: number | null
   color_mode?: string | null
   host_origin?: string | null
   media?: string | null
   sides?: string | null
   outside_policy?: boolean
+}
+
+export interface JobLineOut {
+  id: number
+  timestamp: string
+  color_mode?: string | null
+  color_mode_source?: string | null
+  pages: number
+}
+
+export interface JobLineFilters {
+  printer: string
+  username: string
+  job_id: number
+  job_name?: string | null
+  minute_bucket: string
+}
+
+export interface CostRateRead {
+  id: number
+  rate_mono: string
+  rate_color: string
+  valid_from: string
+  created_at: string
+}
+
+export interface CostRateCreate {
+  rate_mono: number
+  rate_color: number
+  valid_from?: string | null
 }
 
 export interface JobFilters {

@@ -1,6 +1,7 @@
 import {
   Briefcase,
   Building2,
+  Coins,
   Menu,
   Printer,
   Upload,
@@ -76,6 +77,10 @@ export function Sidebar({ mobileOpen, onMobileToggle }: SidebarProps) {
           <NavLink to="/settings/cost-centers" className={navLinkClass}>
             <Wallet className="size-4" aria-hidden />
             Centros de custo
+          </NavLink>
+          <NavLink to="/settings/cost-rates" className={navLinkClass}>
+            <Coins className="size-4" aria-hidden />
+            Tarifas
           </NavLink>
           <NavLink to="/settings/users" className={navLinkClass}>
             <Users className="size-4" aria-hidden />

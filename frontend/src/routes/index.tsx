@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { JobsPage } from '../pages/JobsPage'
 import { CostCentersPage } from '../pages/settings/CostCentersPage'
+import { CostRatesPage } from '../pages/settings/CostRatesPage'
 import { DepartmentsPage } from '../pages/settings/DepartmentsPage'
 import { ImportPage } from '../pages/settings/ImportPage'
 import { PrintersPage } from '../pages/settings/PrintersPage'
@@ -19,6 +20,7 @@ export function AppRoutes() {
           <Route path="printers" element={<PrintersPage />} />
           <Route path="departments" element={<DepartmentsPage />} />
           <Route path="cost-centers" element={<CostCentersPage />} />
+          <Route path="cost-rates" element={<CostRatesPage />} />
           <Route path="users" element={<UsersPage />} />
           <Route path="import" element={<ImportPage />} />
         </Route>

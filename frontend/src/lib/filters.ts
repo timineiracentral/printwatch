@@ -9,6 +9,16 @@ export function clearFiltersDefaults(): JobFilters {
   return { page: DEFAULT_PAGE, size: DEFAULT_SIZE }
 }
 
+export function hasActiveFilters(filters: JobFilters): boolean {
+  return !!(
+    filters.username?.trim() ||
+    filters.printer?.trim() ||
+    filters.search?.trim() ||
+    filters.date_from ||
+    filters.date_to
+  )
+}
+
 export function parseFiltersFromUrl(search: string): JobFilters {
   const params = new URLSearchParams(
     search.startsWith('?') ? search.slice(1) : search,

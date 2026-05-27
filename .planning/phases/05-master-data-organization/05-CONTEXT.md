@@ -1,262 +1,144 @@
-# Phase 5 Context — Master Data & Organization
+# Phase 5: Master Data & Organization — Context
 
-**Milestone:** v1.5 Management Platform  
-**Phase:** 5 — Master Data & Organization  
-**Status:** Architectural discussion (pre-planning)  
-**Created:** 2026-05-27
+**Gathered:** 2026-05-27  
+**Status:** ✅ Ready for planning (architecture gate closed)
 
----
+<domain>
+## Phase Boundary
 
-## Phase Goal
+Cadastro operacional de impressoras, departamentos, centros de custo e usuários; import CSV; Settings UI; vínculo de `print_jobs` a impressoras via `printer_id` **sem alterar o hot path do watcher**.
 
-Estabelecer o modelo de domínio operacional (impressoras, departamentos, centros de custo, usuários) e vincular jobs a impressoras cadastradas — **sem modificar o hot path de captura**.
+**Cadeia alvo:** `Registry (SQLite) + Matcher (background) → API CRUD/import → Settings UI` + audit dashboard inalterado em captura.
 
-**Requirements:** 28 REQ — ver `REQUIREMENTS.md` seção "Phase 5 — Detailed Requirements"
+**Não inclui:** custos/chargeback (Fase 6), dashboard gerencial (Fase 7), fleet/SNMP (Fase 8), LDAP, auth na app, hard delete na UI, FK `user_id` em jobs.
 
----
+</domain>
 
-## Constraints (non-negotiable)
+<decisions>
+## Implementation Decisions
 
-| # | Constraint | Source |
-|---|------------|--------|
-| C1 | Watcher não importa modelos de org; INSERT não espera FK | Research PITFALLS #1 |
-| C2 | `printer_id` nullable; preenchido async/batch | USER + ARCHITECTURE.md |
-| C3 | SQLite + monólito + Docker Compose | PROJECT.md |
-| C4 | CC ≠ Department (entidades distintas) | USER decision |
-| C5 | Settings/analytics failure ≠ print failure | Core value v1.0 |
-| C6 | Reuse `normalize_printer_name()` para matching | Fase 3 GAP-02-01 |
+### A. Printer matching & `printer_id`
 
----
+- **D-01:** Watcher **não** resolve `printer_id` no INSERT; coluna nullable.
+- **D-02:** Matcher periódico **60s** — atualiza **somente** `print_jobs WHERE printer_id IS NULL`, em **batches limitados** (evitar full scan).
+- **D-03:** **On-save printer** — match imediato para jobs órfãos daquela `cups_queue_name` normalizada.
+- **D-04:** `POST /api/v1/admin/backfill-printer-ids` — reprocessamento histórico completo, **idempotente**, acionável manualmente.
+- **D-05:** Matching usa `normalize_printer_name()` compartilhado — mesma regra em watcher ingest label, API, matcher e import.
 
-## Proposed Domain Model
+### B. User ↔ Job linking
 
-```mermaid
-erDiagram
-    Department {
-        int id PK
-        string name
-        string code UK
-        int cost_center_id FK "nullable"
-        bool is_active
-    }
-    CostCenter {
-        int id PK
-        string name
-        string code UK
-        bool is_active
-    }
-    User {
-        int id PK
-        string cups_username UK
-        string display_name
-        int department_id FK "nullable"
-        int cost_center_id FK "nullable override"
-        bool is_active
-    }
-    Printer {
-        int id PK
-        string display_name
-        string cups_queue_name UK
-        string ip_address
-        string manufacturer
-        string model
-        string location
-        int department_id FK "nullable"
-        bool is_active
-        bool snmp_enabled "default false"
-    }
-    PrintJob {
-        int id PK
-        string printer "legacy"
-        int printer_id FK "nullable"
-        string username
-    }
-    CostCenter ||--o{ Department : "optional"
-    Department ||--o{ User : "assigned"
-    CostCenter ||--o{ User : "override"
-    Department ||--o{ Printer : "location"
-    Printer ||--o{ PrintJob : "linked"
+- **D-06:** **Soft link** — `print_jobs.username` raw preservado; join read-time com `users.cups_username` (exact match).
+- **D-07:** **Sem FK** `user_id` em `print_jobs` nesta fase (aliases AD, inconsistências reais).
+
+### C. Settings UI & navigation
+
+- **D-08:** Rotas `/settings/*` (printers, departments, cost-centers, users, import) no **AppShell** existente.
+- **D-09:** UX **operacional** (`/` audit jobs) separada de **gerencial** (`/manager` = Fase 7).
+- **D-10:** Menu lateral simples, PaperCut-like; formulários e tabelas enxutos — workflows rápidos de TI, não CRUD enterprise.
+
+### D. Printer registry & discovery
+
+- **D-11:** Tabela `printers` + API registry = **fonte canônica** (substitui DISTINCT como primário).
+- **D-12:** `GET /api/v1/printers/unmapped-queues` — filas no log sem cadastro (onboarding).
+- **D-13:** UI Settings destaca impressoras **descobertas mas não cadastradas** (call-to-action para cadastro).
+- **D-14:** `cups_queue_name` **globalmente único** — identidade operacional da fila CUPS; `display_name` pode repetir.
+
+### E. Organization entities
+
+- **D-15:** `departments` e `cost_centers` são entidades **distintas**; dept pode referenciar CC opcionalmente.
+- **D-16:** `code` obrigatório em dept e CC; validação **case-insensitive**; persistência **UPPERCASE**; unicidade por código.
+- **D-17:** `users.cups_username` unique; match exato ao username do log.
+- **D-18:** Apenas **soft-delete** (`is_active=false`) na UI; hard delete só intervenção manual no banco.
+
+### F. Schema & migrations
+
+- **D-19:** **Alembic** obrigatório (`backend/alembic/`); sem migrations SQL manuais ad-hoc.
+- **D-20:** Novas tabelas: `printers`, `departments`, `cost_centers`, `users`; `print_jobs.printer_id` nullable FK + índice.
+- **D-21:** Índice composto ou parcial útil para matcher: `printer_id IS NULL` (+ `printer` se necessário para performance).
+- **D-22:** SQLite WAL; transações curtas em backfill/matcher.
+
+### G. CSV import
+
+- **D-23:** **Partial commit** por padrão; `?strict=true` para all-or-nothing.
+- **D-24:** Resposta de import inclui relatório: total, criados, atualizados, ignorados, erros por linha (número + mensagem).
+- **D-25:** Templates CSV downloadáveis por entidade.
+- **D-26:** Normalização de códigos dept/CC para UPPERCASE no import.
+
+### H. Security & auth (v1.5)
+
+- **D-27:** **Sem auth** na aplicação nesta fase — rede local.
+- **D-28:** API e frontend **não** assumem sessão/login; nginx basic auth futuro via camada reversa **sem refactor** (sem middleware auth obrigatório no FastAPI agora).
+
+### I. Invariants (non-negotiable)
+
+- **D-29:** Falha em import, matcher, registry ou qualquer endpoint de settings **não** afeta watcher nem impressão física.
+- **D-30:** Watcher não importa modelos SQLAlchemy de org — no máximo `app.core.normalize`.
+- **D-31:** Capture pipeline e master data **desacoplados** — sem triggers de FK no INSERT de jobs.
+
+</decisions>
+
+<domain_model>
+## Entity Model (approved)
+
+```
+CostCenter (1) ──< Department (N)     [department.cost_center_id optional]
+Department (1) ──< User (N)
+CostCenter (1) ──< User (N)           [user.cost_center_id optional override]
+Department (1) ──< Printer (N)        [optional location]
+Printer (1) ──< PrintJob (N)          [printer_id nullable FK]
+PrintJob.username ──soft──> User.cups_username
 ```
 
-### Linking rules
+### Schema notes
 
-| Link | Strategy | When |
-|------|----------|------|
-| Job → Printer | `normalize(cups_queue) == normalize(printer.cups_queue_name)` | Matcher (batch + periodic) |
-| Job → User | `job.username == user.cups_username` | Read-time join (soft) |
-| User → CC | `user.cost_center_id` OR `department.cost_center_id` | Read-time (chargeback Fase 6) |
+- `cost_centers.code`, `departments.code` — NOT NULL, UNIQUE, stored UPPERCASE
+- `printers.cups_queue_name` — NOT NULL, UNIQUE (normalized comparison at match time)
+- `users.cups_username` — NOT NULL, UNIQUE (raw CUPS string)
+- All master tables: `is_active`, `created_at`, `updated_at`
 
----
+</domain_model>
 
-## Architecture Decisions to Discuss
+<api_surface>
+## Minimum API Surface
 
-### AD-01: Where does printer_id assignment run?
+| Method | Path | Decision |
+|--------|------|----------|
+| CRUD | `/api/v1/printers` | D-11, D-14 |
+| CRUD | `/api/v1/departments` | D-15–16 |
+| CRUD | `/api/v1/cost-centers` | D-15–16 |
+| CRUD | `/api/v1/users` | D-17 |
+| GET | `/api/v1/printers/unmapped-queues` | D-12 |
+| POST | `/api/v1/import/{entity}` | D-23–24 |
+| GET | `/api/v1/import/templates/{entity}` | D-25 |
+| POST | `/api/v1/admin/backfill-printer-ids` | D-04 |
 
-| Option | Pros | Cons |
-|--------|------|------|
-| **A. Background task in FastAPI lifespan** | Simple; no watcher change | Slight delay before ID appears |
-| **B. SQL trigger on INSERT** | Immediate | Couples DB to registry; watcher still shouldn't wait |
-| **C. Separate worker container** | Isolation | Overengineering for v1.5 |
+Audit endpoints (`/jobs`, `/export/csv`, `/stats/summary`) — **sem breaking changes** na Fase 5.
 
-**Recommendation:** A — periodic task (60s) + manual `POST /admin/backfill-printer-ids`
+</api_surface>
 
----
+<suggested_plan_order>
+## Suggested Plan Breakdown (for plan-phase)
 
-### AD-02: User ↔ Job relationship
+1. Alembic setup + migrations (entities + `printer_id` column)
+2. Shared `normalize.py` + refactor Fase 3 usage
+3. CRUD APIs (printers → cost_centers → departments → users)
+4. Matcher service + lifespan task + admin backfill endpoint
+5. Import CSV + templates + report schema
+6. Settings UI (printers + unmapped highlight → org entities → import)
+7. Integration: FilterBar printer source migration + validation scripts
 
-| Option | Pros | Cons |
-|--------|------|------|
-| **A. Soft link by username string** | Matches v1.0 AS-IS; no migration of jobs | Rename user = orphan until update |
-| **B. FK user_id on print_jobs** | Strong integrity | Requires backfill; username changes break |
+</suggested_plan_order>
 
-**Recommendation:** A for Phase 5 (soft link); revisit if LDAP sync added
-
----
-
-### AD-03: Settings UI structure
-
-| Option | Pros | Cons |
-|--------|------|------|
-| **A. `/settings/*` routes, shared AppShell** | Clear separation | More routes |
-| **B. Modal drawer over audit dashboard** | Less navigation | Cramped for CRUD tables |
-
-**Recommendation:** A — `/settings/printers`, `/settings/departments`, etc.
-
----
-
-### AD-04: Deprecate GET /printers (DISTINCT log)
-
-| Option | Pros | Cons |
-|--------|------|------|
-| **A. Replace with registry; show "unmapped queues" endpoint** | Clean canonical model | FilterBar migration |
-| **B. Keep both during transition** | Safer | Duplication |
-
-**Recommendation:** B for Phase 5 — registry primary; log-distinct as `GET /printers/unmapped-queues` helper
-
----
-
-### AD-05: Alembic placement
-
-| Option | Pros | Cons |
-|--------|------|------|
-| **A. `backend/alembic/` standard layout** | Convention | New folder |
-| **B. Raw SQL migration scripts** | No dep | Harder rollback |
-
-**Recommendation:** A — Alembic from day one of Phase 5
-
----
-
-### AD-06: CSV import transaction model
-
-| Option | Pros | Cons |
-|--------|------|------|
-| **A. All-or-nothing per file** | Simple | One bad row fails all |
-| **B. Row-level with partial commit** | USER wants IMPORT-04 | More complex UI |
-
-**Recommendation:** B — default partial; option `?strict=true` for all-or-nothing
-
----
-
-## Open Questions (for discussion)
-
-1. **Printer matcher frequency:** 60s periodic enough, or trigger on Settings save only?
-2. **Unique CUPS queue name:** enforce globally unique, or allow duplicate display names with unique queue?
-3. **Department code / CC code:** required or optional? Case sensitivity?
-4. **Deactivate vs delete:** soft-delete only (recommended) — confirm no hard delete in UI?
-5. **Settings auth:** confirm no nginx basic auth in v1.5 (rely on network isolation)?
-6. **Shared normalize module:** extract to `backend/app/core/normalize.py` imported by watcher AND API — acceptable coupling?
-
----
-
-## Proposed Schema (draft SQL)
-
-```sql
--- cost_centers
-CREATE TABLE cost_centers (
-  id INTEGER PRIMARY KEY,
-  code VARCHAR(50) UNIQUE NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  is_active BOOLEAN DEFAULT 1,
-  created_at DATETIME NOT NULL,
-  updated_at DATETIME NOT NULL
-);
-
--- departments
-CREATE TABLE departments (
-  id INTEGER PRIMARY KEY,
-  code VARCHAR(50) UNIQUE NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  cost_center_id INTEGER REFERENCES cost_centers(id),
-  is_active BOOLEAN DEFAULT 1,
-  created_at DATETIME NOT NULL,
-  updated_at DATETIME NOT NULL
-);
-
--- users
-CREATE TABLE users (
-  id INTEGER PRIMARY KEY,
-  cups_username VARCHAR(255) UNIQUE NOT NULL,
-  display_name VARCHAR(255),
-  department_id INTEGER REFERENCES departments(id),
-  cost_center_id INTEGER REFERENCES cost_centers(id),
-  is_active BOOLEAN DEFAULT 1,
-  created_at DATETIME NOT NULL,
-  updated_at DATETIME NOT NULL
-);
-
--- printers
-CREATE TABLE printers (
-  id INTEGER PRIMARY KEY,
-  display_name VARCHAR(255) NOT NULL,
-  cups_queue_name VARCHAR(255) UNIQUE NOT NULL,
-  ip_address VARCHAR(45),
-  manufacturer VARCHAR(100),
-  model VARCHAR(100),
-  location VARCHAR(255),
-  department_id INTEGER REFERENCES departments(id),
-  snmp_enabled BOOLEAN DEFAULT 0,
-  is_active BOOLEAN DEFAULT 1,
-  created_at DATETIME NOT NULL,
-  updated_at DATETIME NOT NULL
-);
-
--- print_jobs alteration
-ALTER TABLE print_jobs ADD COLUMN printer_id INTEGER REFERENCES printers(id);
-CREATE INDEX ix_print_jobs_printer_id ON print_jobs(printer_id);
-```
-
----
-
-## Integration with Existing Code
-
-| Existing | Phase 5 change |
-|----------|----------------|
-| `backend/app/db/models.py` | Add 4 models; alter PrintJob |
-| `backend/app/api/v1/printers.py` | Evolve or split registry vs unmapped |
-| `backend/app/services/normalize_printer_name` | Extract to shared module |
-| `frontend/src/` | New `settings/` routes + nav item |
-| `watcher` | Optional: import normalize only |
-
----
-
-## Discussion Agenda
-
-1. Confirm AD-01 through AD-06 recommendations (or override)
-2. Resolve open questions 1–6
-3. Validate schema draft vs requirements P5-AC-01–07
-4. Agree plan breakdown strategy (schema → API → UI → matcher → backfill)
-5. **Gate:** explicit "architecture approved" before `/gsd-plan-phase 5`
-
----
-
+<references>
 ## References
 
-- `.planning/REQUIREMENTS.md` — Phase 5 detailed
-- `.planning/research/ARCHITECTURE.md`
-- `.planning/research/PITFALLS.md`
+- `.planning/REQUIREMENTS.md` — Phase 5 detailed (28 REQ)
+- `.planning/phases/05-master-data-organization/05-DISCUSSION-LOG.md` — audit trail
+- `.planning/research/PITFALLS.md` — capture coupling warnings
 - `backend/app/db/models.py` — current schema
-- `.planning/phases/03-backend-api/03-02-PLAN.md` — normalize_printer_name
+- `.planning/phases/03-backend-api/03-02-PLAN.md` — normalize_printer_name origin
+
+</references>
 
 ---
-
-*Next: discuss decisions in chat or run `/gsd-discuss-phase 5` to formalize DISCUSSION-LOG.md*
+*Architecture approved: 2026-05-27 — Proceed to `/gsd-plan-phase 5`*

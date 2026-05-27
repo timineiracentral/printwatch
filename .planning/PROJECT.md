@@ -139,6 +139,10 @@ Ver `.planning/REQUIREMENTS.md` (milestone v1.5). Resumo:
 | Chargeback interno apenas | ✓ CSV/relatórios, sem fatura |
 | Fleet: CUPS/IPP → ping → SNMP toner | ✓ v1.5 híbrido simples |
 | Master data antes de costing/analytics | ✓ Fase 5 primeiro |
+| Matcher incremental + on-save | ✓ Fase 5 arch |
+| Soft link username (no FK on jobs) | ✓ Fase 5 arch |
+| Alembic obrigatório | ✓ Fase 5 arch |
+| normalize compartilhado | ✓ `app/core/normalize.py` |
 
 ---
 

@@ -51,7 +51,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 **Goal:** Admin cadastra impressoras, departamentos, centros de custo e usuários; importa CSV; jobs históricos e novos vinculam a `printer_id` sem alterar o hot path do watcher.
 
 **Requirements:** ORG-01–09, INV-01–06, IMPORT-01–05, SETTINGS-01–04, DATA-04–07, SERVER-04  
-**Plans:** 0 (aguardando discussão arquitetural + `/gsd-plan-phase 5`)
+**Plans:** 0 (arquitetura aprovada 2026-05-27 — aguardando `/gsd-plan-phase 5`)
 
 **Success criteria:**
 1. Admin CRUD completo para printers, departments, cost-centers, users via Settings UI
@@ -61,7 +61,8 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 5. Audit dashboard (jobs) permanece funcional com nova navegação Settings
 6. CC e Department gerenciados como entidades independentes
 
-**Discussão:** `.planning/phases/05-master-data-organization/05-CONTEXT.md`
+**Context:** `.planning/phases/05-master-data-organization/05-CONTEXT.md` (gate ✅)  
+**Discussion log:** `05-DISCUSSION-LOG.md`
 
 ---
 
@@ -115,7 +116,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | Fase | Milestone | REQ | Plans | Status |
 |------|-----------|-----|-------|--------|
 | 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
-| 5 | v1.5 | 28 | — | 📋 Requirements ✓ — arch discuss |
+| 5 | v1.5 | 28 | — | ✅ Arch approved — plan next |
 | 6 | v1.5 | 8 | — | Scoped |
 | 7 | v1.5 | 5 | — | Scoped |
 | 8 | v1.5 | 9 | — | Scoped |
@@ -133,9 +134,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 
 ## Próximos passos
 
-1. **Discussão arquitetural Fase 5** — `05-CONTEXT.md` (agora)
-2. `/gsd-discuss-phase 5` — opcional, formaliza decisões
-3. `/gsd-plan-phase 5` — **somente após** arquitetura aprovada
+1. `/gsd-plan-phase 5` — gerar plans (arquitetura aprovada 2026-05-27)
 
 ---
 *Roadmap v1.5 — 2026-05-27*

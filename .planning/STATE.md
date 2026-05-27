@@ -3,21 +3,21 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Management Platform
 status: planning
-last_updated: 2026-05-27T20:00:00.000Z
+last_updated: 2026-05-27T21:00:00.000Z
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
   percent: 0
-stopped_at: "Milestone v1.5 initialized — Phase 5 requirements ready for architectural discussion"
+stopped_at: "Phase 5 architecture gate closed — ready for /gsd-plan-phase 5"
 ---
 
 # STATE — PrintWatch
 
 **Última atualização:** 2026-05-27  
 **Milestone:** v1.5 Management Platform  
-**Status:** Defining requirements — Fase 5 em discussão arquitetural
+**Status:** Phase 5 ready for planning
 
 ---
 
@@ -25,8 +25,8 @@ stopped_at: "Milestone v1.5 initialized — Phase 5 requirements ready for archi
 
 **Phase:** 5 — Master Data & Organization (not started)  
 **Plan:** —  
-**Status:** Requirements defined — architectural discussion next  
-**Last activity:** 2026-05-27 — Milestone v1.5 initialized (research + requirements + roadmap)
+**Status:** ✅ Architecture approved — ready for `/gsd-plan-phase 5`  
+**Last activity:** 2026-05-27 — Phase 5 discussion gate closed (05-CONTEXT.md, 05-DISCUSSION-LOG.md)
 
 ---
 
@@ -44,7 +44,7 @@ See: `.planning/PROJECT.md`
 
 | Fase | Nome | Status |
 |------|------|--------|
-| 5 | Master Data & Organization | 📋 Requirements ✓ — discuss next |
+| 5 | Master Data & Organization | ✅ Arch approved — plan next |
 | 6 | Costing & Chargeback | 📋 Scoped |
 | 7 | Manager Analytics | 📋 Scoped |
 | 8 | Fleet Health & Toner | 📋 Scoped |
@@ -53,9 +53,8 @@ See: `.planning/PROJECT.md`
 
 ## Próxima ação
 
-1. Discussão arquitetural Fase 5 — ver `.planning/phases/05-master-data-organization/05-CONTEXT.md`
-2. `/gsd-discuss-phase 5` (opcional, formaliza discussão)
-3. `/gsd-plan-phase 5` **somente após** discussão arquitetural aprovada
+1. `/gsd-plan-phase 5` — gerar plans da Fase 5
+2. Contexto: `.planning/phases/05-master-data-organization/05-CONTEXT.md` (31 decisões D-01–D-31)
 
 ---
 
@@ -72,18 +71,20 @@ Archives: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`
 
 ---
 
-## Decisões v1.5 (início milestone)
+## Decisões Fase 5 (arquitetura aprovada)
 
-- CC e Department são entidades distintas
-- Chargeback = relatório/CSV interno, sem fatura
-- Inventário = impressoras; toner = telemetria SNMP opt-in
-- Fleet online: CUPS/IPP → ping IP → SNMP só toner
-- Cadastro/analytics isolados do pipeline de captura
+- Matcher: on-save imediato + 60s só `printer_id IS NULL` (batch limitado)
+- Backfill manual idempotente via admin endpoint
+- Soft link username; sem FK user em jobs
+- `/settings/*` + registry primário + `unmapped-queues`
+- Alembic obrigatório; códigos dept/CC UPPERCASE únicos
+- `normalize_printer_name` em módulo compartilhado
+- Sem auth v1.5; nginx basic auth futuro sem refactor app
 
 ---
 
 ## Session Continuity
 
 Last session: 2026-05-27  
-Stopped at: v1.5 milestone artifacts written — ready for Phase 5 architecture discussion  
-Resume: `.planning/phases/05-master-data-organization/05-CONTEXT.md`
+Stopped at: Phase 5 architecture gate closed  
+Resume: `/gsd-plan-phase 5`

@@ -13,7 +13,7 @@
 | 1 | Infrastructure & Print Server | VM Ubuntu + CUPS recebendo jobs IPP | SERVER-01, SERVER-02, SERVER-03, DEPLOY-01, DEPLOY-02 | ✓ Complete (2026-05-26) |
 | 2 | Log Pipeline & Data Layer | Jobs capturados e persistidos no banco | CAPTURE-01, CAPTURE-02, CAPTURE-03, CAPTURE-04, DATA-01, DATA-02, DATA-03, EXTEND-01, EXTEND-02, EXTEND-03 | ✓ Complete (2026-05-26 — functional with known gaps) |
 | 3 | Backend API | API REST servindo dados com filtros | DASH-06 (performance), EXPORT-01, EXPORT-02 | 3 |
-| 4 | Dashboard Web | Interface completa para o admin de TI | DASH-01, DASH-02, DASH-03, DASH-04, DASH-05 | 4 |
+| 4 | Dashboard Web | 6/7 | In Progress|  |
 | 5 | Client Config & Hardening | PCs Windows integrados, deploy documentado | SERVER-04, DEPLOY-03, DEPLOY-04 | 4 |
 
 ---
@@ -165,20 +165,20 @@ Plans:
 **Wave 1** *(sequencial — infra walking skeleton)*
 
 Plans:
-- [ ] 04-01-PLAN.md — Scaffold Vite React-TS + Tailwind v4 + Vitest libs (filters, dates, media)
+- [x] 04-01-PLAN.md — Scaffold Vite React-TS + Tailwind v4 + Vitest libs (filters, dates, media)
 
 **Wave 2** *(paralela — 04-02, 04-03 e 04-07 dependem de 04-01)*
 
 Plans:
-- [ ] 04-07-PLAN.md — nginx :80 + docker-compose + validate-phase4.sh Wave 0 (DASH-01 infra)
-- [ ] 04-02-PLAN.md — API client, tipos Pydantic, hooks TanStack Query, URL filters, debounce
-- [ ] 04-03-PLAN.md — Shell AppShell/Sidebar + primitivos UI Apple/PaperCut
+- [x] 04-07-PLAN.md — nginx :80 + docker-compose + validate-phase4.sh Wave 0 (DASH-01 infra)
+- [x] 04-02-PLAN.md — API client, tipos Pydantic, hooks TanStack Query, URL filters, debounce
+- [x] 04-03-PLAN.md — Shell AppShell/Sidebar + primitivos UI Apple/PaperCut
 
 **Wave 3** *(04-04 → 04-05 sequencial; 04-06 após ambos)*
 
 Plans:
-- [ ] 04-04-PLAN.md — SummaryCards DASH-02 via stats/summary
-- [ ] 04-05-PLAN.md — FilterBar + JobsTable + paginação server-side *(blocked on 04-04 — App.tsx)*
+- [x] 04-04-PLAN.md — SummaryCards DASH-02 via stats/summary
+- [x] 04-05-PLAN.md — FilterBar + JobsTable + paginação server-side *(blocked on 04-04 — App.tsx)*
 - [ ] 04-06-PLAN.md — Export CSV + validate completo + checkpoint humano (EXPORT-01)
 
 **Cross-cutting:** Decisões D-01..D-67 em `04-CONTEXT.md`; contratos API Fase 3; sem React Router/MUI/auth/charts.

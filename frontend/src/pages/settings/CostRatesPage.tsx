@@ -173,7 +173,9 @@ export function CostRatesPage() {
                             <td className="px-3 py-2 whitespace-nowrap">
                               {formatDateTime(row.valid_from)}
                               {isCurrent ? (
-                                <Badge className="ml-2">Vigente</Badge>
+                                <span className="ml-2 inline-block">
+                                  <Badge>Vigente</Badge>
+                                </span>
                               ) : null}
                             </td>
                             <td className="px-3 py-2 tabular-nums">{formatRateDisplay(row.rate_mono)}</td>

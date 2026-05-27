@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Management Platform
 status: executing
-last_updated: "2026-05-27T16:15:00.000Z"
+last_updated: "2026-05-27T16:30:00.000Z"
 last_activity: 2026-05-27
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 7
-  completed_plans: 3
-  percent: 43
+  completed_plans: 4
+  percent: 57
 ---
 
 # STATE — PrintWatch
@@ -24,10 +24,10 @@ progress:
 ## Current Position
 
 Phase: 05 (master-data-organization) — EXECUTING
-Plan: 4 of 7 (05-04 next)
+Plan: 5 of 7 (05-05 next)
 **Phase:** 5 — Master Data & Organization  
-**Plan:** 3/7 complete (05-01 ✅, 05-02 ✅, 05-03 ✅)  
-**Status:** Executing — Wave 2 in progress  
+**Plan:** 4/7 complete (05-01 ✅, 05-02 ✅, 05-03 ✅, 05-04 ✅)  
+**Status:** Executing — Wave 3 next (matcher)  
 **Last activity:** 2026-05-27
 
 ---
@@ -55,8 +55,8 @@ See: `.planning/PROJECT.md`
 
 ## Próxima ação
 
-1. Executar plan 05-04 (CRUD departments, cost-centers, users)
-2. Wave 3: 05-05 matcher após CRUD org
+1. Executar plan 05-05 (matcher + backfill printer_id)
+2. Wave 3: 05-06 import CSV após matcher
 
 ---
 

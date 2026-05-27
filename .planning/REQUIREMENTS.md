@@ -12,30 +12,30 @@
 
 ### Organization — Departments (ORG)
 
-- [ ] **ORG-01**: Admin can create, edit, and deactivate a department with name and optional code
-- [ ] **ORG-02**: Admin can list departments with search/filter by name or code
-- [ ] **ORG-03**: Deactivated department does not accept new user assignments but preserves historical references
+- [x] **ORG-01**: Admin can create, edit, and deactivate a department with name and optional code
+- [x] **ORG-02**: Admin can list departments with search/filter by name or code
+- [x] **ORG-03**: Deactivated department does not accept new user assignments but preserves historical references
 
 ### Organization — Cost Centers (ORG)
 
-- [ ] **ORG-04**: Admin can create, edit, and deactivate a cost center independent of departments
-- [ ] **ORG-05**: Admin can optionally link a department to a cost center (many departments may share one CC)
-- [ ] **ORG-06**: A department without CC assignment appears as "unassigned" in chargeback reports (Fase 6)
+- [x] **ORG-04**: Admin can create, edit, and deactivate a cost center independent of departments
+- [x] **ORG-05**: Admin can optionally link a department to a cost center (many departments may share one CC)
+- [x] **ORG-06**: A department without CC assignment appears as "unassigned" in chargeback reports (Fase 6)
 
 ### Organization — Users (ORG)
 
-- [ ] **ORG-07**: Admin can register a user with CUPS username (exact match key), display name, department, and optional cost center override
-- [ ] **ORG-08**: Admin can list users with filter by department, cost center, or username
-- [ ] **ORG-09**: Print jobs from unknown usernames remain visible in audit views and appear as "unassigned" in management reports
+- [x] **ORG-07**: Admin can register a user with CUPS username (exact match key), display name, department, and optional cost center override
+- [x] **ORG-08**: Admin can list users with filter by department, cost center, or username
+- [x] **ORG-09**: Print jobs from unknown usernames remain visible in audit views and appear as "unassigned" in management reports
 
 ### Inventory — Printers (INV)
 
-- [ ] **INV-01**: Admin can register a printer with display name, CUPS queue name, IP address, manufacturer/model, location, and optional department
-- [ ] **INV-02**: Admin can edit printer metadata and deactivate a printer (historical jobs preserved)
-- [ ] **INV-03**: Admin can list printers showing registration status: mapped jobs vs unmapped queue names from log
+- [x] **INV-01**: Admin can register a printer with display name, CUPS queue name, IP address, manufacturer/model, location, and optional department
+- [x] **INV-02**: Admin can edit printer metadata and deactivate a printer (historical jobs preserved)
+- [x] **INV-03**: Admin can list printers showing registration status: mapped jobs vs unmapped queue names from log
 - [ ] **INV-04**: System links historical print jobs to `printer_id` via normalized CUPS queue name match (batch/backfill)
 - [x] **INV-05**: New print jobs receive `printer_id` when queue name matches a registered printer (async or post-insert, never blocking watcher)
-- [ ] **INV-06**: `/api/v1/printers` registry replaces DISTINCT-log behavior as canonical printer list (audit UI migrates to registry)
+- [x] **INV-06**: `/api/v1/printers` registry replaces DISTINCT-log behavior as canonical printer list (audit UI migrates to registry)
 
 ### Import (IMPORT)
 
@@ -61,7 +61,7 @@
 
 ### Server (SERVER) — deferred from v1.0
 
-- [ ] **SERVER-04**: Admin can view printer registration and mapping status in UI (fulfills v1.0 deferral)
+- [x] **SERVER-04**: Admin can view printer registration and mapping status in UI (fulfills v1.0 deferral)
 
 ---
 
@@ -211,7 +211,7 @@ PrintJob.username ──match──> User.cups_username [soft link, no FK requir
 | IMPORT-01 – IMPORT-05 | 5 | Pending |
 | SETTINGS-01 – SETTINGS-04 | 5 | Pending |
 | DATA-04 – DATA-07 | 5 | Pending |
-| SERVER-04 | 5 | Pending |
+| SERVER-04 | 5 | Complete |
 | COST-01 – COST-04 | 6 | Pending |
 | CHRG-01 – CHRG-04 | 6 | Pending |
 | ANAL-01 – ANAL-05 | 7 | Pending |

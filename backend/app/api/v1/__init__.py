@@ -1,10 +1,12 @@
 from fastapi import APIRouter
 
 from app.api.v1 import (
+    admin,
     cost_centers,
     departments,
     export,
     health,
+    import_routes,
     jobs,
     printers,
     stats,
@@ -24,3 +26,5 @@ api_v1_router.include_router(users.router, prefix="/users", tags=["users"])
 api_v1_router.include_router(stats.router, prefix="/stats", tags=["stats"])
 api_v1_router.include_router(export.router, prefix="/export", tags=["export"])
 api_v1_router.include_router(health.router, prefix="/health", tags=["health"])
+api_v1_router.include_router(admin.router, prefix="/admin", tags=["admin"])
+api_v1_router.include_router(import_routes.router, prefix="/import", tags=["import"])

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
@@ -12,6 +13,7 @@ from app.core.config import settings
 from app.db.migrations import ensure_indexes, ensure_wal_mode
 from app.db.repository import PrintJobRepository
 from app.db.session import SessionLocal, engine
+from app.services.printer_matcher import match_batch
 from app.services.retention import purge_old_jobs
 from app.services.tail_reader import TailReader
 from app.watcher import status as watcher_status
@@ -22,11 +24,27 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 _observer: object | None = None
+_matcher_task: asyncio.Task[None] | None = None
+
+
+async def _matcher_loop() -> None:
+    """D-02: batch a cada 60s — só jobs com printer_id IS NULL."""
+    while True:
+        await asyncio.sleep(60)
+        session = SessionLocal()
+        try:
+            n = match_batch(session)
+            if n:
+                logger.info("matcher periodic: %d job(s) linked", n)
+        except Exception:
+            logger.exception("matcher periodic batch failed")
+        finally:
+            session.close()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    global _observer
+    global _observer, _matcher_task
 
     # InotifyObserver é Linux-only — import lazy para permitir dev local no Windows.
     try:
@@ -63,7 +81,19 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     else:
         logger.warning("InotifyObserver unavailable (non-Linux); watcher not started")
 
+    _matcher_task = asyncio.create_task(_matcher_loop())
+    logger.info("matcher periodic task started (60s interval)")
+
     yield
+
+    if _matcher_task is not None:
+        _matcher_task.cancel()
+        try:
+            await _matcher_task
+        except asyncio.CancelledError:
+            pass
+        _matcher_task = None
+        logger.info("matcher periodic task stopped")
 
     if _observer is not None:
         _observer.stop()

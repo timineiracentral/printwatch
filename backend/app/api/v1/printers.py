@@ -1,7 +1,7 @@
 """CRUD /api/v1/printers — registry canônico (D-11, D-12, D-14, D-18)."""
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db_dep
@@ -23,10 +23,11 @@ def list_printers_endpoint(
 @router.post("", response_model=PrinterRead, status_code=201)
 def create_printer_endpoint(
     payload: PrinterCreate,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db_dep),
 ) -> PrinterRead:
     row = printers_service.create_printer(db, payload)
-    schedule_match_for_queue(row.cups_queue_name)
+    background_tasks.add_task(schedule_match_for_queue, row.cups_queue_name)
     return row
 
 
@@ -50,10 +51,11 @@ def get_printer_endpoint(
 def update_printer_endpoint(
     printer_id: int,
     payload: PrinterUpdate,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db_dep),
 ) -> PrinterRead:
     row = printers_service.update_printer(db, printer_id, payload)
-    schedule_match_for_queue(row.cups_queue_name)
+    background_tasks.add_task(schedule_match_for_queue, row.cups_queue_name)
     return row
 
 

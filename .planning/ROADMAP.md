@@ -109,9 +109,23 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 
 **Goal:** Tarifas mono/color configuráveis; custo estimado por job; relatórios e export CSV de chargeback interno por departamento e centro de custo.
 
-**Requirements:** COST-01–04, CHRG-01–04
+**Requirements:** COST-01–04, CHRG-01–04  
+**Plans:** 1/5 plans executed (06-01 ✅)
+
+| Wave | Plans | Entrega |
+|------|-------|---------|
+| 1 | 06-01 | Migration cost_rates + color_mode_source + parser aliases + doc CUPS |
+| 2 | 06-02 | cost_service + API /cost-rates |
+| 3 | 06-03, 06-04 | Jobs custo/páginas faturáveis + PATCH cor + exports chargeback CSV |
+| 4 | 06-05 | Settings Tarifas + coluna custo Jobs + correção manual UI |
+
+**Cross-cutting constraints:**
+- Custo sempre read-path; tarifa vigente na data do job (não tarifa atual)
+- `outside_policy` excluído de chargeback e exports desta fase
+- `/stats/summary` inalterado — analytics de custo ficam na Fase 7
 
 **Context:** `.planning/phases/06-costing-chargeback/06-CONTEXT.md` (gate ✅)  
+**Research:** `06-RESEARCH.md`  
 **Discussion log:** `06-DISCUSSION-LOG.md`
 
 **Success criteria:**
@@ -160,7 +174,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
 | 5 | v1.5 | 7/7 | Complete    | 2026-05-27 |
 | 5.2 | v1.5 | 5/5 | Planned | 2026-05-27 |
-| 6 | v1.5 | 8 | — | Context ready |
+| 6 | v1.5 | 8 | 1/5 | Executing |
 | 7 | v1.5 | 5 | — | Scoped |
 | 8 | v1.5 | 9 | — | Scoped |
 
@@ -178,7 +192,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 ## Próximos passos
 
 1. `/gsd-execute-phase 5.2` — User–Printer Access (5 plans)
-2. `/gsd-plan-phase 6` — context gathered 2026-05-27
+2. `/gsd-execute-phase 6` — Costing & Chargeback (5 plans)
 
 ---
 *Roadmap v1.5 — 2026-05-27*

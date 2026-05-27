@@ -2,32 +2,34 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Management Platform
-status: phase_6_context_gathered
-last_updated: 2026-05-27T20:00:00.000Z
+status: executing
+stopped_at: Completed 06-01-PLAN.md
+last_updated: "2026-05-27T20:30:00.000Z"
 last_activity: 2026-05-27
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 28
-  completed_plans: 24
-  percent: 25
-stopped_at: Phase 6 context gathered — ready for plan-phase
+  total_plans: 5
+  completed_plans: 1
+  percent: 20
 ---
 
 # STATE — PrintWatch
 
 **Última atualização:** 2026-05-27  
 **Milestone:** v1.5 Management Platform  
-**Status:** Ready to execute
+**Status:** Executing Phase 06
 
 ---
 
 ## Current Position
 
+Phase: 06 (costing-chargeback) — EXECUTING
+Plan: 2 of 5
 **Phase:** 6
-**Plan:** —
-**Status:** Context gathered — `phases/06-costing-chargeback/06-CONTEXT.md`  
-**Last activity:** 2026-05-27 — discuss-phase 6
+**Plan:** 06-02 next (cost_service + API cost-rates)
+**Status:** Plan 06-01 complete — `06-01-SUMMARY.md`  
+**Last activity:** 2026-05-27 — executed 06-01
 
 ---
 
@@ -47,7 +49,7 @@ See: `.planning/PROJECT.md`
 |------|------|--------|
 | 5 | Master Data & Organization | ✅ Complete (7/7 plans) |
 | 5.2 | User–Printer Access Policy | ✅ Executed (5/5 plans) — UAT pendente |
-| 6 | Costing & Chargeback | 📋 Context ready |
+| 6 | Costing & Chargeback | 🔄 Executing (1/5 plans) |
 | 7 | Manager Analytics | 📋 Scoped |
 | 8 | Fleet Health & Toner | 📋 Scoped |
 
@@ -55,7 +57,7 @@ See: `.planning/PROJECT.md`
 
 ## Próxima ação
 
-1. `/gsd-plan-phase 6` — planejar costing & chargeback (context em `06-CONTEXT.md`)
+1. Executar plano **06-02** — cost_service + API `/cost-rates`
 2. UAT Fase 5.2 em `05.2-HUMAN-UAT.md` (se ainda pendente)
 
 ---
@@ -96,9 +98,9 @@ Archives: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`
 
 ## Session Continuity
 
-Last session: 2026-05-27T19:00:00.000Z
-Stopped at: Completed 05-07-PLAN.md
-Resume: None
+Last session: 2026-05-27T20:30:00.000Z
+Stopped at: Completed 06-01-PLAN.md
+Resume: Execute 06-02-PLAN.md
 
 ## Performance Metrics
 
@@ -110,6 +112,7 @@ Resume: None
 | Phase 05-master-data-organization P05 | 25min | 2 tasks | 7 files |
 | Phase 05-master-data-organization P06 | 35min | 2 tasks | 8 files |
 | Phase 05-master-data-organization P07 | 55min | 4 tasks | 30+ files |
+| Phase 06-costing-chargeback P01 | 25min | 3 tasks | 8 files |
 
 ## Decisions
 
@@ -121,3 +124,4 @@ Resume: None
 - [Phase 05 Plan 06]: CSV import strict=false partial commit; strict=true rollback total
 - [Phase 05 Plan 06]: Templates CSV downloadáveis; upsert por natural key com relatório por linha
 - [Phase 05 Plan 07]: Settings UI react-router /settings/*; FilterBar no registry; display_name no combobox
+- [Phase 06 Plan 01]: cost_rates + color_mode_source schema; aliases CUPS em color_mode.py; watcher sem costing

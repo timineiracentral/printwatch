@@ -47,10 +47,10 @@
 
 ### Settings UI (SETTINGS)
 
-- [ ] **SETTINGS-01**: Dashboard has a Settings section with navigation for Printers, Departments, Cost Centers, Users, and Import
-- [ ] **SETTINGS-02**: CRUD forms follow existing UI patterns (Fase 4 design system)
-- [ ] **SETTINGS-03**: Settings changes do not require restart of watcher or CUPS containers
-- [ ] **SETTINGS-04**: Audit dashboard (jobs/history) remains available unchanged alongside Settings
+- [x] **SETTINGS-01**: Dashboard has a Settings section with navigation for Printers, Departments, Cost Centers, Users, and Import
+- [x] **SETTINGS-02**: CRUD forms follow existing UI patterns (Fase 4 design system)
+- [x] **SETTINGS-03**: Settings changes do not require restart of watcher or CUPS containers
+- [x] **SETTINGS-04**: Audit dashboard (jobs/history) remains available unchanged alongside Settings
 
 ### Data & Schema (DATA)
 

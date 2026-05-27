@@ -3,8 +3,8 @@ import { PageHeader } from './components/layout/PageHeader'
 import { FilterBar } from './components/filters/FilterBar'
 import { JobsPagination } from './components/jobs/JobsPagination'
 import { JobsTable } from './components/jobs/JobsTable'
+import { ExportCsvButton } from './components/export/ExportCsvButton'
 import { SummaryCards } from './components/summary/SummaryCards'
-import { Button } from './components/ui/Button'
 
 export default function App() {
   return (
@@ -12,11 +12,7 @@ export default function App() {
       header={
         <PageHeader
           title="Histórico de impressão"
-          actions={
-            <Button variant="secondary" disabled>
-              Exportar CSV
-            </Button>
-          }
+          actions={<ExportCsvButton />}
         />
       }
     >

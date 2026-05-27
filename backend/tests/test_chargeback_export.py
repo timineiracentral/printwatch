@@ -208,3 +208,34 @@ def test_count_chargeback_groups_matches_rows(db_session: Session) -> None:
         db_session, date(2026, 5, 1), date(2026, 5, 31), "department"
     )
     assert n == len(rows)
+
+
+def test_export_chargeback_endpoints_return_csv_with_bom(
+    client: TestClient,
+) -> None:
+    for path in (
+        "/api/v1/export/chargeback/by-cost-center",
+        "/api/v1/export/chargeback/by-department",
+    ):
+        r = client.get(
+            path,
+            params={"date_from": "2026-05-01", "date_to": "2026-05-31"},
+        )
+        assert r.status_code == 200, r.text
+        assert r.headers["content-type"].startswith("text/csv")
+        assert r.content[:3] == b"\xef\xbb\xbf"
+        assert "chargeback_" in r.headers["content-disposition"]
+
+
+def test_export_chargeback_cap_returns_400(client: TestClient) -> None:
+    from unittest.mock import patch
+
+    with patch(
+        "app.api.v1.export.chargeback_export.count_chargeback_groups",
+        return_value=100_001,
+    ):
+        r = client.get(
+            "/api/v1/export/chargeback/by-cost-center",
+            params={"date_from": "2026-05-01", "date_to": "2026-05-31"},
+        )
+    assert r.status_code == 400

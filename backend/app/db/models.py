@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from datetime import datetime
+from decimal import Decimal
 from typing import Optional
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, Numeric, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -108,6 +109,17 @@ class UserPrinterAccess(Base):
     )
 
 
+class CostRate(Base):
+    __tablename__ = "cost_rates"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    rate_mono: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
+    rate_color: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
+    valid_from: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+
 class PrintJob(Base):
     __tablename__ = "print_jobs"
 
@@ -121,6 +133,7 @@ class PrintJob(Base):
     timestamp: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     pages: Mapped[int] = mapped_column(Integer, nullable=False)
     color_mode: Mapped[Optional[str]] = mapped_column(String(50))
+    color_mode_source: Mapped[Optional[str]] = mapped_column(String(20))
     host_origin: Mapped[Optional[str]] = mapped_column(String(255))
     job_name: Mapped[Optional[str]] = mapped_column(String(512))
     media: Mapped[Optional[str]] = mapped_column(String(100))

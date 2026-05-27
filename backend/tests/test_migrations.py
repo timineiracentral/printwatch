@@ -116,8 +116,10 @@ def test_upgrade_head_creates_master_tables_and_printer_id(migration_db: Path) -
             text("SELECT version_num FROM alembic_version")
         ).scalar_one()
     engine.dispose()
-    assert current == "c4e8f1a92b03"
+    assert current == "4227505c4a72"
     assert _table_exists(migration_db, "user_printer_access")
+    assert _table_exists(migration_db, "cost_rates")
+    assert "color_mode_source" in _table_columns(migration_db, "print_jobs")
 
 
 def test_downgrade_user_printer_access_and_reupgrade(migration_db: Path) -> None:
@@ -125,12 +127,24 @@ def test_downgrade_user_printer_access_and_reupgrade(migration_db: Path) -> None
     command.upgrade(cfg, "head")
     assert _table_exists(migration_db, "user_printer_access")
 
-    command.downgrade(cfg, "-1")
+    command.downgrade(cfg, "085a2d5c5767")
     assert not _table_exists(migration_db, "user_printer_access")
     assert _table_exists(migration_db, "printers")
 
     command.upgrade(cfg, "head")
     assert _table_exists(migration_db, "user_printer_access")
+
+
+def test_downgrade_cost_rates_and_reupgrade(migration_db: Path) -> None:
+    cfg = _alembic_config(migration_db)
+    command.upgrade(cfg, "head")
+    assert _table_exists(migration_db, "cost_rates")
+
+    command.downgrade(cfg, "-1")
+    assert not _table_exists(migration_db, "cost_rates")
+
+    command.upgrade(cfg, "head")
+    assert _table_exists(migration_db, "cost_rates")
 
 
 def test_alembic_current_shows_head(migration_db: Path) -> None:
@@ -143,4 +157,4 @@ def test_alembic_current_shows_head(migration_db: Path) -> None:
             text("SELECT version_num FROM alembic_version")
         ).scalar_one()
     engine.dispose()
-    assert current == "c4e8f1a92b03"
+    assert current == "4227505c4a72"

@@ -7,7 +7,16 @@ export LOG_RETENTION_DAYS="${LOG_RETENTION_DAYS:-90}"
 
 mkdir -p "$(dirname "$DB_PATH")"
 
-python -c "import app.db.session"  # noqa: F401 — create_all + ensure DB file exists
+# create_all para tabelas novas; alembic altera print_jobs existente (printer_id, etc.)
+python -c "import app.db.session"  # noqa: F401
+
+if [[ -f /app/scripts/ensure_db_schema.py ]]; then
+  python /app/scripts/ensure_db_schema.py
+elif [[ -f alembic.ini ]]; then
+  alembic -c /app/alembic.ini upgrade head
+else
+  echo "WARN: alembic.ini missing — schema may be stale on existing DB volumes" >&2
+fi
 
 if [[ -f "$DB_PATH" ]]; then
   chmod 600 "$DB_PATH"

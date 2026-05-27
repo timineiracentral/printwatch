@@ -41,6 +41,7 @@ CSV_HEADER = [           # D-14 — cabeçalhos pt-BR
     "Frente/Verso",
     "Modo de Cor",
     "Origem",
+    "Fora da política",
 ]
 
 
@@ -88,16 +89,25 @@ def iter_csv_rows(db: Session, filters: JobFilters) -> Iterator[str]:
         .execution_options(yield_per=1000)
     )
 
+    from app.services.policy_service import compute_outside_policy, load_policy_context
+
+    policy_ctx = load_policy_context(db)
+
     for row in db.execute(stmt).mappings():
+        row_dict = dict(row)
+        outside = compute_outside_policy(
+            policy_ctx, row_dict["username"], row_dict.get("printer_id")
+        )
         fields = [
-            _format_timestamp(row["timestamp"]),
-            row["username"] or "",
-            row["printer"] or "",
-            row["job_name"] or "",
-            str(row["pages"]),
-            row["media"] or "",
-            row["sides"] or "",
-            row["color_mode"] or "",
-            row["host_origin"] or "",
+            _format_timestamp(row_dict["timestamp"]),
+            row_dict["username"] or "",
+            row_dict["printer"] or "",
+            row_dict["job_name"] or "",
+            str(row_dict["pages"]),
+            row_dict["media"] or "",
+            row_dict["sides"] or "",
+            row_dict["color_mode"] or "",
+            row_dict["host_origin"] or "",
+            "sim" if outside else "nao",
         ]
         yield CSV_DELIMITER.join(_csv_escape(c) for c in fields) + "\n"

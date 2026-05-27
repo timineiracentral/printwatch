@@ -12,6 +12,7 @@ export interface JobOut {
   host_origin?: string | null
   media?: string | null
   sides?: string | null
+  outside_policy?: boolean
 }
 
 export interface JobFilters {
@@ -22,6 +23,7 @@ export interface JobFilters {
   search?: string
   date_from?: string
   date_to?: string
+  outside_policy?: boolean
 }
 
 export interface Page<T> {
@@ -146,6 +148,43 @@ export interface UserUpdate {
   department_id?: number
   cost_center_id?: number | null
   is_active?: boolean
+}
+
+export interface PrinterAccessItem {
+  printer_id: number
+  is_default: boolean
+  is_active: boolean
+}
+
+export interface PrinterAccessRead {
+  id: number
+  user_id: number
+  printer_id: number
+  printer_display_name?: string | null
+  is_default: boolean
+  is_active: boolean
+}
+
+export interface PrinterAccessReplace {
+  assignments: PrinterAccessItem[]
+}
+
+export interface PrinterUserAccessRead {
+  id: number
+  display_name: string
+  cups_username: string
+  is_default: boolean
+}
+
+export interface TiExportRow {
+  display_name: string
+  username: string
+  printer_display_name: string
+  cups_queue_name: string
+  ipp_url: string | null
+  is_default: boolean
+  department: string | null
+  location: string | null
 }
 
 export interface ImportLineError {

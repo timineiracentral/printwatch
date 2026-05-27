@@ -42,6 +42,19 @@ export async function postJson<T>(path: string, body: unknown): Promise<T> {
   return res.json() as Promise<T>
 }
 
+export async function putJson<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${baseUrl}${path}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+  if (!res.ok) await parseError(res)
+  return res.json() as Promise<T>
+}
+
 export async function patchJson<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(`${baseUrl}${path}`, {
     method: 'PATCH',

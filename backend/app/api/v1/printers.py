@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db_dep
 from app.schemas.printer import PrinterCreate, PrinterRead, PrinterUpdate
+from app.schemas.user_printer_access import PrinterUserAccessRead
+from app.services import user_printer_access_service
 from app.services import printers_service
 from app.services.matcher_hooks import schedule_match_for_queue
 
@@ -34,6 +36,14 @@ def create_printer_endpoint(
 @router.get("/unmapped-queues", response_model=list[str])
 def list_unmapped_queues_endpoint(db: Session = Depends(get_db_dep)) -> list[str]:
     return printers_service.list_unmapped_queues(db)
+
+
+@router.get("/{printer_id}/users", response_model=list[PrinterUserAccessRead])
+def list_printer_users_endpoint(
+    printer_id: int,
+    db: Session = Depends(get_db_dep),
+) -> list[PrinterUserAccessRead]:
+    return user_printer_access_service.list_users_for_printer(db, printer_id)
 
 
 @router.get("/{printer_id}", response_model=PrinterRead)

@@ -15,7 +15,8 @@ export function hasActiveFilters(filters: JobFilters): boolean {
     filters.printer?.trim() ||
     filters.search?.trim() ||
     filters.date_from ||
-    filters.date_to
+    filters.date_to ||
+    filters.outside_policy != null
   )
 }
 
@@ -43,6 +44,10 @@ export function parseFiltersFromUrl(search: string): JobFilters {
   const dateTo = params.get('date_to')?.trim()
   if (dateTo) filters.date_to = dateTo
 
+  const outsidePolicy = params.get('outside_policy')?.trim()
+  if (outsidePolicy === 'true') filters.outside_policy = true
+  if (outsidePolicy === 'false') filters.outside_policy = false
+
   return filters
 }
 
@@ -61,6 +66,9 @@ export function filtersToSearchParams(filters: JobFilters): URLSearchParams {
 
   const search = filters.search?.trim()
   if (search) params.set('search', search)
+
+  if (filters.outside_policy === true) params.set('outside_policy', 'true')
+  if (filters.outside_policy === false) params.set('outside_policy', 'false')
 
   return params
 }

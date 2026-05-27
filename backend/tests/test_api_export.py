@@ -39,7 +39,10 @@ def test_export_csv_header_pt_br(client: TestClient, seed_jobs) -> None:
     """D-14: cabeçalhos em pt-BR."""
     text = _decode(client.get("/api/v1/export/csv").content)
     header = text.splitlines()[0]
-    expected = "Data/Hora;Usuário;Impressora;Documento;Páginas;Papel;Frente/Verso;Modo de Cor;Origem"
+    expected = (
+        "Data/Hora;Usuário;Impressora;Documento;Páginas;Papel;Frente/Verso;"
+        "Modo de Cor;Origem;Fora da política"
+    )
     assert header == expected
 
 

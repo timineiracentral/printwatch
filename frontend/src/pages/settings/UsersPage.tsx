@@ -1,5 +1,7 @@
 import { Users } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { UserPrinterAccessSection } from '../../components/settings/UserPrinterAccessSection'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { ConfirmDialog } from '../../components/settings/ConfirmDialog'
 import { SettingsSearch } from '../../components/settings/SettingsSearch'
@@ -102,8 +104,10 @@ export function UsersPage() {
           department_id: Number(departmentId),
           cost_center_id: costCenterId ? Number(costCenterId) : null,
         }
-        await create.mutateAsync(body)
-        setSuccessMsg('Usuário cadastrado.')
+        const created = await create.mutateAsync(body)
+        setEditing(created)
+        setSuccessMsg('Usuário cadastrado. Configure as impressoras abaixo.')
+        return
       }
       setDialogOpen(false)
     } catch {
@@ -193,6 +197,7 @@ export function UsersPage() {
       <Dialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
+        wide={!!editing}
         title={editing ? 'Editar usuário' : 'Novo usuário'}
         footer={
           <>
@@ -233,6 +238,25 @@ export function UsersPage() {
             value={costCenterId}
             onChange={(e) => setCostCenterId(e.target.value)}
           />
+          {editing ? (
+            <>
+              <div className="flex flex-wrap gap-3 print:hidden">
+                <Link
+                  to={`/settings/users/${editing.id}/ti-export`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-[var(--accent)] underline"
+                >
+                  Exportar roteiro TI
+                </Link>
+              </div>
+              <UserPrinterAccessSection userId={editing.id} />
+            </>
+          ) : (
+            <p className="text-xs text-[var(--text-secondary)]">
+              Salve o usuário para configurar impressoras permitidas.
+            </p>
+          )}
         </form>
       </Dialog>
       <ConfirmDialog

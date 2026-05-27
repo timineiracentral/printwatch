@@ -1,5 +1,6 @@
 import { Printer } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { PrinterUsersPanel } from '../../components/settings/PrinterUsersPanel'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { ConfirmDialog } from '../../components/settings/ConfirmDialog'
 import { SettingsSearch } from '../../components/settings/SettingsSearch'
@@ -182,7 +183,7 @@ export function PrintersPage() {
             <table className="w-full min-w-[720px] border-collapse text-sm">
               <thead className="sticky top-0 z-[1] bg-[var(--bg-surface)]">
                 <tr className="border-b border-[var(--border-subtle)]">
-                  {['Nome', 'Fila CUPS', 'Local', 'Status', 'Ações'].map((h) => (
+                  {['Nome', 'Fila no servidor', 'Local', 'Status', 'Ações'].map((h) => (
                     <th
                       key={h}
                       scope="col"
@@ -271,6 +272,7 @@ export function PrintersPage() {
       <Dialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
+        wide
         title={editing ? 'Editar impressora' : 'Nova impressora'}
         footer={
           <>
@@ -296,13 +298,41 @@ export function PrintersPage() {
             value={form.display_name}
             onChange={(e) => setForm((f) => ({ ...f, display_name: e.target.value }))}
           />
-          <Input
-            label="Fila CUPS"
-            required
-            value={form.cups_queue_name}
-            onChange={(e) => setForm((f) => ({ ...f, cups_queue_name: e.target.value }))}
-            placeholder="nome exato da fila CUPS"
-          />
+          {(unmapped.data?.length ?? 0) > 0 || editing ? (
+            <Select
+              label="Fila detectada"
+              required={!editing && (unmapped.data?.length ?? 0) > 0}
+              options={[
+                ...(editing
+                  ? [{ value: form.cups_queue_name, label: form.cups_queue_name }]
+                  : []),
+                ...(unmapped.data ?? []).map((q) => ({ value: q, label: q })),
+              ]}
+              placeholder="Selecione uma fila…"
+              value={form.cups_queue_name}
+              onChange={(e) => {
+                const q = e.target.value
+                setForm((f) => ({
+                  ...f,
+                  cups_queue_name: q,
+                  display_name: f.display_name || q,
+                }))
+              }}
+            />
+          ) : null}
+          <details className="rounded border border-[var(--border-subtle)] p-3">
+            <summary className="cursor-pointer text-sm font-medium">Avançado</summary>
+            <div className="mt-3">
+              <Input
+                label="Identificador no servidor"
+                value={form.cups_queue_name}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, cups_queue_name: e.target.value }))
+                }
+                placeholder="nome exato da fila no servidor"
+              />
+            </div>
+          </details>
           <Input
             label="Endereço IP"
             value={form.ip_address}
@@ -325,6 +355,7 @@ export function PrintersPage() {
             value={form.department_id}
             onChange={(e) => setForm((f) => ({ ...f, department_id: e.target.value }))}
           />
+          {editing ? <PrinterUsersPanel printerId={editing.id} /> : null}
         </form>
       </Dialog>
 

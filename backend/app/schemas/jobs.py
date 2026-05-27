@@ -42,6 +42,7 @@ class JobOut(BaseModel):
     host_origin: Optional[str] = None
     media: Optional[str] = None
     sides: Optional[str] = None
+    outside_policy: bool = False
 
     @field_serializer("timestamp")
     def _serialize_timestamp_in_sao_paulo(self, value: datetime) -> str:
@@ -68,6 +69,7 @@ class JobFilters(BaseModel):
     search: Optional[str] = None
     date_from: Optional[date] = None
     date_to: Optional[date] = None
+    outside_policy: Optional[bool] = None
 
     @model_validator(mode="after")
     def _validate_date_range(self) -> "JobFilters":

@@ -14,8 +14,8 @@ export function UnmappedQueuesBanner({
   const n = queues.length
   const label =
     n === 1
-      ? '1 fila no log ainda não cadastrada'
-      : `${n} filas no log ainda não cadastradas`
+      ? '1 fila detectada ainda não cadastrada'
+      : `${n} filas detectadas ainda não cadastradas`
 
   return (
     <div
@@ -40,7 +40,7 @@ export function UnmappedQueuesBanner({
           variant="secondary"
           onClick={() => onRegisterQueue(queues[0] ?? '')}
         >
-          Cadastrar fila
+          Cadastrar fila detectada
         </Button>
       </div>
     </div>

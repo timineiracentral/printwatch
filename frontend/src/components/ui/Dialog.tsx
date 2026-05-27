@@ -12,16 +12,19 @@ export interface DialogProps {
   title: string
   children: ReactNode
   footer?: ReactNode
+  /** Expande painel (ex.: ficha usuário com impressoras). */
+  wide?: boolean
 }
 
-export function Dialog({ open, onClose, title, children, footer }: DialogProps) {
+export function Dialog({ open, onClose, title, children, footer, wide }: DialogProps) {
   return (
     <HDialog open={open} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/20" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel
           className={[
-            'max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-[var(--border-subtle)]',
+            'max-h-[90vh] w-full overflow-y-auto rounded-xl border border-[var(--border-subtle)]',
+            wide ? 'max-w-2xl' : 'max-w-lg',
             'bg-[var(--bg-surface)] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.12)]',
           ].join(' ')}
         >

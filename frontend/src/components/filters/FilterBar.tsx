@@ -4,6 +4,7 @@ import { useUrlFilters } from '../../hooks/useUrlFilters'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
 import { DatePresetGroup } from './DatePresetGroup'
+import { Select } from '../ui/Select'
 import { PrinterCombobox } from './PrinterCombobox'
 
 /**
@@ -76,6 +77,27 @@ export function FilterBar() {
           placeholder="Buscar por nome do arquivo…"
           value={searchLocal}
           onChange={(e) => setSearchLocal(e.target.value)}
+        />
+        <Select
+          label="Fora da política"
+          options={[
+            { value: '', label: 'Todos' },
+            { value: 'true', label: 'Somente fora da política' },
+            { value: 'false', label: 'Somente conformes' },
+          ]}
+          value={
+            filters.outside_policy === true
+              ? 'true'
+              : filters.outside_policy === false
+                ? 'false'
+                : ''
+          }
+          onChange={(e) => {
+            const v = e.target.value
+            setFilters({
+              outside_policy: v === 'true' ? true : v === 'false' ? false : undefined,
+            })
+          }}
         />
       </div>
     </section>

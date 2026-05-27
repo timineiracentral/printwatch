@@ -22,6 +22,7 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.db.models import PrintJob
 from app.schemas.jobs import JobFilters
+from app.services.policy_service import compute_outside_policy, load_policy_context
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +69,7 @@ def _build_aggregated_query(filters: JobFilters):
             func.max(PrintJob.host_origin).label("host_origin"),
             func.max(PrintJob.media).label("media"),
             func.max(PrintJob.sides).label("sides"),
+            func.max(PrintJob.printer_id).label("printer_id"),
         )
         .group_by(
             PrintJob.printer,
@@ -98,12 +100,44 @@ def _build_aggregated_query(filters: JobFilters):
     return stmt
 
 
+def _enrich_outside_policy(
+    db: Session, items: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    ctx = load_policy_context(db)
+    for item in items:
+        item["outside_policy"] = compute_outside_policy(
+            ctx, item["username"], item.get("printer_id")
+        )
+    return items
+
+
+def _apply_outside_policy_filter(
+    items: list[dict[str, Any]], filters: JobFilters
+) -> list[dict[str, Any]]:
+    if filters.outside_policy is None:
+        return items
+    want = filters.outside_policy
+    return [i for i in items if i.get("outside_policy") is want]
+
+
 # Alias público para imports cross-service (D-31 — citado em RESEARCH §6).
 _build_aggregated_subquery = _build_aggregated_query
 
 
 def list_jobs(db: Session, filters: JobFilters) -> tuple[list[dict[str, Any]], int]:
     """Lista paginada de jobs agregados (D-07, D-08)."""
+    if filters.outside_policy is not None:
+        stmt_all = _build_aggregated_query(filters).order_by(
+            func.min(PrintJob.timestamp).desc()
+        )
+        rows_all = db.execute(stmt_all).mappings().all()
+        items = _enrich_outside_policy(db, [dict(r) for r in rows_all])
+        items = _apply_outside_policy_filter(items, filters)
+        total = len(items)
+        start = (filters.page - 1) * filters.size
+        end = start + filters.size
+        return items[start:end], total
+
     agg = _build_aggregated_query(filters).subquery()
     total = db.execute(select(func.count()).select_from(agg)).scalar_one()
 
@@ -115,7 +149,7 @@ def list_jobs(db: Session, filters: JobFilters) -> tuple[list[dict[str, Any]], i
     )
     rows = db.execute(stmt).mappings().all()
 
-    items: list[dict[str, Any]] = [dict(r) for r in rows]
+    items = _enrich_outside_policy(db, [dict(r) for r in rows])
     return items, total
 
 
@@ -159,6 +193,7 @@ def get_job_by_id(db: Session, job_db_id: int) -> dict[str, Any] | None:
             func.max(PrintJob.host_origin).label("host_origin"),
             func.max(PrintJob.media).label("media"),
             func.max(PrintJob.sides).label("sides"),
+            func.max(PrintJob.printer_id).label("printer_id"),
         )
         .where(*where_clauses)
         .group_by(
@@ -173,7 +208,8 @@ def get_job_by_id(db: Session, job_db_id: int) -> dict[str, Any] | None:
         return None
     out = dict(result)
     out["id"] = row.id
-    return out
+    enriched = _enrich_outside_policy(db, [out])
+    return enriched[0]
 
 
 def list_printer_names(db: Session) -> list[str]:

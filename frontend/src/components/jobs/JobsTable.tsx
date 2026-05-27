@@ -6,6 +6,7 @@ import { hasActiveFilters } from '../../lib/filters'
 import { formatMediaLabel } from '../../lib/media'
 import { ErrorBanner } from '../ui/ErrorBanner'
 import { EmptyState } from '../ui/EmptyState'
+import { Badge } from '../ui/Badge'
 import { Skeleton } from '../ui/Skeleton'
 
 const ERROR_MESSAGE =
@@ -130,10 +131,20 @@ export function JobsTable() {
                             {job.username}
                           </span>
                         </td>
-                        <td className="max-w-[140px] px-3 py-2">
-                          <span className="block truncate" title={job.printer}>
-                            {job.printer}
-                          </span>
+                        <td className="max-w-[180px] px-3 py-2">
+                          <div className="flex flex-wrap items-center gap-1">
+                            <span className="block truncate" title={job.printer}>
+                              {job.printer}
+                            </span>
+                            {job.outside_policy ? (
+                              <Badge
+                                variant="warning"
+                                title="Usuário imprimiu em impressora não atribuída"
+                              >
+                                Fora da política
+                              </Badge>
+                            ) : null}
+                          </div>
                         </td>
                         <td className="max-w-[240px] px-3 py-2">
                           <span

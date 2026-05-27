@@ -1,5 +1,13 @@
-import { deleteJson, getJson, patchJson, postJson } from '../client'
-import type { UserCreate, UserRead, UserUpdate } from '../../types/api'
+import { baseUrl, deleteJson, getJson, patchJson, postJson, putJson } from '../client'
+import type {
+  PrinterAccessRead,
+  PrinterAccessReplace,
+  PrinterUserAccessRead,
+  TiExportRow,
+  UserCreate,
+  UserRead,
+  UserUpdate,
+} from '../../types/api'
 
 export function fetchUsers(includeInactive = false): Promise<UserRead[]> {
   const params = new URLSearchParams()
@@ -17,4 +25,27 @@ export function updateUser(id: number, body: UserUpdate): Promise<UserRead> {
 
 export function deactivateUser(id: number): Promise<UserRead> {
   return deleteJson<UserRead>(`/users/${id}`)
+}
+
+export function fetchUserPrinterAccess(userId: number): Promise<PrinterAccessRead[]> {
+  return getJson<PrinterAccessRead[]>(`/users/${userId}/printer-access`)
+}
+
+export function putUserPrinterAccess(
+  userId: number,
+  body: PrinterAccessReplace,
+): Promise<PrinterAccessRead[]> {
+  return putJson<PrinterAccessRead[]>(`/users/${userId}/printer-access`, body)
+}
+
+export function fetchPrinterUsers(printerId: number): Promise<PrinterUserAccessRead[]> {
+  return getJson<PrinterUserAccessRead[]>(`/printers/${printerId}/users`)
+}
+
+export function fetchTiExport(userId: number): Promise<TiExportRow[]> {
+  return getJson<TiExportRow[]>(`/users/${userId}/ti-export`)
+}
+
+export function tiExportCsvUrl(userId: number): string {
+  return `${baseUrl}/users/${userId}/ti-export?format=csv`
 }

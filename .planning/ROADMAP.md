@@ -111,6 +111,9 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 
 **Requirements:** COST-01–04, CHRG-01–04
 
+**Context:** `.planning/phases/06-costing-chargeback/06-CONTEXT.md` (gate ✅)  
+**Discussion log:** `06-DISCUSSION-LOG.md`
+
 **Success criteria:**
 1. Admin define tarifa global mono e color
 2. Lista de jobs exibe custo estimado quando rates configurados
@@ -157,7 +160,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
 | 5 | v1.5 | 7/7 | Complete    | 2026-05-27 |
 | 5.2 | v1.5 | 5/5 | Planned | 2026-05-27 |
-| 6 | v1.5 | 8 | — | Scoped |
+| 6 | v1.5 | 8 | — | Context ready |
 | 7 | v1.5 | 5 | — | Scoped |
 | 8 | v1.5 | 9 | — | Scoped |
 
@@ -175,7 +178,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 ## Próximos passos
 
 1. `/gsd-execute-phase 5.2` — User–Printer Access (5 plans)
-2. `/gsd-plan-phase 6` — após 5.2 executada
+2. `/gsd-plan-phase 6` — context gathered 2026-05-27
 
 ---
 *Roadmap v1.5 — 2026-05-27*

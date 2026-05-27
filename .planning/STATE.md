@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Management Platform
-status: phase_5_2_executed
-last_updated: 2026-05-27T18:00:00.000Z
+status: phase_6_context_gathered
+last_updated: 2026-05-27T20:00:00.000Z
 last_activity: 2026-05-27
 progress:
   total_phases: 5
@@ -11,7 +11,7 @@ progress:
   total_plans: 28
   completed_plans: 24
   percent: 25
-stopped_at: Phase 5.2 executed — aguardando UAT humano
+stopped_at: Phase 6 context gathered — ready for plan-phase
 ---
 
 # STATE — PrintWatch
@@ -24,10 +24,10 @@ stopped_at: Phase 5.2 executed — aguardando UAT humano
 
 ## Current Position
 
-**Phase:** 5.2
-**Plan:** 5/5 complete
-**Status:** Executed — UAT em `05.2-HUMAN-UAT.md`  
-**Last activity:** 2026-05-27 — execute-phase 5.2
+**Phase:** 6
+**Plan:** —
+**Status:** Context gathered — `phases/06-costing-chargeback/06-CONTEXT.md`  
+**Last activity:** 2026-05-27 — discuss-phase 6
 
 ---
 
@@ -47,7 +47,7 @@ See: `.planning/PROJECT.md`
 |------|------|--------|
 | 5 | Master Data & Organization | ✅ Complete (7/7 plans) |
 | 5.2 | User–Printer Access Policy | ✅ Executed (5/5 plans) — UAT pendente |
-| 6 | Costing & Chargeback | 📋 Scoped |
+| 6 | Costing & Chargeback | 📋 Context ready |
 | 7 | Manager Analytics | 📋 Scoped |
 | 8 | Fleet Health & Toner | 📋 Scoped |
 
@@ -55,8 +55,8 @@ See: `.planning/PROJECT.md`
 
 ## Próxima ação
 
-1. `/gsd-execute-phase 5.2` — executar 5 plans em `phases/05-2-user-printer-access-policy/`
-2. `/gsd-plan-phase 6` — após 5.2 executada e verificada
+1. `/gsd-plan-phase 6` — planejar costing & chargeback (context em `06-CONTEXT.md`)
+2. UAT Fase 5.2 em `05.2-HUMAN-UAT.md` (se ainda pendente)
 
 ---
 

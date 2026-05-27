@@ -71,7 +71,7 @@ completed: 2026-05-27
 1. **Task 1: cost_service core** - `1121b2c` (feat)
 2. **Task 2: Schemas + router cost-rates** - `47419bb` (feat)
 
-**Plan metadata:** pending (docs commit)
+**Plan metadata:** `05d1c0e` (docs: complete plan)
 
 ## Files Created/Modified
 

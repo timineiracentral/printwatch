@@ -61,6 +61,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | 4 | 05-07 | Settings UI + react-router + FilterBar registry |
 
 **Success criteria:**
+
 1. Admin CRUD completo para printers, departments, cost-centers, users via Settings UI
 2. CSV import com validação por linha e templates downloadáveis
 3. `printer_id` preenchido em jobs novos (matcher) e backfill executável para histórico
@@ -95,6 +96,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | Auditoria | Flag soft em jobs/export para usuário cadastrado fora da lista |
 
 **Success criteria:**
+
 1. Admin atribui impressoras e default por usuário; modelo não bloqueia impressão física
 2. Cadastro de impressora usa fila detectada sem expor "CUPS" na UI principal
 3. Export TI utilizável para instalação Windows IPP presencial
@@ -120,6 +122,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | 4 | 06-05 | Settings Tarifas + coluna custo Jobs + correção manual UI |
 
 **Cross-cutting constraints:**
+
 - Custo sempre read-path; tarifa vigente na data do job (não tarifa atual)
 - `outside_policy` excluído de chargeback e exports desta fase
 - `/stats/summary` inalterado — analytics de custo ficam na Fase 7
@@ -129,6 +132,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 **Discussion log:** `06-DISCUSSION-LOG.md`
 
 **Success criteria:**
+
 1. Admin define tarifa global mono e color
 2. Lista de jobs exibe custo estimado quando rates configurados
 3. Export chargeback CSV por CC e por departamento com split mono/color
@@ -144,6 +148,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 **Requirements:** ANAL-01–05
 
 **Success criteria:**
+
 1. Rota `/manager` com cards de período (páginas + custo)
 2. Top 10 usuários, impressoras e departamentos
 3. Comparativo vs período anterior
@@ -159,6 +164,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 **Requirements:** FLEET-01–05, TONER-01–04
 
 **Success criteria:**
+
 1. Fleet overview com status e última verificação
 2. Checker em background — falha não afeta captura/API core
 3. Status primário via CUPS/IPP; fallback ping IP
@@ -174,7 +180,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
 | 5 | v1.5 | 7/7 | Complete    | 2026-05-27 |
 | 5.2 | v1.5 | 5/5 | Planned | 2026-05-27 |
-| 6 | v1.5 | 5/5 | Complete   | 2026-05-27 |
+| 6 | v1.5 | 5/5 | Complete    | 2026-05-27 |
 | 7 | v1.5 | 5 | — | Scoped |
 | 8 | v1.5 | 9 | — | Scoped |
 

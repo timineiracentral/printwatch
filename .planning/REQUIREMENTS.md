@@ -279,6 +279,7 @@ PrintJob ──audit──> printer_id + username ──soft match──> policy
 | TONER-01 – TONER-04 | 8 | Pending |
 
 **Coverage:**
+
 - v1.5 requirements: **52** total (47 + 5 ACCESS)
 - Mapped to phases: **52**
 - Unmapped: **0** ✓

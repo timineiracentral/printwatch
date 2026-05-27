@@ -23,6 +23,8 @@ services:
       DB_PATH: ${DB_PATH:-/app/data/printwatch.db}
       LOG_PATH: ${LOG_PATH:-/var/log/cups/page_log}
       LOG_RETENTION_DAYS: ${LOG_RETENTION_DAYS:-90}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173,http://localhost,http://VM_HOST}
+      API_TIMEZONE: ${API_TIMEZONE:-America/Sao_Paulo}
     volumes:
       - cups_logs:/var/log/cups:ro
       - db_data:/app/data
@@ -30,7 +32,15 @@ services:
     depends_on:
       - cups
 
-  # Fase 4+: frontend + nginx (proxy :80 → dashboard + API)
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
 
 volumes:
   cups_logs:

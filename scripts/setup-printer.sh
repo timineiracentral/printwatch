@@ -90,9 +90,15 @@ fi
 cupsaccept \"\${PRINTER_NAME}\"
 cupsenable \"\${PRINTER_NAME}\"
 
-# PPD Samsung/HP costuma default Gray — força cor em filas com hardware real.
+# Driverless IPP: evita PPD Samsung que grava print-color-mode=monochrome na fila.
 if [[ \"\${PRINTER_URI}\" != cups-pdf:* ]]; then
-  lpoptions -p \"\${PRINTER_NAME}\" -o ColorModel=Color -o print-color-mode=color 2>/dev/null || true
+  if [[ \"\${PRINTER_DRIVER}\" != everywhere ]] && [[ \"\${PRINTER_DRIVER}\" != driverless:* ]]; then
+    echo \"[WARN] Driver \${PRINTER_DRIVER} pode forçar P&B — prefira TEST_PRINTER_DRIVER=everywhere\"
+  fi
+  lpoptions -p \"\${PRINTER_NAME}\" -o print-color-mode=color 2>/dev/null || true
+  if grep -q 'Option print-color-mode monochrome' /etc/cups/printers.conf 2>/dev/null; then
+    echo \"[WARN] Fila com print-color-mode=monochrome — execute: ./scripts/fix-cups-color-queue.sh \${PRINTER_NAME} \${PRINTER_URI}\"
+  fi
 fi
 
 lpstat -p \"\${PRINTER_NAME}\"
@@ -106,7 +112,7 @@ main() {
   run_lpadmin_idempotent
   echo "[OK] Impressora ${PRINTER_NAME} pronta (URI: ${PRINTER_URI})"
   if [[ "${PRINTER_URI}" != cups-pdf:* ]]; then
-    echo "[INFO] Padrão de fila: ColorModel=Color (impressão colorida)"
+    echo "[INFO] Padrão de fila: print-color-mode=color (use driver everywhere)"
   fi
 }
 

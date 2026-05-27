@@ -3,6 +3,7 @@ import { PageHeader } from '../components/layout/PageHeader'
 import { FilterBar } from '../components/filters/FilterBar'
 import { JobsPagination } from '../components/jobs/JobsPagination'
 import { JobsTable } from '../components/jobs/JobsTable'
+import { ChargebackExportButtons } from '../components/export/ChargebackExportButtons'
 import { ExportCsvButton } from '../components/export/ExportCsvButton'
 import { SummaryCards } from '../components/summary/SummaryCards'
 
@@ -12,7 +13,12 @@ export function JobsPage() {
       header={
         <PageHeader
           title="Histórico de impressão"
-          actions={<ExportCsvButton />}
+          actions={
+            <div className="flex flex-col items-end gap-2 sm:flex-row sm:flex-wrap">
+              <ChargebackExportButtons />
+              <ExportCsvButton />
+            </div>
+          }
         />
       }
     >

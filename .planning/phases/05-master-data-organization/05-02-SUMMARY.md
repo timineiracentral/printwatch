@@ -73,7 +73,7 @@ Each task was committed atomically:
 1. **Task 1: Criar app.core.normalize e migrar implementação** - `3edebc2` (feat)
 2. **Task 2: Adicionar normalize_org_code para dept/CC** - `ee3dc6a` (feat)
 
-**Plan metadata:** pending (docs commit)
+**Plan metadata:** `dde0161` (docs: complete plan)
 
 ## Files Created/Modified
 

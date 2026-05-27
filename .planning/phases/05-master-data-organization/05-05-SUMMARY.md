@@ -83,7 +83,7 @@ Each task was committed atomically:
 1. **Task 1: printer_matcher service** - `3abe487` (feat)
 2. **Task 2: Lifespan asyncio loop + admin backfill** - `d392489` (feat)
 
-**Plan metadata:** pending final docs commit
+**Plan metadata:** `21cad83` (docs)
 
 ## Files Created/Modified
 

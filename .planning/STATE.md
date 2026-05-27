@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Management Platform
 status: executing
-last_updated: "2026-05-27T16:30:00.000Z"
+last_updated: "2026-05-27T17:35:00.000Z"
 last_activity: 2026-05-27
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 7
-  completed_plans: 4
-  percent: 57
+  completed_plans: 6
+  percent: 86
 ---
 
 # STATE — PrintWatch
@@ -24,10 +24,10 @@ progress:
 ## Current Position
 
 Phase: 05 (master-data-organization) — EXECUTING
-Plan: 5 of 7 (05-05 next)
+Plan: 7 of 7 (05-07 next)
 **Phase:** 5 — Master Data & Organization  
-**Plan:** 4/7 complete (05-01 ✅, 05-02 ✅, 05-03 ✅, 05-04 ✅)  
-**Status:** Executing — Wave 3 next (matcher)  
+**Plan:** 6/7 complete (05-01 ✅ … 05-06 ✅)  
+**Status:** Executing — Wave 4 Settings UI (05-07)  
 **Last activity:** 2026-05-27
 
 ---
@@ -55,8 +55,7 @@ See: `.planning/PROJECT.md`
 
 ## Próxima ação
 
-1. Executar plan 05-05 (matcher + backfill printer_id)
-2. Wave 3: 05-06 import CSV após matcher
+1. Executar plan 05-07 (Settings UI + react-router)
 
 ---
 
@@ -87,7 +86,7 @@ Archives: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`
 
 ## Session Continuity
 
-Last session: 2026-05-27T16:15:00.000Z
+Last session: 2026-05-27T15:18:28.263Z
 Stopped at: Completed 05-03-PLAN.md
 Resume: Execute 05-04-PLAN.md
 
@@ -98,9 +97,12 @@ Resume: Execute 05-04-PLAN.md
 | Phase 05-master-data-organization P01 | 25min | 4 tasks | 11 files |
 | Phase 05-master-data-organization P02 | 15min | 2 tasks | 6 files |
 | Phase 05-master-data-organization P03 | 20min | 2 tasks | 6 files |
+| Phase 05-master-data-organization P05 | 25min | 2 tasks | 7 files |
 
 ## Decisions
 
 - [Phase 05-master-data-organization]: Migration condicional DB vazio vs v1.0 — batch_alter falha sem print_jobs; create_table bootstrap em DB vazio
 - [Phase 05-master-data-organization]: normalize_printer_name e normalize_org_code em app.core.normalize — watcher-safe sem SQLAlchemy
 - [Phase 05-master-data-organization]: Registry /api/v1/printers substitui DISTINCT legado; unmapped-queues para onboarding D-12
+- [Phase 05 Plan 05]: printer_matcher isolado do watcher; batch 500 + loop 60s
+- [Phase 05 Plan 05]: on-save via BackgroundTasks com SessionLocal própria

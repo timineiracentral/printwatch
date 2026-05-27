@@ -51,7 +51,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 **Goal:** Admin cadastra impressoras, departamentos, centros de custo e usuários; importa CSV; jobs históricos e novos vinculam a `printer_id` sem alterar o hot path do watcher.
 
 **Requirements:** ORG-01–09, INV-01–06, IMPORT-01–05, SETTINGS-01–04, DATA-04–07, SERVER-04  
-**Plans:** 4/7 plans executed
+**Plans:** 6/7 plans executed
 
 | Wave | Plans | Entrega |
 |------|-------|---------|
@@ -123,7 +123,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | Fase | Milestone | REQ | Plans | Status |
 |------|-----------|-----|-------|--------|
 | 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
-| 5 | v1.5 | 3/7 | In Progress|  |
+| 5 | v1.5 | 6/7 | In Progress|  |
 | 6 | v1.5 | 8 | — | Scoped |
 | 7 | v1.5 | 5 | — | Scoped |
 | 8 | v1.5 | 9 | — | Scoped |

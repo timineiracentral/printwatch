@@ -33,17 +33,17 @@
 - [x] **INV-01**: Admin can register a printer with display name, CUPS queue name, IP address, manufacturer/model, location, and optional department
 - [x] **INV-02**: Admin can edit printer metadata and deactivate a printer (historical jobs preserved)
 - [x] **INV-03**: Admin can list printers showing registration status: mapped jobs vs unmapped queue names from log
-- [ ] **INV-04**: System links historical print jobs to `printer_id` via normalized CUPS queue name match (batch/backfill)
+- [x] **INV-04**: System links historical print jobs to `printer_id` via normalized CUPS queue name match (batch/backfill)
 - [x] **INV-05**: New print jobs receive `printer_id` when queue name matches a registered printer (async or post-insert, never blocking watcher)
 - [x] **INV-06**: `/api/v1/printers` registry replaces DISTINCT-log behavior as canonical printer list (audit UI migrates to registry)
 
 ### Import (IMPORT)
 
-- [ ] **IMPORT-01**: Admin can upload CSV to bulk create/update departments
-- [ ] **IMPORT-02**: Admin can upload CSV to bulk create/update cost centers
-- [ ] **IMPORT-03**: Admin can upload CSV to bulk create/update users (username, name, department code, optional CC code)
-- [ ] **IMPORT-04**: Import returns per-row validation errors without failing entire file when configured for partial success
-- [ ] **IMPORT-05**: CSV templates are downloadable from Settings UI
+- [x] **IMPORT-01**: Admin can upload CSV to bulk create/update departments
+- [x] **IMPORT-02**: Admin can upload CSV to bulk create/update cost centers
+- [x] **IMPORT-03**: Admin can upload CSV to bulk create/update users (username, name, department code, optional CC code)
+- [x] **IMPORT-04**: Import returns per-row validation errors without failing entire file when configured for partial success
+- [x] **IMPORT-05**: CSV templates are downloadable from Settings UI
 
 ### Settings UI (SETTINGS)
 

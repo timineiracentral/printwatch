@@ -1,6 +1,6 @@
 # PrintWatch — Project Context
 
-**Versão:** 1.5 (planejamento)  
+**Versão:** 1.5.2 (planejamento — Fase 5.2)  
 **Milestone ativa:** v1.5 Management Platform  
 **Última milestone shipped:** v1.0 Audit Platform — 2026-05-27  
 **Status:** Brownfield — evoluindo de auditoria para gestão operacional
@@ -30,6 +30,17 @@ PrintWatch é um sistema self-hosted de **auditoria e gestão de impressão**. A
 - Fleet: status online/offline (CUPS/IPP primário, ping IP fallback)
 - Toner: telemetria SNMP opt-in (sem controle de estoque)
 - UI de configuração (Settings) complementando dashboard de auditoria
+
+**Fase 5.2 — Política de acesso usuário–impressora (antes da Fase 6):**
+- N:N `user_printer_access` (`is_default`, `is_active`) — permissão por **usuário**, não por departamento
+- Modelo **permissivo**: sem atribuição ou job em impressora fora da lista **não bloqueia** impressão; orienta TI e alimenta relatórios
+- Uma fila CUPS por impressora física (1:1 com registry); escolha na impressão = Windows (IPP); PrintWatch audita a fila usada
+- TI instala impressoras presencialmente no PC; produto exporta lista (nome + URL IPP + padrão)
+- UI: impressoras permitidas + padrão na ficha do usuário; vista invertida opcional na impressora
+- UX cadastro impressora: selecionar fila detectada (`unmapped` / futuro `discovered`), sem jargão "CUPS" na UI principal
+- Export "roteiro TI" por usuário; indicador read-only "fora da política" em jobs/export
+
+**Fora de escopo 5.2:** bloqueio CUPS (v2.5 POLICY), herança por departamento, portal self-service, auth/login dashboard.
 
 **Diretrizes arquiteturais (v1.5):**
 - SQLite + monólito + Docker Compose — sem microserviços
@@ -81,7 +92,8 @@ Ver `.planning/REQUIREMENTS.md` (milestone v1.5). Resumo:
 
 ### Active (v1.5)
 
-- Fase 5: Master Data & Organization (ORG, INV, IMPORT, SETTINGS, DATA-04+)
+- Fase 5: Master Data & Organization (ORG, INV, IMPORT, SETTINGS, DATA-04+) — ✅ entregue
+- Fase 5.2: User–Printer Access Policy (ACCESS-01–05) — antes da Fase 6
 - Fase 6: Costing & Chargeback (COST, CHRG)
 - Fase 7: Manager Analytics (ANAL)
 - Fase 8: Fleet Health & Toner (FLEET, TONER)
@@ -91,7 +103,9 @@ Ver `.planning/REQUIREMENTS.md` (milestone v1.5). Resumo:
 | Item | Razão |
 |------|-------|
 | Autenticação dashboard | v3.0 ou nginx basic auth |
-| Cotas e bloqueio ativo | v2.5+ Policy |
+| Bloqueio CUPS / cotas ativas | v2.5+ POLICY — 5.2 é permissivo apenas |
+| Herança impressora por departamento | 5.2 = N:N por usuário |
+| Portal self-service usuário final | Fora de 5.2 |
 | LDAP/AD sync | Após master data manual estável |
 | PostgreSQL | Só com evidência de escala |
 | Faturamento/billing contábil | Chargeback = relatório interno apenas |
@@ -143,6 +157,12 @@ Ver `.planning/REQUIREMENTS.md` (milestone v1.5). Resumo:
 | Soft link username (no FK on jobs) | ✓ Fase 5 arch |
 | Alembic obrigatório | ✓ Fase 5 arch |
 | normalize compartilhado | ✓ `app/core/normalize.py` |
+| Acesso usuário–impressora N:N | ✓ 5.2 — `user_printer_access`, não por dept |
+| Modelo permissivo (sem bloqueio) | ✓ 5.2 — auditoria/orientação; POLICY v2.5 |
+| 1 fila CUPS : 1 impressora registry | ✓ 5.2 |
+| Escolha impressora no cliente | ✓ Windows IPP; PrintWatch audita fila |
+| Export roteiro TI por usuário | ✓ 5.2 — display_name, queue, ipp_url, default |
+| UI fila detectada sem jargão CUPS | ✓ 5.2 — unmapped/discovered na UX principal |
 
 ---
 
@@ -164,4 +184,4 @@ MVP substituindo PaperCut em PME. Fases 1–4 = Audit Platform. Artefatos: `.pla
 </details>
 
 ---
-*Last updated: 2026-05-27 — milestone v1.5 initialized*
+*Last updated: 2026-05-27 — Fase 5.2 access policy captured*

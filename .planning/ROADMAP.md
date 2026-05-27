@@ -73,6 +73,32 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 
 ---
 
+### Phase 5.2: User–Printer Access Policy
+
+**Goal:** Política permissiva N:N usuário–impressora, UX de fila detectada sem jargão CUPS, export roteiro TI e indicador read-only "fora da política" — **antes** da Fase 6; sem bloqueio no CUPS.
+
+**Requirements:** ACCESS-01–05  
+**Plans:** 0 (não planejado)
+
+| Entrega | Descrição |
+|---------|-----------|
+| Schema/API | `user_printer_access` (`is_default`, `is_active`) |
+| UI usuário | Impressoras permitidas + padrão na ficha |
+| UI impressora | Vista invertida opcional; picker de fila unmapped/discovered |
+| Export TI | display_name, queue, ipp_url, is_default por usuário |
+| Auditoria | Flag soft em jobs/export para usuário cadastrado fora da lista |
+
+**Success criteria:**
+1. Admin atribui impressoras e default por usuário; modelo não bloqueia impressão física
+2. Cadastro de impressora usa fila detectada sem expor "CUPS" na UI principal
+3. Export TI utilizável para instalação Windows IPP presencial
+4. Jobs de usuário cadastrado fora da política marcados read-only; usuário sem cadastro sem falso positivo
+5. Watcher e pipeline append-only inalterados
+
+**Fora de escopo:** bloqueio CUPS (v2.5), herança por departamento, portal self-service, auth dashboard.
+
+---
+
 ### Phase 6: Costing & Chargeback
 
 **Goal:** Tarifas mono/color configuráveis; custo estimado por job; relatórios e export CSV de chargeback interno por departamento e centro de custo.
@@ -124,6 +150,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 |------|-----------|-----|-------|--------|
 | 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
 | 5 | v1.5 | 7/7 | Complete    | 2026-05-27 |
+| 5.2 | v1.5 | 5 | — | Scoped |
 | 6 | v1.5 | 8 | — | Scoped |
 | 7 | v1.5 | 5 | — | Scoped |
 | 8 | v1.5 | 9 | — | Scoped |
@@ -141,7 +168,8 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 
 ## Próximos passos
 
-1. `/gsd-plan-phase 5` — gerar plans (arquitetura aprovada 2026-05-27)
+1. `/gsd-discuss-phase 5.2` ou `/gsd-plan-phase 5.2` — User–Printer Access (ACCESS-01–05)
+2. `/gsd-plan-phase 6` — após 5.2
 
 ---
 *Roadmap v1.5 — 2026-05-27*

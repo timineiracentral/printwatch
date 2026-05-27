@@ -65,6 +65,20 @@
 
 ---
 
+### User–Printer Access (ACCESS) — Fase 5.2
+
+**Policy model (decisions locked):** N:N User ↔ Printer via `user_printer_access`; **permissive** — missing assignment or print on non-assigned printer does **not** block physical print; informs TI and reporting only. One CUPS queue per registered printer (1:1). Client choice = Windows IPP; PrintWatch audits queue used. TI installs printers on PC; product exports setup list.
+
+- [ ] **ACCESS-01**: Admin can assign printers to a user via `user_printer_access` (`is_active`, `is_default`); at most one default per user; API CRUD on user and/or printer scope
+- [ ] **ACCESS-02**: User detail in Settings shows allowed printers and lets admin set/clear default among active assignments
+- [ ] **ACCESS-03**: Printer detail optionally shows users with access (inverted view); changes sync with user-side assignments
+- [ ] **ACCESS-04**: Printer create/edit selects queue from detected unmapped (and future discovered) queues; primary UI labels avoid "CUPS" jargon
+- [ ] **ACCESS-05**: Admin can export per-user TI setup guide (display_name, queue name, ipp_url, is_default); jobs list and/or CSV export show read-only **outside policy** when a **registered** user prints on a printer not in their allowed list
+
+**Out of scope 5.2:** CUPS/job blocking (v2.5 POLICY), department inheritance, end-user self-service portal, dashboard auth/login.
+
+---
+
 ### Costing (COST) — Fase 6
 
 - [ ] **COST-01**: Admin can configure global cost per page for monochrome and color
@@ -168,6 +182,49 @@ PrintJob.username ──match──> User.cups_username [soft link, no FK requir
 
 ---
 
+## Phase 5.2 — User–Printer Access Policy
+
+**Phase goal:** Cadastrar política permissiva usuário–impressora, melhorar onboarding de filas na UI e exportar roteiro TI — sem alterar captura nem bloquear impressão.
+
+**Dependencies:** Phase 5 complete (users, printers registry, unmapped-queues).  
+**Downstream:** Phase 6 costing may use policy flags in reports; blocking deferred to v2.5 POLICY.
+
+### Phase 5.2 Acceptance Criteria
+
+| # | Criterion | Maps to |
+|---|-----------|---------|
+| P52-AC-01 | Admin assigns 3 printers to user, marks one default; API returns consistent N:N | ACCESS-01, ACCESS-02 |
+| P52-AC-02 | Printer form picks queue from unmapped list; saved printer links jobs as today | ACCESS-04, INV-01 |
+| P52-AC-03 | TI export for user lists display_name, queue, ipp_url, default flag | ACCESS-05 |
+| P52-AC-04 | Registered user prints on non-assigned printer → job shows outside-policy indicator; print still completes | ACCESS-05 |
+| P52-AC-05 | User with no assignments prints → no block; no false-positive policy flag | permissive model |
+
+### Phase 5.2 Entity Model (requirements-level)
+
+```
+User (1) ──< user_printer_access (N) >── Printer (1)
+user_printer_access: is_active, is_default (≤1 default per user)
+PrintJob ──audit──> printer_id + username ──soft match──> policy check (read-only flag)
+```
+
+### Phase 5.2 API Surface (minimum)
+
+| Method | Path | Requirement |
+|--------|------|-------------|
+| CRUD | `/api/v1/users/{id}/printer-access` | ACCESS-01, ACCESS-02 |
+| GET | `/api/v1/printers/{id}/users` (optional) | ACCESS-03 |
+| GET | `/api/v1/users/{id}/ti-export` | ACCESS-05 |
+| — | Jobs list/export field `outside_policy` | ACCESS-05 |
+
+### Phase 5.2 Non-Goals (explicit)
+
+- No CUPS `pre_process_job` or quota block (v2.5 POLICY)
+- No department-level printer inheritance
+- No end-user portal to pick printers
+- No dashboard authentication (unchanged v1.5)
+
+---
+
 ## Future Requirements (v1.6+)
 
 ### Policy & Control (v2.5+)
@@ -194,7 +251,8 @@ PrintJob.username ──match──> User.cups_username [soft link, no FK requir
 | Billing invoices / accounting export | CHRG = internal only per milestone decision |
 | Toner/consumable stock management | Telemetry only |
 | LDAP/AD sync | After manual master data stable |
-| Print blocking / quotas | v2.5+ |
+| Print blocking / quotas / CUPS deny | v2.5+ POLICY — 5.2 permissive only |
+| Department-level printer access | 5.2 = per-user N:N |
 | PostgreSQL | No scale evidence |
 | Microservices | Monolith principle |
 | Multi-site | Single VM deployment |
@@ -212,6 +270,7 @@ PrintJob.username ──match──> User.cups_username [soft link, no FK requir
 | SETTINGS-01 – SETTINGS-04 | 5 | Pending |
 | DATA-04 – DATA-07 | 5 | Pending |
 | SERVER-04 | 5 | Complete |
+| ACCESS-01 – ACCESS-05 | 5.2 | Pending |
 | COST-01 – COST-04 | 6 | Pending |
 | CHRG-01 – CHRG-04 | 6 | Pending |
 | ANAL-01 – ANAL-05 | 7 | Pending |
@@ -219,11 +278,12 @@ PrintJob.username ──match──> User.cups_username [soft link, no FK requir
 | TONER-01 – TONER-04 | 8 | Pending |
 
 **Coverage:**
-- v1.5 requirements: **47** total
-- Mapped to phases: **47**
+- v1.5 requirements: **52** total (47 + 5 ACCESS)
+- Mapped to phases: **52**
 - Unmapped: **0** ✓
 
-**Phase 5 subset:** 28 requirements (ORG + INV + IMPORT + SETTINGS + DATA + SERVER-04)
+**Phase 5 subset:** 28 requirements (ORG + INV + IMPORT + SETTINGS + DATA + SERVER-04)  
+**Phase 5.2 subset:** 5 requirements (ACCESS-01 – ACCESS-05)
 
 ---
-*Requirements defined: 2026-05-27 — milestone v1.5*
+*Requirements defined: 2026-05-27 — ACCESS-01–05 added for Phase 5.2*

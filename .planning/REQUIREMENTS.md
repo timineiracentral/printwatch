@@ -34,7 +34,7 @@
 - [ ] **INV-02**: Admin can edit printer metadata and deactivate a printer (historical jobs preserved)
 - [ ] **INV-03**: Admin can list printers showing registration status: mapped jobs vs unmapped queue names from log
 - [ ] **INV-04**: System links historical print jobs to `printer_id` via normalized CUPS queue name match (batch/backfill)
-- [ ] **INV-05**: New print jobs receive `printer_id` when queue name matches a registered printer (async or post-insert, never blocking watcher)
+- [x] **INV-05**: New print jobs receive `printer_id` when queue name matches a registered printer (async or post-insert, never blocking watcher)
 - [ ] **INV-06**: `/api/v1/printers` registry replaces DISTINCT-log behavior as canonical printer list (audit UI migrates to registry)
 
 ### Import (IMPORT)

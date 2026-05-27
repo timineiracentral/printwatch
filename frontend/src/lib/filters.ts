@@ -1,13 +1,6 @@
-/** Espelha `JobFilters` em backend/app/schemas/jobs.py (D-65). */
-export interface JobFilters {
-  page: number
-  size: number
-  username?: string
-  printer?: string
-  search?: string
-  date_from?: string
-  date_to?: string
-}
+import type { JobFilters } from '../types/api'
+
+export type { JobFilters } from '../types/api'
 
 const DEFAULT_PAGE = 1
 const DEFAULT_SIZE = 50

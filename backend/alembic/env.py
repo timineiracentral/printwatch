@@ -21,8 +21,9 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-# Mesma URL que app.db.session — DB_PATH via settings
-_db_url = f"sqlite:///{settings.db_path}"
+# DB_PATH pode mudar em runtime (testes); não usar settings cacheado na importação
+db_path = os.environ.get("DB_PATH", settings.db_path)
+_db_url = f"sqlite:///{db_path}"
 config.set_main_option("sqlalchemy.url", _db_url)
 
 

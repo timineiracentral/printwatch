@@ -73,6 +73,7 @@
 - [ ] **ACCESS-02**: User detail in Settings shows allowed printers and lets admin set/clear default among active assignments
 - [ ] **ACCESS-03**: Printer detail optionally shows users with access (inverted view); changes sync with user-side assignments
 - [ ] **ACCESS-04**: Printer create/edit selects queue from detected unmapped (and future discovered) queues; primary UI labels avoid "CUPS" jargon
+- [ ] **UX-05-02**: Printer create flow uses detected-queue picker (`unmapped-queues` minimum); label **Identificador no servidor** for manual `cups_queue_name` only in advanced/collapsed section
 - [ ] **ACCESS-05**: Admin can export per-user TI setup guide (display_name, queue name, ipp_url, is_default); jobs list and/or CSV export show read-only **outside policy** when a **registered** user prints on a printer not in their allowed list
 
 **Out of scope 5.2:** CUPS/job blocking (v2.5 POLICY), department inheritance, end-user self-service portal, dashboard auth/login.
@@ -194,7 +195,7 @@ PrintJob.username ──match──> User.cups_username [soft link, no FK requir
 | # | Criterion | Maps to |
 |---|-----------|---------|
 | P52-AC-01 | Admin assigns 3 printers to user, marks one default; API returns consistent N:N | ACCESS-01, ACCESS-02 |
-| P52-AC-02 | Printer form picks queue from unmapped list; saved printer links jobs as today | ACCESS-04, INV-01 |
+| P52-AC-02 | Printer form picks queue from unmapped list; saved printer links jobs as today | ACCESS-04, UX-05-02, INV-01 |
 | P52-AC-03 | TI export for user lists display_name, queue, ipp_url, default flag | ACCESS-05 |
 | P52-AC-04 | Registered user prints on non-assigned printer → job shows outside-policy indicator; print still completes | ACCESS-05 |
 | P52-AC-05 | User with no assignments prints → no block; no false-positive policy flag | permissive model |
@@ -283,7 +284,7 @@ PrintJob ──audit──> printer_id + username ──soft match──> policy
 - Unmapped: **0** ✓
 
 **Phase 5 subset:** 28 requirements (ORG + INV + IMPORT + SETTINGS + DATA + SERVER-04)  
-**Phase 5.2 subset:** 5 requirements (ACCESS-01 – ACCESS-05)
+**Phase 5.2 subset:** 6 requirements (ACCESS-01 – ACCESS-05, UX-05-02)
 
 ---
 *Requirements defined: 2026-05-27 — ACCESS-01–05 added for Phase 5.2*

@@ -77,8 +77,14 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 
 **Goal:** Política permissiva N:N usuário–impressora, UX de fila detectada sem jargão CUPS, export roteiro TI e indicador read-only "fora da política" — **antes** da Fase 6; sem bloqueio no CUPS.
 
-**Requirements:** ACCESS-01–05  
-**Plans:** 0 (não planejado)
+**Requirements:** ACCESS-01–05, UX-05-02  
+**Plans:** 5 plans em 3 waves
+
+| Wave | Plans | Entrega |
+|------|-------|---------|
+| 1 | 05.2-01 | Migration `user_printer_access` + models + schemas |
+| 2 | 05.2-02, 05.2-03 | API assignments + policy `outside_policy` em jobs |
+| 3 | 05.2-04, 05.2-05 | Settings UI + export TI + jobs badge/filtro |
 
 | Entrega | Descrição |
 |---------|-----------|
@@ -150,7 +156,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 |------|-----------|-----|-------|--------|
 | 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
 | 5 | v1.5 | 7/7 | Complete    | 2026-05-27 |
-| 5.2 | v1.5 | 5 | — | Scoped |
+| 5.2 | v1.5 | 5/5 | Planned | 2026-05-27 |
 | 6 | v1.5 | 8 | — | Scoped |
 | 7 | v1.5 | 5 | — | Scoped |
 | 8 | v1.5 | 9 | — | Scoped |
@@ -168,8 +174,8 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 
 ## Próximos passos
 
-1. `/gsd-discuss-phase 5.2` ou `/gsd-plan-phase 5.2` — User–Printer Access (ACCESS-01–05)
-2. `/gsd-plan-phase 6` — após 5.2
+1. `/gsd-execute-phase 5.2` — User–Printer Access (5 plans)
+2. `/gsd-plan-phase 6` — após 5.2 executada
 
 ---
 *Roadmap v1.5 — 2026-05-27*

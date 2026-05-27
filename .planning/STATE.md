@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Management Platform
 status: executing
-last_updated: "2026-05-27T15:30:00.000Z"
+last_updated: "2026-05-27T16:15:00.000Z"
 last_activity: 2026-05-27
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 7
-  completed_plans: 2
-  percent: 29
+  completed_plans: 3
+  percent: 43
 ---
 
 # STATE — PrintWatch
@@ -24,9 +24,9 @@ progress:
 ## Current Position
 
 Phase: 05 (master-data-organization) — EXECUTING
-Plan: 3 of 7 (05-03 next)
+Plan: 4 of 7 (05-04 next)
 **Phase:** 5 — Master Data & Organization  
-**Plan:** 2/7 complete (05-01 ✅, 05-02 ✅)  
+**Plan:** 3/7 complete (05-01 ✅, 05-02 ✅, 05-03 ✅)  
 **Status:** Executing — Wave 2 in progress  
 **Last activity:** 2026-05-27
 
@@ -55,8 +55,8 @@ See: `.planning/PROJECT.md`
 
 ## Próxima ação
 
-1. Executar plan 05-03 (CRUD printers)
-2. Wave 2: 05-04 CRUD org em paralelo após 05-03
+1. Executar plan 05-04 (CRUD departments, cost-centers, users)
+2. Wave 3: 05-05 matcher após CRUD org
 
 ---
 
@@ -87,9 +87,9 @@ Archives: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`
 
 ## Session Continuity
 
-Last session: 2026-05-27T15:07:57.869Z
-Stopped at: Completed 05-02-PLAN.md
-Resume: Execute 05-03-PLAN.md
+Last session: 2026-05-27T16:15:00.000Z
+Stopped at: Completed 05-03-PLAN.md
+Resume: Execute 05-04-PLAN.md
 
 ## Performance Metrics
 
@@ -97,8 +97,10 @@ Resume: Execute 05-03-PLAN.md
 |-------|------|----------|-------|
 | Phase 05-master-data-organization P01 | 25min | 4 tasks | 11 files |
 | Phase 05-master-data-organization P02 | 15min | 2 tasks | 6 files |
+| Phase 05-master-data-organization P03 | 20min | 2 tasks | 6 files |
 
 ## Decisions
 
 - [Phase 05-master-data-organization]: Migration condicional DB vazio vs v1.0 — batch_alter falha sem print_jobs; create_table bootstrap em DB vazio
 - [Phase 05-master-data-organization]: normalize_printer_name e normalize_org_code em app.core.normalize — watcher-safe sem SQLAlchemy
+- [Phase 05-master-data-organization]: Registry /api/v1/printers substitui DISTINCT legado; unmapped-queues para onboarding D-12

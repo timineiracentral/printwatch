@@ -123,7 +123,7 @@ Requisitos: [milestones/v1.0-REQUIREMENTS.md](milestones/v1.0-REQUIREMENTS.md)
 | Fase | Milestone | REQ | Plans | Status |
 |------|-----------|-----|-------|--------|
 | 1–4 | v1.0 | 22 | 23/23 | ✅ Complete |
-| 5 | v1.5 | 7/7 | Complete   | 2026-05-27 |
+| 5 | v1.5 | 7/7 | Complete    | 2026-05-27 |
 | 6 | v1.5 | 8 | — | Scoped |
 | 7 | v1.5 | 5 | — | Scoped |
 | 8 | v1.5 | 9 | — | Scoped |

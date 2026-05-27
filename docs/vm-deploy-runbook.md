@@ -133,9 +133,10 @@ Checklist antes de retomar **01-04 Task 3** (job remoto IPP Windows):
 
 Com o gate verde, retome o checkpoint **01-04 Task 3**:
 
-1. Leia [phase1-validation.md §2](phase1-validation.md) — job remoto IPP desde Windows
-2. Adicione impressora IPP `http://VM_HOST:631/printers/test_printer` no PC cliente
-3. Envie job de teste e valide linha em `page_log` com `DOMINIO\usuario`
+1. Leia [windows-printer-setup.md](windows-printer-setup.md) — cadastro no Windows (**TCP/IP ou nome de host**, não “compartilhada pelo nome”)
+2. Leia [phase1-validation.md §2](phase1-validation.md) — job remoto IPP e verificação do `page_log`
+3. Adicione impressora IPP `http://VM_HOST:631/printers/<cups_queue_name>` no PC cliente (`test_printer` ou fila cadastrada no painel)
+4. Envie job de teste e valide linha em `page_log` com `DOMINIO\usuario`
 
 ---
 

@@ -122,6 +122,8 @@ docker compose exec -T cups lpstat -v test_printer
 
 Segunda execução do script deve retornar `already configured` (idempotente, D-11).
 
+Para **filas de produção** (nome diferente de `TEST_PRINTER_NAME`) e **cadastro no painel + Windows**, veja [windows-printer-setup.md](windows-printer-setup.md).
+
 ---
 
 ## 6. Verificação rápida

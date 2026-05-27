@@ -63,9 +63,12 @@ http://VM_HOST:631/printers/test_printer
 
 ### Passos — adicionar impressora no Windows
 
+> **Não use** “Selecionar uma impressora compartilhada pelo nome” — o PrintWatch publica filas via **IPP (:631)**, não SMB.  
+> Guia completo (cadastro novo + impressora já no painel): [windows-printer-setup.md](windows-printer-setup.md)
+
 1. Abrir **Configurações → Bluetooth e dispositivos → Impressoras e scanners**
 2. Clicar **Adicionar dispositivo** → **Adicionar manualmente**
-3. Selecionar **Adicionar uma impressora usando um endereço TCP/IP ou nome de host**
+3. Selecionar **Adicionar uma impressora usando um endereço TCP/IP ou nome de host** (não “compartilhada pelo nome”)
 4. Tipo de dispositivo: **Dispositivo TCP/IP**
 5. Hostname/porta: colar a URL IPP completa (`http://VM_HOST:631/printers/test_printer`)
 6. Quando solicitado, escolher driver HP/Samsung ou **Microsoft IPP Class Driver**

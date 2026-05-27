@@ -40,6 +40,7 @@ printwatch/
 - [PRD.md](PRD.md) — visão do produto
 - [SPEC.md](SPEC.md) — especificação técnica
 - [docs/vm-setup.md](docs/vm-setup.md) — preparação da VM Ubuntu 22.04
+- [docs/windows-printer-setup.md](docs/windows-printer-setup.md) — cadastrar impressora (painel + CUPS + Windows) e usar fila já cadastrada
 
 ## Próximas fases
 

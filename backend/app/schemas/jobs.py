@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timezone
+from decimal import Decimal
 from typing import Optional
 from zoneinfo import ZoneInfo
 
@@ -36,13 +37,25 @@ class JobOut(BaseModel):
     username: str
     job_id: int
     job_name: Optional[str] = None
+    minute_bucket: Optional[str] = None
     timestamp: datetime
     pages: int
+    pages_billable: int = 0
+    pages_pending_color: int = 0
+    pages_mono: int = 0
+    pages_color: int = 0
+    estimated_cost: Optional[Decimal] = None
     color_mode: Optional[str] = None
     host_origin: Optional[str] = None
     media: Optional[str] = None
     sides: Optional[str] = None
     outside_policy: bool = False
+
+    @field_serializer("estimated_cost")
+    def _serialize_estimated_cost(self, value: Decimal | None) -> float | None:
+        if value is None:
+            return None
+        return float(value.quantize(Decimal("0.0001")))
 
     @field_serializer("timestamp")
     def _serialize_timestamp_in_sao_paulo(self, value: datetime) -> str:

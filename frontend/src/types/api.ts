@@ -50,3 +50,119 @@ export interface StatsSummaryResponse {
 }
 
 export type ExportFilters = Omit<JobFilters, 'page' | 'size'>
+
+export interface PrinterRead {
+  id: number
+  display_name: string
+  cups_queue_name: string
+  ip_address?: string | null
+  manufacturer_model?: string | null
+  location?: string | null
+  department_id?: number | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface PrinterCreate {
+  display_name: string
+  cups_queue_name: string
+  ip_address?: string | null
+  manufacturer_model?: string | null
+  location?: string | null
+  department_id?: number | null
+}
+
+export interface PrinterUpdate {
+  display_name?: string
+  cups_queue_name?: string
+  ip_address?: string | null
+  manufacturer_model?: string | null
+  location?: string | null
+  department_id?: number | null
+}
+
+export interface DepartmentRead {
+  id: number
+  code: string
+  name: string
+  cost_center_id?: number | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface DepartmentCreate {
+  code: string
+  name: string
+  cost_center_id?: number | null
+}
+
+export interface DepartmentUpdate {
+  code?: string
+  name?: string
+  cost_center_id?: number | null
+}
+
+export interface CostCenterRead {
+  id: number
+  code: string
+  name: string
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface CostCenterCreate {
+  code: string
+  name: string
+}
+
+export interface CostCenterUpdate {
+  code?: string
+  name?: string
+}
+
+export interface UserRead {
+  id: number
+  cups_username: string
+  display_name: string
+  department_id: number
+  cost_center_id?: number | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface UserCreate {
+  cups_username: string
+  display_name: string
+  department_id: number
+  cost_center_id?: number | null
+}
+
+export interface UserUpdate {
+  display_name?: string
+  department_id?: number
+  cost_center_id?: number | null
+  is_active?: boolean
+}
+
+export interface ImportLineError {
+  line: number
+  message: string
+}
+
+export interface ImportResult {
+  total: number
+  created: number
+  updated: number
+  skipped: number
+  errors: ImportLineError[]
+}
+
+export type ImportEntity =
+  | 'departments'
+  | 'cost-centers'
+  | 'users'
+  | 'printers'

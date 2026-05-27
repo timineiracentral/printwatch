@@ -1,12 +1,14 @@
 import type { ButtonHTMLAttributes } from 'react'
 
-export type ButtonVariant = 'secondary' | 'ghost'
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
+  primary:
+    'border border-transparent bg-[var(--accent)] text-white hover:opacity-90',
   secondary:
     'border border-[var(--border)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--row-hover)]',
   ghost:

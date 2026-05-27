@@ -1,0 +1,69 @@
+/** Espelha `JobFilters` em backend/app/schemas/jobs.py (D-65). */
+export interface JobFilters {
+  page: number
+  size: number
+  username?: string
+  printer?: string
+  search?: string
+  date_from?: string
+  date_to?: string
+}
+
+const DEFAULT_PAGE = 1
+const DEFAULT_SIZE = 50
+
+export function clearFiltersDefaults(): JobFilters {
+  return { page: DEFAULT_PAGE, size: DEFAULT_SIZE }
+}
+
+export function parseFiltersFromUrl(search: string): JobFilters {
+  const params = new URLSearchParams(
+    search.startsWith('?') ? search.slice(1) : search,
+  )
+  const filters: JobFilters = {
+    page: parsePositiveInt(params.get('page'), DEFAULT_PAGE),
+    size: parsePositiveInt(params.get('size'), DEFAULT_SIZE),
+  }
+
+  const username = params.get('username')?.trim()
+  if (username) filters.username = username
+
+  const printer = params.get('printer')?.trim()
+  if (printer) filters.printer = printer
+
+  const searchTerm = params.get('search')?.trim()
+  if (searchTerm) filters.search = searchTerm
+
+  const dateFrom = params.get('date_from')?.trim()
+  if (dateFrom) filters.date_from = dateFrom
+
+  const dateTo = params.get('date_to')?.trim()
+  if (dateTo) filters.date_to = dateTo
+
+  return filters
+}
+
+export function filtersToSearchParams(filters: JobFilters): URLSearchParams {
+  const params = new URLSearchParams()
+  params.set('page', String(filters.page ?? DEFAULT_PAGE))
+  params.set('size', String(filters.size ?? DEFAULT_SIZE))
+
+  if (filters.date_from) params.set('date_from', filters.date_from)
+  if (filters.date_to) params.set('date_to', filters.date_to)
+  const username = filters.username?.trim()
+  if (username) params.set('username', username)
+
+  const printer = filters.printer?.trim()
+  if (printer) params.set('printer', printer)
+
+  const search = filters.search?.trim()
+  if (search) params.set('search', search)
+
+  return params
+}
+
+function parsePositiveInt(value: string | null, fallback: number): number {
+  if (!value) return fallback
+  const parsed = Number.parseInt(value, 10)
+  return Number.isFinite(parsed) && parsed >= 1 ? parsed : fallback
+}

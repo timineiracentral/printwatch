@@ -22,3 +22,11 @@ def normalize_printer_name(raw: Optional[str]) -> Optional[str]:
         s = s[1:-1].strip()
     s = s.lstrip('"').lstrip("'").rstrip('"').rstrip("'").strip()
     return s
+
+
+def normalize_org_code(raw: Optional[str]) -> Optional[str]:
+    """Strip, uppercase; None se vazio após normalização (D-16)."""
+    if raw is None:
+        return None
+    s = raw.strip().upper()
+    return s if s else None

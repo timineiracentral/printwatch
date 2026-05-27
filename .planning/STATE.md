@@ -2,7 +2,7 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Management Platform
-status: ready_to_execute
+status: phase_5_2_executed
 last_updated: 2026-05-27T18:00:00.000Z
 last_activity: 2026-05-27
 progress:
@@ -11,7 +11,7 @@ progress:
   total_plans: 28
   completed_plans: 24
   percent: 25
-stopped_at: Phase 5.2 planned — 5 plans ready
+stopped_at: Phase 5.2 executed — aguardando UAT humano
 ---
 
 # STATE — PrintWatch
@@ -25,9 +25,9 @@ stopped_at: Phase 5.2 planned — 5 plans ready
 ## Current Position
 
 **Phase:** 5.2
-**Plan:** 5/5 planned (waves 1–3)
-**Status:** Ready for `/gsd-execute-phase 5.2`  
-**Last activity:** 2026-05-27 — plan-phase complete
+**Plan:** 5/5 complete
+**Status:** Executed — UAT em `05.2-HUMAN-UAT.md`  
+**Last activity:** 2026-05-27 — execute-phase 5.2
 
 ---
 
@@ -46,7 +46,7 @@ See: `.planning/PROJECT.md`
 | Fase | Nome | Status |
 |------|------|--------|
 | 5 | Master Data & Organization | ✅ Complete (7/7 plans) |
-| 5.2 | User–Printer Access Policy | 📋 Planned (5/5 plans) |
+| 5.2 | User–Printer Access Policy | ✅ Executed (5/5 plans) — UAT pendente |
 | 6 | Costing & Chargeback | 📋 Scoped |
 | 7 | Manager Analytics | 📋 Scoped |
 | 8 | Fleet Health & Toner | 📋 Scoped |

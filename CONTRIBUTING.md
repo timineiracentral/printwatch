@@ -84,16 +84,34 @@ PrintJob(printer="my-printer", username="joao.silva", host_origin="10.0.1.50")
 
 ---
 
-### Pre-commit (opcional, recomendado)
+### Pre-commit (obrigatório em cada clone)
 
-Para prevenir vazamentos automaticamente, instale o hook `detect-secrets`:
+Ative os hooks versionados no repositório (bloqueia IPs da rede corporativa e usuários reais em arquivos staged):
 
 ```bash
-pip install detect-secrets
-detect-secrets scan > .secrets.baseline
-detect-secrets audit .secrets.baseline
-# Adicione ao pre-commit hook local
+git config core.hooksPath .githooks
 ```
+
+Validação manual antes do commit:
+
+```powershell
+# Windows
+.\scripts\check-no-secrets.ps1 --staged
+
+# Linux / Git Bash
+./scripts/check-no-secrets.sh --staged
+```
+
+### Re-sanitizar histórico Git (raro)
+
+Se dados reais entraram no histórico:
+
+1. Copie `replacements-filter-repo.example.txt` → `replacements.txt` (local, gitignored)
+2. `pip install git-filter-repo`
+3. `git filter-repo --replace-text replacements.txt --force`
+4. `git remote add origin <url>` e `git push --force-with-lease origin master`
+
+**Aviso:** force-push reescreve o histórico para todos os colaboradores.
 
 ---
 

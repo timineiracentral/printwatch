@@ -29,7 +29,7 @@ load_env() {
 is_placeholder_uri() {
   local uri="$1"
   [[ -z "$uri" ]] && return 0
-  [[ "$uri" == *"192.0.2.50"* ]] && return 0
+  [[ "$uri" == *"192.0.2."* ]] && return 0
   [[ "$uri" == *"x.x"* ]] && return 0
   return 1
 }

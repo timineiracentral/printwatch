@@ -1,0 +1,12 @@
+***REMOVED***
+***REMOVED***
+
+literal:VM_HOST==>VM_HOST
+literal:admin-user==>admin-user
+literal:http://VM_HOST==>http://VM_HOST
+literal:ipp://192.0.2.50/ipp/print==>ipp://192.0.2.50/ipp/print
+literal:192.0.2.50==>192.0.2.50
+literal:socket://192.0.2.50:9100==>socket://192.0.2.50:9100
+regex:10\.35\.11\.\d{1,3}==>VM_HOST
+regex:10\.35\.x(?!\.x)==>REDACTED_LAN
+regex:Maria Silva==>Maria Silva

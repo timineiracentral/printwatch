@@ -14,7 +14,7 @@ describe('filters', () => {
     const original = {
       page: 2,
       size: 100,
-      username: 'felipe',
+      username: 'user.example',
       printer: 'hp-floor-1',
       search: 'relatorio',
       date_from: '2026-05-01',

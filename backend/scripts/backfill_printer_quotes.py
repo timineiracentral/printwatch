@@ -17,7 +17,7 @@ from sqlalchemy import select, text, update
 
 from app.db.models import PrintJob
 from app.db.session import SessionLocal
-from app.services.normalization import normalize_printer_name
+from app.core.normalize import normalize_printer_name
 
 logger = logging.getLogger(__name__)
 

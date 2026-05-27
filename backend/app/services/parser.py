@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from typing import Any, Optional
 
-from app.services.normalization import normalize_printer_name
+from app.core.normalize import normalize_printer_name
 
 PAGE_LOG_REGEX = re.compile(
     r"^(\S+)\s+(\S+)\s+(\d+)\s+\[(.+?)\]\s+total\s+(\d+)\s+(\S+)\s+(\S+)\s+(.+?)\s+(\S+)\s+(\S+)$"

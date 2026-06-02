@@ -33,6 +33,31 @@ def resolve_community(printer: Printer) -> str:
     return settings.snmp_community
 
 
+def _hlapi_asyncio():
+    """pysnmp 6.x expõe hlapi em pysnmp.hlapi.asyncio (getCmd/walkCmd), não v3arch."""
+    from pysnmp.hlapi.asyncio import (
+        CommunityData,
+        ContextData,
+        ObjectIdentity,
+        ObjectType,
+        SnmpEngine,
+        UdpTransportTarget,
+        getCmd,
+        walkCmd,
+    )
+
+    return (
+        CommunityData,
+        ContextData,
+        ObjectIdentity,
+        ObjectType,
+        SnmpEngine,
+        UdpTransportTarget,
+        getCmd,
+        walkCmd,
+    )
+
+
 async def snmp_get_int(ip: str, community: str, oid: str) -> int | None:
     """GET SNMP integer; substituível em testes via monkeypatch."""
     global _SNMP_GET
@@ -40,24 +65,24 @@ async def snmp_get_int(ip: str, community: str, oid: str) -> int | None:
         return await _SNMP_GET(ip, community, oid)
 
     try:
-        from pysnmp.hlapi.v3arch.asyncio import (
+        (
             CommunityData,
             ContextData,
+            ObjectIdentity,
             ObjectType,
             SnmpEngine,
             UdpTransportTarget,
-            get_cmd,
-        )
-        from pysnmp.hlapi.v3arch.asyncio import ObjectIdentity
+            getCmd,
+            _walkCmd,
+        ) = _hlapi_asyncio()
     except ImportError:
-        logger.warning("pysnmp not installed")
+        logger.warning("pysnmp hlapi.asyncio unavailable")
         return None
 
-    transport = await UdpTransportTarget.create((ip, 161), timeout=3, retries=1)
-    error_indication, error_status, _error_index, var_binds = await get_cmd(
+    error_indication, error_status, _error_index, var_binds = await getCmd(
         SnmpEngine(),
         CommunityData(community, mpModel=1),
-        transport,
+        UdpTransportTarget((ip, 161), timeout=3, retries=1),
         ContextData(),
         ObjectType(ObjectIdentity(oid)),
     )
@@ -78,24 +103,24 @@ async def _walk_supply_levels(ip: str, community: str) -> list[int]:
         return [val] if val is not None else []
 
     try:
-        from pysnmp.hlapi.v3arch.asyncio import (
+        (
             CommunityData,
             ContextData,
+            ObjectIdentity,
             ObjectType,
             SnmpEngine,
             UdpTransportTarget,
-            walk_cmd,
-        )
-        from pysnmp.hlapi.v3arch.asyncio import ObjectIdentity
+            _getCmd,
+            walkCmd,
+        ) = _hlapi_asyncio()
     except ImportError:
         return []
 
     levels: list[int] = []
-    transport = await UdpTransportTarget.create((ip, 161), timeout=3, retries=1)
-    async for error_indication, error_status, _error_index, var_binds in walk_cmd(
+    async for error_indication, error_status, _error_index, var_binds in walkCmd(
         SnmpEngine(),
         CommunityData(community, mpModel=1),
-        transport,
+        UdpTransportTarget((ip, 161), timeout=3, retries=1),
         ContextData(),
         ObjectType(ObjectIdentity(SUPPLIES_LEVEL_OID)),
         lexicographicMode=False,

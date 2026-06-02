@@ -71,8 +71,32 @@ async def _ping_host(ip_address: str) -> bool:
         )
         await asyncio.wait_for(proc.wait(), timeout=5.0)
         return proc.returncode == 0
+    except FileNotFoundError:
+        return False
     except (asyncio.TimeoutError, OSError):
         return False
+
+
+async def _tcp_reachable(ip_address: str, ports: tuple[int, ...] = (9100, 631, 80)) -> bool:
+    """Fallback quando o container slim não tem binário ping (backend Docker)."""
+    for port in ports:
+        try:
+            _reader, writer = await asyncio.wait_for(
+                asyncio.open_connection(ip_address, port),
+                timeout=2.0,
+            )
+            writer.close()
+            await writer.wait_closed()
+            return True
+        except (asyncio.TimeoutError, OSError):
+            continue
+    return False
+
+
+async def _host_reachable(ip_address: str) -> bool:
+    if await _ping_host(ip_address):
+        return True
+    return await _tcp_reachable(ip_address)
 
 
 async def check_printer_connectivity(
@@ -87,7 +111,7 @@ async def check_printer_connectivity(
         return cups_result, "cups", None
 
     cups_err = cups_result or "CUPS unavailable"
-    ping_ok = await _ping_host(printer.ip_address)
+    ping_ok = await _host_reachable(printer.ip_address)
     if ping_ok:
         return "online", "ping", cups_err
     return "offline", "ping", cups_err

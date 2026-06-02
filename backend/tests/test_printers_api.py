@@ -97,6 +97,19 @@ def test_list_printers_does_not_call_cups(
     assert "alpha" in r.json()
 
 
+def test_snmp_enabled_without_ip_422(client: TestClient) -> None:
+    r = client.post(
+        "/api/v1/printers",
+        json={
+            "display_name": "SNMP No IP",
+            "cups_queue_name": "snmp-no-ip",
+            "snmp_enabled": True,
+        },
+    )
+    assert r.status_code == 422
+    assert "ip_address" in r.json()["detail"].lower() or "SNMP" in r.json()["detail"]
+
+
 def test_openapi_lists_printer_paths(client: TestClient) -> None:
     r = client.get("/api/v1/openapi.json")
     assert r.status_code == 200

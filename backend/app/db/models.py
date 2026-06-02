@@ -57,6 +57,8 @@ class Printer(Base):
         ForeignKey("departments.id"), nullable=True
     )
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
+    snmp_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    snmp_community_override: Mapped[Optional[str]] = mapped_column(String(255))
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
@@ -67,6 +69,12 @@ class Printer(Base):
     )
     user_access_rows: Mapped[list["UserPrinterAccess"]] = relationship(
         back_populates="printer"
+    )
+    fleet_status: Mapped[Optional["PrinterFleetStatus"]] = relationship(
+        back_populates="printer", uselist=False
+    )
+    toner_snapshot: Mapped[Optional["PrinterTonerSnapshot"]] = relationship(
+        back_populates="printer", uselist=False
     )
 
 
@@ -110,6 +118,35 @@ class UserPrinterAccess(Base):
     __table_args__ = (
         UniqueConstraint("user_id", "printer_id", name="uq_user_printer"),
     )
+
+
+class PrinterFleetStatus(Base):
+    __tablename__ = "printer_fleet_status"
+
+    printer_id: Mapped[int] = mapped_column(
+        ForeignKey("printers.id", ondelete="CASCADE"), primary_key=True
+    )
+    status: Mapped[str] = mapped_column(String(20), nullable=False)
+    source: Mapped[str] = mapped_column(String(20), nullable=False)
+    last_checked_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    error_message: Mapped[Optional[str]] = mapped_column(String(512))
+
+    printer: Mapped["Printer"] = relationship(back_populates="fleet_status")
+
+
+class PrinterTonerSnapshot(Base):
+    __tablename__ = "printer_toner_snapshots"
+
+    printer_id: Mapped[int] = mapped_column(
+        ForeignKey("printers.id", ondelete="CASCADE"), primary_key=True
+    )
+    black_pct: Mapped[Optional[int]] = mapped_column(Integer)
+    color_pct: Mapped[Optional[int]] = mapped_column(Integer)
+    partial_color: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    status: Mapped[str] = mapped_column(String(20), nullable=False)
+    checked_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+    printer: Mapped["Printer"] = relationship(back_populates="toner_snapshot")
 
 
 class PrinterMeterReading(Base):

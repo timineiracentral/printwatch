@@ -4,7 +4,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 
 class PrinterCreate(BaseModel):
@@ -14,6 +14,12 @@ class PrinterCreate(BaseModel):
     manufacturer_model: Optional[str] = Field(None, max_length=255)
     location: Optional[str] = Field(None, max_length=255)
     department_id: Optional[int] = None
+    snmp_enabled: bool = False
+    snmp_community_override: Optional[str] = Field(
+        None,
+        max_length=255,
+        description="Override opcional da community SNMP; armazenado criptografado em produção",
+    )
 
 
 class PrinterUpdate(BaseModel):
@@ -23,6 +29,12 @@ class PrinterUpdate(BaseModel):
     manufacturer_model: Optional[str] = Field(None, max_length=255)
     location: Optional[str] = Field(None, max_length=255)
     department_id: Optional[int] = None
+    snmp_enabled: Optional[bool] = None
+    snmp_community_override: Optional[str] = Field(
+        None,
+        max_length=255,
+        description="Override opcional da community SNMP",
+    )
 
 
 class PrinterRead(BaseModel):
@@ -36,5 +48,16 @@ class PrinterRead(BaseModel):
     location: Optional[str] = None
     department_id: Optional[int] = None
     is_active: bool
+    snmp_enabled: bool = False
+    snmp_community_override: Optional[str] = Field(
+        None,
+        description="Mascarado como *** quando configurado (T-08-01)",
+    )
     created_at: datetime
     updated_at: datetime
+
+    @field_serializer("snmp_community_override")
+    def mask_community(self, value: Optional[str]) -> Optional[str]:
+        if value:
+            return "***"
+        return None

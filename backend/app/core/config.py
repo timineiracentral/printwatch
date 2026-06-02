@@ -10,6 +10,15 @@ class Settings:
         "http://localhost:5173",
     )
     api_timezone: str = os.environ.get("API_TIMEZONE", "America/Sao_Paulo")
+    snmp_community: str = os.environ.get("SNMP_COMMUNITY", "public")
+    fleet_health_interval_sec: int = int(
+        os.environ.get("FLEET_HEALTH_INTERVAL_SEC", "900")
+    )
+    fleet_snmp_interval_sec: int = int(
+        os.environ.get("FLEET_SNMP_INTERVAL_SEC", "43200")
+    )
+    cups_host: str = os.environ.get("CUPS_HOST", "cups")
+    cups_port: int = int(os.environ.get("CUPS_PORT", "631"))
 
 
 settings = Settings()

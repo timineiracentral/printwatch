@@ -24,6 +24,17 @@ def _normalized_key(name: str) -> str:
     return norm
 
 
+def _validate_snmp(
+    snmp_enabled: bool,
+    ip_address: Optional[str],
+) -> None:
+    if snmp_enabled and not ip_address:
+        raise HTTPException(
+            status_code=422,
+            detail="ip_address obrigatório para SNMP",
+        )
+
+
 def _find_duplicate(
     db: Session, normalized: str, *, exclude_id: Optional[int] = None
 ) -> Optional[Printer]:
@@ -53,6 +64,8 @@ def create_printer(db: Session, payload: PrinterCreate) -> Printer:
     if _find_duplicate(db, normalized) is not None:
         raise HTTPException(status_code=409, detail="cups_queue_name já cadastrado")
 
+    _validate_snmp(payload.snmp_enabled, payload.ip_address)
+
     now = _utc_now()
     row = Printer(
         display_name=payload.display_name.strip(),
@@ -61,6 +74,8 @@ def create_printer(db: Session, payload: PrinterCreate) -> Printer:
         manufacturer_model=payload.manufacturer_model,
         location=payload.location,
         department_id=payload.department_id,
+        snmp_enabled=payload.snmp_enabled if payload.ip_address else False,
+        snmp_community_override=payload.snmp_community_override,
         is_active=True,
         created_at=now,
         updated_at=now,
@@ -79,6 +94,11 @@ def update_printer(
         raise HTTPException(status_code=404, detail="printer not found")
 
     data = payload.model_dump(exclude_unset=True)
+    snmp_enabled = data.get("snmp_enabled", row.snmp_enabled)
+    ip_address = data.get("ip_address", row.ip_address)
+    if "snmp_enabled" in data or "ip_address" in data:
+        _validate_snmp(bool(snmp_enabled), ip_address)
+
     if "cups_queue_name" in data and data["cups_queue_name"] is not None:
         normalized = _normalized_key(data["cups_queue_name"])
         dup = _find_duplicate(db, normalized, exclude_id=printer_id)
@@ -87,6 +107,12 @@ def update_printer(
         data["cups_queue_name"] = normalized
     if "display_name" in data and data["display_name"] is not None:
         data["display_name"] = data["display_name"].strip()
+
+    final_ip = data.get("ip_address", row.ip_address)
+    final_snmp = data.get("snmp_enabled", row.snmp_enabled)
+    _validate_snmp(bool(final_snmp), final_ip)
+    if "snmp_enabled" in data and not final_ip:
+        data["snmp_enabled"] = False
 
     for key, value in data.items():
         setattr(row, key, value)

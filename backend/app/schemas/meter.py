@@ -13,7 +13,7 @@ class MeterReadingCreate(BaseModel):
     counter_total: int = Field(..., ge=0)
     counter_mono: Optional[int] = Field(None, ge=0)
     counter_color: Optional[int] = Field(None, ge=0)
-    source: Literal["manual", "import"] = "manual"
+    source: Literal["manual", "import", "snmp"] = "manual"
 
     @model_validator(mode="after")
     def counter_parts_not_exceed_total(self) -> "MeterReadingCreate":

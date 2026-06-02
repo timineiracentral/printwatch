@@ -62,6 +62,9 @@ class Printer(Base):
 
     department: Mapped[Optional["Department"]] = relationship(back_populates="printers")
     print_jobs: Mapped[list["PrintJob"]] = relationship(back_populates="printer_ref")
+    meter_readings: Mapped[list["PrinterMeterReading"]] = relationship(
+        back_populates="printer"
+    )
     user_access_rows: Mapped[list["UserPrinterAccess"]] = relationship(
         back_populates="printer"
     )
@@ -107,6 +110,21 @@ class UserPrinterAccess(Base):
     __table_args__ = (
         UniqueConstraint("user_id", "printer_id", name="uq_user_printer"),
     )
+
+
+class PrinterMeterReading(Base):
+    __tablename__ = "printer_meter_readings"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    printer_id: Mapped[int] = mapped_column(ForeignKey("printers.id"), nullable=False)
+    timestamp: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    counter_total: Mapped[int] = mapped_column(Integer, nullable=False)
+    counter_mono: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    counter_color: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    source: Mapped[str] = mapped_column(String(20), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+    printer: Mapped["Printer"] = relationship(back_populates="meter_readings")
 
 
 class CostRate(Base):

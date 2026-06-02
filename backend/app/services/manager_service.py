@@ -20,6 +20,7 @@ from app.services.cost_service import (
     line_cost,
     rate_at,
 )
+from app.services import meter_service
 from app.services.policy_service import compute_outside_policy, load_policy_context
 
 _TZ = ZoneInfo(settings.api_timezone)
@@ -294,7 +295,9 @@ def build_summary(
         top_departments=_tops_from_accumulator(
             acc["departments"], has_rates=has_rates
         ),
-        meter_reconciliation=[],
+        meter_reconciliation=meter_service.build_reconciliation(
+            db, date_from, date_to
+        ),
         has_rates=has_rates,
         pending_pct=pending_pct,
         pending_count=period.pages_pending,

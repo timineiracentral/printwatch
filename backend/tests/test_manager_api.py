@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.db.models import CostRate, PrintJob
-from tests.test_manager_service import seed_manager_fixtures
+from tests.test_manager_service import seed_manager_fixtures  # noqa: F401
 
 
 def test_manager_summary_endpoint(client: TestClient, db_session: Session) -> None:
@@ -57,6 +57,39 @@ def test_manager_summary_endpoint_in_openapi(client: TestClient) -> None:
     assert r.status_code == 200
     paths = r.json().get("paths", {})
     assert "/api/v1/manager/summary" in paths
+
+
+def test_summary_includes_meter_reconciliation(
+    client: TestClient, db_session: Session
+) -> None:
+    fx = seed_manager_fixtures(db_session)
+    pid = fx["allowed"].id
+    client.post(
+        f"/api/v1/printers/{pid}/meter-readings",
+        json={
+            "timestamp": "2026-05-01T08:00:00Z",
+            "counter_total": 1000,
+            "source": "manual",
+        },
+    )
+    client.post(
+        f"/api/v1/printers/{pid}/meter-readings",
+        json={
+            "timestamp": "2026-05-31T18:00:00Z",
+            "counter_total": 1500,
+            "source": "manual",
+        },
+    )
+    r = client.get(
+        "/api/v1/manager/summary",
+        params={"date_from": "2026-05-01", "date_to": "2026-05-31"},
+    )
+    assert r.status_code == 200
+    rec = r.json()["meter_reconciliation"]
+    assert rec
+    row = next(x for x in rec if x["printer_id"] == pid)
+    assert row["pages_meter"] == 500
+    assert "pages_jobs" in row
 
 
 def test_manager_summary_with_data(client: TestClient, db_session: Session) -> None:

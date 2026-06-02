@@ -3,6 +3,7 @@ import { PageHeader } from '../components/layout/PageHeader'
 import { ManagerFilterBar } from '../components/manager/ManagerFilterBar'
 import { ManagerKpiCards } from '../components/manager/ManagerKpiCards'
 import { ManagerTopTables } from '../components/manager/ManagerTopTables'
+import { FleetSummarySection } from '../components/manager/FleetSummarySection'
 import { MeterReconciliationTable } from '../components/manager/MeterReconciliationTable'
 import { PendingPagesBanner } from '../components/manager/PendingPagesBanner'
 import { useManagerSummary } from '../hooks/useManagerSummary'
@@ -57,6 +58,9 @@ export function ManagerPage() {
               topDepartments={data.top_departments}
               hasRates={data.has_rates}
             />
+            {data.fleet_summary ? (
+              <FleetSummarySection fleetSummary={data.fleet_summary} />
+            ) : null}
             <MeterReconciliationTable
               rows={data.meter_reconciliation}
               hasRates={data.has_rates}

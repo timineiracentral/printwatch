@@ -33,6 +33,7 @@ class JobOut(BaseModel):
     model_config = ConfigDict(from_attributes=False)
 
     id: Optional[int] = None
+    printer_id: Optional[int] = None
     printer: str
     username: str
     job_id: int

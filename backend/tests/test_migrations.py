@@ -116,7 +116,7 @@ def test_upgrade_head_creates_master_tables_and_printer_id(migration_db: Path) -
             text("SELECT version_num FROM alembic_version")
         ).scalar_one()
     engine.dispose()
-    assert current == "1e9f0b8a7e50"
+    assert current == "a3b7c2d4e5f6"
     assert _table_exists(migration_db, "user_printer_access")
     assert _table_exists(migration_db, "cost_rates")
     assert _table_exists(migration_db, "printer_meter_readings")
@@ -164,4 +164,4 @@ def test_alembic_current_shows_head(migration_db: Path) -> None:
             text("SELECT version_num FROM alembic_version")
         ).scalar_one()
     engine.dispose()
-    assert current == "1e9f0b8a7e50"
+    assert current == "a3b7c2d4e5f6"

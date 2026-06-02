@@ -16,8 +16,16 @@ import { Select } from '../../components/ui/Select'
 import { Skeleton } from '../../components/ui/Skeleton'
 import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 import { useDepartments } from '../../hooks/useDepartments'
+import { useFleet } from '../../hooks/useFleet'
 import { usePrintersRegistry } from '../../hooks/usePrintersRegistry'
-import type { PrinterCreate, PrinterRead, PrinterUpdate } from '../../types/api'
+import { postSnmpTest } from '../../api/fleet'
+import { TonerBar } from '../../components/fleet/TonerBar'
+import type {
+  FleetPrinterRow,
+  PrinterCreate,
+  PrinterRead,
+  PrinterUpdate,
+} from '../../types/api'
 
 type FormState = {
   display_name: string
@@ -26,6 +34,8 @@ type FormState = {
   manufacturer_model: string
   location: string
   department_id: string
+  snmp_enabled: boolean
+  snmp_community_override: string
 }
 
 const emptyForm = (): FormState => ({
@@ -35,9 +45,12 @@ const emptyForm = (): FormState => ({
   manufacturer_model: '',
   location: '',
   department_id: '',
+  snmp_enabled: false,
+  snmp_community_override: '',
 })
 
 function toForm(p: PrinterRead): FormState {
+  const override = p.snmp_community_override
   return {
     display_name: p.display_name,
     cups_queue_name: p.cups_queue_name,
@@ -45,11 +58,21 @@ function toForm(p: PrinterRead): FormState {
     manufacturer_model: p.manufacturer_model ?? '',
     location: p.location ?? '',
     department_id: p.department_id != null ? String(p.department_id) : '',
+    snmp_enabled: p.snmp_enabled,
+    snmp_community_override:
+      override && override !== '***' ? override : '',
   }
+}
+
+function fleetStatusLabel(status: string): string {
+  if (status === 'online') return 'Online'
+  if (status === 'offline') return 'Offline'
+  return 'Desconhecido'
 }
 
 export function PrintersPage() {
   const { list, unmapped, create, update, deactivate } = usePrintersRegistry(true)
+  const { data: fleetData } = useFleet()
   const { list: deptList } = useDepartments(false)
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebouncedValue(search, 300)
@@ -60,6 +83,15 @@ export function PrintersPage() {
   const [meterPrinter, setMeterPrinter] = useState<PrinterRead | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
+  const [snmpTesting, setSnmpTesting] = useState(false)
+
+  const fleetByPrinterId = useMemo(() => {
+    const map = new Map<number, FleetPrinterRow>()
+    for (const row of fleetData?.items ?? []) {
+      map.set(row.printer_id, row)
+    }
+    return map
+  }, [fleetData?.items])
 
   const deptOptions = useMemo(
     () =>
@@ -101,13 +133,16 @@ export function PrintersPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setFormError(null)
+    const ip = form.ip_address.trim() || null
     const body: PrinterCreate = {
       display_name: form.display_name.trim(),
       cups_queue_name: form.cups_queue_name.trim(),
-      ip_address: form.ip_address.trim() || null,
+      ip_address: ip,
       manufacturer_model: form.manufacturer_model.trim() || null,
       location: form.location.trim() || null,
       department_id: form.department_id ? Number(form.department_id) : null,
+      snmp_enabled: ip ? form.snmp_enabled : false,
+      snmp_community_override: form.snmp_community_override.trim() || null,
     }
     try {
       if (editing) {
@@ -133,6 +168,20 @@ export function PrintersPage() {
     } catch {
       setFormError('Falha ao desativar.')
       setConfirmId(null)
+    }
+  }
+
+  async function handleSnmpTest() {
+    if (!editing) return
+    setSnmpTesting(true)
+    setFormError(null)
+    try {
+      const res = await postSnmpTest(editing.id)
+      setSuccessMsg(res.ok ? res.message : `Falha: ${res.message}`)
+    } catch {
+      setFormError('Teste SNMP falhou.')
+    } finally {
+      setSnmpTesting(false)
     }
   }
 
@@ -185,7 +234,15 @@ export function PrintersPage() {
             <table className="w-full min-w-[720px] border-collapse text-sm">
               <thead className="sticky top-0 z-[1] bg-[var(--bg-surface)]">
                 <tr className="border-b border-[var(--border-subtle)]">
-                  {['Nome', 'Fila no servidor', 'Local', 'Status', 'Ações'].map((h) => (
+                  {[
+                    'Nome',
+                    'Fila no servidor',
+                    'Local',
+                    'Status frota',
+                    'Toner',
+                    'Cadastro',
+                    'Ações',
+                  ].map((h) => (
                     <th
                       key={h}
                       scope="col"
@@ -200,7 +257,7 @@ export function PrintersPage() {
                 {list.isLoading
                   ? Array.from({ length: 5 }, (_, i) => (
                       <tr key={i} className="border-b border-[var(--border-subtle)]">
-                        {Array.from({ length: 5 }, (_, j) => (
+                        {Array.from({ length: 7 }, (_, j) => (
                           <td key={j} className="px-3 py-2">
                             <Skeleton className="h-4 w-full max-w-[140px]" />
                           </td>
@@ -210,7 +267,7 @@ export function PrintersPage() {
                   : filtered.length === 0
                     ? (
                         <tr>
-                          <td colSpan={5}>
+                          <td colSpan={7}>
                             <EmptyState
                               icon={<Printer className="mx-auto size-10" />}
                               heading="Nenhuma impressora"
@@ -234,6 +291,30 @@ export function PrintersPage() {
                             {p.cups_queue_name}
                           </td>
                           <td className="px-3 py-2">{p.location ?? '—'}</td>
+                          <td className="px-3 py-2">
+                            {(() => {
+                              const fleet = fleetByPrinterId.get(p.id)
+                              return fleet ? (
+                                <Badge
+                                  variant={
+                                    fleet.fleet_status === 'offline'
+                                      ? 'warning'
+                                      : 'default'
+                                  }
+                                >
+                                  {fleetStatusLabel(fleet.fleet_status)}
+                                </Badge>
+                              ) : (
+                                <span className="text-[var(--text-tertiary)]">—</span>
+                              )
+                            })()}
+                          </td>
+                          <td className="px-3 py-2">
+                            <TonerBar
+                              snmpEnabled={p.snmp_enabled}
+                              toner={fleetByPrinterId.get(p.id)?.toner}
+                            />
+                          </td>
                           <td className="px-3 py-2">
                             {p.is_active ? (
                               <Badge>Ativa</Badge>
@@ -367,6 +448,43 @@ export function PrintersPage() {
             value={form.department_id}
             onChange={(e) => setForm((f) => ({ ...f, department_id: e.target.value }))}
           />
+          <label className="flex cursor-pointer items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              className="size-4 rounded border-[var(--border)]"
+              checked={form.snmp_enabled}
+              disabled={!form.ip_address.trim()}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, snmp_enabled: e.target.checked }))
+              }
+            />
+            Monitorar toner via SNMP
+          </label>
+          {!form.ip_address.trim() ? (
+            <p className="text-xs text-[var(--text-tertiary)]">
+              Informe o IP para habilitar SNMP.
+            </p>
+          ) : null}
+          <Input
+            label="Community SNMP (opcional)"
+            type="password"
+            autoComplete="off"
+            value={form.snmp_community_override}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, snmp_community_override: e.target.value }))
+            }
+            placeholder="Usa community global se vazio"
+          />
+          {editing ? (
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={snmpTesting || !form.ip_address.trim()}
+              onClick={() => void handleSnmpTest()}
+            >
+              {snmpTesting ? 'Testando…' : 'Testar SNMP'}
+            </Button>
+          ) : null}
           {editing ? <PrinterUsersPanel printerId={editing.id} /> : null}
         </form>
       </Dialog>

@@ -12,7 +12,14 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.db.models import Department, PrintJob, Printer, User
-from app.schemas.manager import ManagerSummaryResponse, PeriodKpi, TopEntry
+from app.schemas.manager import (
+    FleetSummaryBlock,
+    FleetSummaryItem,
+    ManagerSummaryResponse,
+    PeriodKpi,
+    TopEntry,
+)
+from app.services import fleet_service
 from app.services.cost_service import (
     BUCKET_UNREGISTERED_PRINTER,
     BUCKET_UNREGISTERED_USER,
@@ -288,6 +295,12 @@ def build_summary(
     if total_pages > 0:
         pending_pct = round(period.pages_pending / total_pages * 100.0, 2)
 
+    fleet_block_raw = fleet_service.build_fleet_summary_block(db)
+    fleet_summary = FleetSummaryBlock(
+        counts=fleet_block_raw["counts"],
+        items=[FleetSummaryItem(**item) for item in fleet_block_raw["items"]],
+    )
+
     return ManagerSummaryResponse(
         period=period,
         top_users=_tops_from_accumulator(acc["users"], has_rates=has_rates),
@@ -298,6 +311,7 @@ def build_summary(
         meter_reconciliation=meter_service.build_reconciliation(
             db, date_from, date_to
         ),
+        fleet_summary=fleet_summary,
         has_rates=has_rates,
         pending_pct=pending_pct,
         pending_count=period.pages_pending,

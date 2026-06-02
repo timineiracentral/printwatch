@@ -212,6 +212,7 @@ def build_fleet_summary_block(db: Session) -> dict:
             "printer_id": row.printer_id,
             "display_name": row.display_name,
             "fleet_status": row.fleet_status,
+            "snmp_enabled": row.snmp_enabled,
             "black_pct": row.toner.black_pct if row.toner else None,
             "toner_status": row.toner.status if row.toner else None,
         }

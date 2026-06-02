@@ -42,6 +42,8 @@ def test_manager_summary_endpoint(client: TestClient, db_session: Session) -> No
         "has_rates",
     }
     assert body["period"]["pages_billable"] == 0
+    assert "fleet_summary" in body
+    assert body["fleet_summary"]["counts"]["total"] >= 0
 
 
 def test_manager_summary_invalid_date_range(client: TestClient) -> None:

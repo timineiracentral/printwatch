@@ -26,12 +26,27 @@ class PeriodKpi(BaseModel):
     delta_pct_cost: Optional[float] = None
 
 
+class FleetSummaryItem(BaseModel):
+    printer_id: int
+    display_name: str
+    fleet_status: str
+    snmp_enabled: bool = False
+    black_pct: Optional[int] = None
+    toner_status: Optional[str] = None
+
+
+class FleetSummaryBlock(BaseModel):
+    counts: dict
+    items: list[FleetSummaryItem] = Field(default_factory=list)
+
+
 class ManagerSummaryResponse(BaseModel):
     period: PeriodKpi
     top_users: list[TopEntry] = Field(default_factory=list)
     top_printers: list[TopEntry] = Field(default_factory=list)
     top_departments: list[TopEntry] = Field(default_factory=list)
     meter_reconciliation: list[MeterReconciliationRow] = Field(default_factory=list)
+    fleet_summary: Optional[FleetSummaryBlock] = None
     has_rates: bool = False
     pending_pct: Optional[float] = None
     pending_count: int = 0

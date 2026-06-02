@@ -1,5 +1,6 @@
 import { FileQuestion } from 'lucide-react'
 import { useState } from 'react'
+import { useFleetStatusMap } from '../../hooks/useFleetStatusMap'
 import { useJobs } from '../../hooks/useJobs'
 import { useShowCostColumn } from '../../hooks/useShowCostColumn'
 import { useUrlFilters } from '../../hooks/useUrlFilters'
@@ -38,6 +39,7 @@ export function JobsTable() {
   const { filters, clearFilters } = useUrlFilters()
   const { showCostColumn, setShowCostColumn } = useShowCostColumn()
   const { data, isLoading, isFetching, isError, refetch } = useJobs(filters)
+  const fleetStatusMap = useFleetStatusMap()
   const [correctionJob, setCorrectionJob] = useState<JobOut | null>(null)
   const isRefetching = isFetching && !isLoading
   const activeFilters = hasActiveFilters(filters)
@@ -150,6 +152,10 @@ export function JobsTable() {
                       ))
                     : items.map((job, index) => {
                         const pending = (job.pages_pending_color ?? 0) > 0
+                        const fleetStatus =
+                          job.printer_id != null
+                            ? fleetStatusMap.get(job.printer_id)
+                            : undefined
                         return (
                           <tr
                             key={job.id ?? `${job.job_id}-${job.timestamp}`}
@@ -171,6 +177,16 @@ export function JobsTable() {
                                 <span className="block truncate" title={job.printer}>
                                   {job.printer}
                                 </span>
+                                {fleetStatus === 'offline' ? (
+                                  <Badge variant="warning" title="Impressora offline">
+                                    Offline
+                                  </Badge>
+                                ) : null}
+                                {fleetStatus === 'unknown' ? (
+                                  <Badge variant="muted" title="Status de frota desconhecido">
+                                    Desconhecido
+                                  </Badge>
+                                ) : null}
                                 {job.outside_policy ? (
                                   <Badge
                                     variant="warning"

@@ -41,6 +41,8 @@ printwatch/
 - [SPEC.md](SPEC.md) — especificação técnica
 - [docs/vm-setup.md](docs/vm-setup.md) — preparação da VM Ubuntu 22.04
 - [docs/windows-printer-setup.md](docs/windows-printer-setup.md) — cadastrar impressora (painel + CUPS + Windows) e usar fila já cadastrada
+- [docs/cups-color-capture.md](docs/cups-color-capture.md) — runbook PB vs color no `page_log`
+- [.planning/research/CUPS-COLOR-CAPTURE.md](.planning/research/CUPS-COLOR-CAPTURE.md) — pesquisa CUPS/Context7 (mapeamento, decisão `%{print-color-mode}`)
 
 ## Próximas fases
 

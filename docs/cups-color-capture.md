@@ -1,74 +1,134 @@
 # Captura de modo de cor no CUPS (page_log)
 
-Este runbook descreve como maximizar o preenchimento do campo de cor no `page_log` do CUPS, para que o PrintWatch classifique impressões como **mono** ou **color** na captura (`color_mode_source=captured`).
+Runbook operacional para classificar impressões como **mono** ou **color** na captura (`color_mode_source=captured`).
+
+**Documentação técnica completa** (pesquisa Context7, mapeamento de campos, decisões):  
+[`.planning/research/CUPS-COLOR-CAPTURE.md`](../.planning/research/CUPS-COLOR-CAPTURE.md)
+
+---
+
+## Visão rápida
+
+| O quê | Detalhe |
+|-------|---------|
+| Fonte da verdade | Atributo IPP **`print-color-mode`** no job |
+| Como chega ao PrintWatch | Linha do `page_log` → parser (`parser.py`, grupo 6) → `normalize_color_mode()` |
+| Formato recomendado | `%{print-color-mode}` no `PageLogFormat` (substitui `%{job-billing}` na mesma posição) |
+| **Não** é cor | Sequência `%C` do CUPS = **cópias**, não PB/color |
+
+---
 
 ## Pré-requisitos
 
-- Docker Compose com o serviço **cups** em execução (`docker compose ps` deve listar `cups` como `running`).
-- Acesso ao host onde o repositório está clonado (para executar scripts na raiz do projeto).
-- Nome da fila CUPS e URI IPP da impressora (ex.: `ipp://HOST:631/ipp/print` — use o host real da sua rede; em documentação interna prefira placeholders como `REDACTED_LAN`).
+- Docker Compose com serviço **cups** em execução.
+- Driver/fila com **page accounting** (contagem de páginas no log).
+- Nome da fila CUPS e URI IPP da impressora.
 
-## Configurar fila com impressão colorida
+---
 
-O script `scripts/fix-cups-color-queue.sh` recria a fila com PPD Samsung e força `print-color-mode=color`, evitando que o PPD trave tudo em monocromático.
+## Passo 1 — `PageLogFormat` (uma vez por ambiente)
+
+No container, o template do repositório é aplicado via `cups/cupsd.conf.template`. O formato **recomendado** (ainda pendente de merge no template em alguns deploys):
+
+```text
+PageLogFormat "%p %u %j %T %P %C %{print-color-mode} %{job-originating-host-name} %{job-name} %{media} %{sides}"
+```
+
+Após alterar:
+
+```bash
+docker compose up -d --build cups
+# ou reiniciar apenas o serviço cups conforme seu fluxo de deploy
+```
+
+Conferir:
+
+```bash
+docker compose exec cups grep PageLogFormat /etc/cups/cupsd.conf
+```
+
+---
+
+## Passo 2 — Configurar fila
+
+Evita PPD Samsung com `print-color-mode=monochrome` fixo:
 
 ```bash
 ./scripts/fix-cups-color-queue.sh <nome_fila> <uri_ipp>
 ```
 
-Exemplo (substitua host e fila pelos valores do seu ambiente):
+Exemplo:
 
 ```bash
 ./scripts/fix-cups-color-queue.sh colorida_corredor ipp://REDACTED_LAN:631/ipp/print
 ```
 
-O script:
+O script: recria fila, `ColorModel=Color`, remove `monochrome` forçado, reativa fila.
 
-1. Verifica se o container `cups` está rodando.
-2. Remove/recria a fila com PPD padrão Samsung.
-3. Define `ColorModel=Color` e remove `print-color-mode=monochrome` de `printers.conf`.
-4. Reativa a fila (`cupsaccept` / `cupsenable`).
-
-Teste rápido após configurar:
+Teste:
 
 ```bash
 docker compose exec cups lp -d <nome_fila> /usr/share/cups/data/default-testpage.pdf
 ```
 
-## Validar o page_log
+---
 
-O watcher lê `/var/log/cups/page_log`. Cada linha concluída deve incluir o **6º campo** (modo de cor) com valor reconhecível ou `-` quando ausente.
+## Passo 3 — Validar `page_log`
 
-Formato esperado (campos principais):
+Formato da linha (campos principais):
 
 ```text
-<impressora> <usuario> <job_id> [<timestamp>] total <paginas> <cor> ...
+<impressora> <usuario> <job_id> [<timestamp>] total <paginas> <print-color-mode> <host> <job_name> <media> <sides>
 ```
 
-Valores de `<cor>` mapeados pelo backend:
-
-| CUPS (exemplos) | Canônico |
-|-----------------|----------|
-| `grayscale`, `gray`, `monochrome`, `bw`, … | `mono` |
-| `color`, `rgb`, `cmyk`, … | `color` |
-| `-` ou desconhecido | pendente (`NULL`) |
-
-Inspecionar linhas recentes:
+Inspecionar:
 
 ```bash
 docker compose exec cups tail -n 20 /var/log/cups/page_log
 ```
 
-Confirme que jobs coloridos exibem um alias de cor (não apenas `-`) após ajuste da fila.
+O **6º campo** (após `total <N>`) deve ser `monochrome` ou `color`, não apenas `-`.
+
+| Valor no log | `color_mode` no banco |
+|--------------|------------------------|
+| `monochrome`, `grayscale`, `gray`, … | `mono` |
+| `color`, `rgb`, `cmyk`, … | `color` |
+| `-` ou desconhecido | NULL (pendente) |
+
+---
+
+## Passo 4 — Validar no painel / API
+
+- UI **Jobs**: colunas mono/color e custo (Fase 6).
+- API: `GET /api/v1/jobs` — `pages_mono`, `pages_color`, `pages_pending_color`.
+
+---
 
 ## Páginas pendentes e correção manual
 
-Linhas com `color_mode` **NULL** (campo `-` ou valor não reconhecido) são **páginas pendentes**: não entram em mono/color nem em custo estimado até serem resolvidas.
+`color_mode` NULL → não entra em custo faturável até resolução.
 
-Na **Fase 6** (custo e chargeback), o administrador pode corrigir manualmente na UI de auditoria (`color_mode_source=manual`). Priorize corrigir a captura CUPS quando muitas linhas ficarem pendentes no mesmo período.
+Na Fase 6, admin corrige na auditoria (`PATCH` → `color_mode_source=manual`). Priorize corrigir CUPS quando muitas linhas ficam pendentes no mesmo período.
+
+---
+
+## Checklist VM (go-live Fase 6/7)
+
+- [ ] `PageLogFormat` com `%{print-color-mode}` ativo no container
+- [ ] `fix-cups-color-queue.sh` na fila de produção
+- [ ] Impressão teste mono → campo 6 = `monochrome` (ou alias mono)
+- [ ] Impressão teste color → campo 6 = `color`
+- [ ] Jobs na UI com `color_mode_source=captured` (não só manual)
+
+---
 
 ## Referências
 
-- Script: `scripts/fix-cups-color-queue.sh`
-- Parser: `backend/app/services/parser.py` + `backend/app/services/color_mode.py`
-- Contexto de produto: `.planning/phases/06-costing-chargeback/06-CONTEXT.md` (D-05, D-06)
+| Recurso | Caminho |
+|---------|---------|
+| Pesquisa e decisão | `.planning/research/CUPS-COLOR-CAPTURE.md` |
+| Template CUPS | `cups/cupsd.conf.template` |
+| Script fila | `scripts/fix-cups-color-queue.sh` |
+| Parser | `backend/app/services/parser.py` |
+| Aliases | `backend/app/services/color_mode.py` |
+| Fase 6 (produto) | `.planning/phases/06-costing-chargeback/06-CONTEXT.md` |

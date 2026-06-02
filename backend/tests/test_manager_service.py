@@ -194,6 +194,7 @@ def test_has_rates_false_without_cost_rate(db_session: Session) -> None:
 
 
 def test_summary_90d_under_3s(db_session: Session) -> None:
+    """ANAL-04 smoke: requer schema com ix_print_jobs_timestamp (alembic upgrade head)."""
     fx = seed_manager_fixtures(db_session)
     base = datetime(2026, 1, 1, tzinfo=timezone.utc)
     pid = fx["allowed"].id
@@ -241,6 +242,29 @@ def test_synthetic_bucket_in_top_users(db_session: Session) -> None:
     summary = build_summary(db_session, date(2026, 5, 1), date(2026, 5, 31))
     names = [t.name for t in summary.top_users]
     assert BUCKET_UNREGISTERED_USER in names
+
+
+def test_explain_uses_timestamp_index(db_session: Session) -> None:
+    """Valida que filtro por timestamp pode usar índice (SQLite EXPLAIN)."""
+    from sqlalchemy import text
+
+    seed_manager_fixtures(db_session)
+    db_session.execute(
+        text(
+            "CREATE INDEX IF NOT EXISTS ix_print_jobs_timestamp "
+            "ON print_jobs(timestamp)"
+        )
+    )
+    db_session.commit()
+    result = db_session.execute(
+        text(
+            "EXPLAIN QUERY PLAN SELECT * FROM print_jobs "
+            "WHERE timestamp >= '2026-01-01' AND timestamp <= '2026-12-31'"
+        )
+    ).fetchall()
+    plan = " ".join(str(row) for row in result).lower()
+    assert "print_jobs" in plan
+    assert "index" in plan or "ix_print_jobs_timestamp" in plan
 
 
 def test_manager_service_no_aggregated_subquery() -> None:

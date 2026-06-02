@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useStatsSummary } from '../../hooks/useStatsSummary'
 import { formatNumberPtBr, formatTopLabel } from '../../lib/format'
 import type { TopEntry } from '../../types/api'
@@ -59,6 +60,13 @@ export function SummaryCards() {
   const topPrinter = topCardValue(data?.mes.top_printers[0])
 
   return (
+    <>
+    <p className="mb-2 text-sm text-[var(--text-secondary)]">
+      Resumo rápido (hoje / mês).{' '}
+      <Link to="/manager" className="font-medium text-[var(--accent)] underline">
+        Abrir painel gerencial
+      </Link>
+    </p>
     <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
       <SummaryCard
         variant="metric"
@@ -83,5 +91,6 @@ export function SummaryCards() {
         isEmpty={topPrinter.isEmpty}
       />
     </div>
+    </>
   )
 }

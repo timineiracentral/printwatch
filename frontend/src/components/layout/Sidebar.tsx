@@ -1,4 +1,5 @@
 import {
+  Activity,
   BarChart3,
   Briefcase,
   Building2,
@@ -66,6 +67,10 @@ export function Sidebar({ mobileOpen, onMobileToggle }: SidebarProps) {
           <NavLink to="/manager" className={navLinkClass}>
             <BarChart3 className="size-4" aria-hidden />
             Gerencial
+          </NavLink>
+          <NavLink to="/fleet" className={navLinkClass}>
+            <Activity className="size-4" aria-hidden />
+            Frota
           </NavLink>
 
           <p className="mb-2 mt-6 px-3 text-xs font-medium uppercase tracking-wide text-[var(--text-tertiary)]">

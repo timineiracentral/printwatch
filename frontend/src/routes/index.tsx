@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { JobsPage } from '../pages/JobsPage'
+import { FleetPage } from '../pages/FleetPage'
 import { ManagerPage } from '../pages/ManagerPage'
 import { CostCentersPage } from '../pages/settings/CostCentersPage'
 import { CostRatesPage } from '../pages/settings/CostRatesPage'
@@ -16,6 +17,7 @@ export function AppRoutes() {
       <Routes>
         <Route path="/" element={<JobsPage />} />
         <Route path="/manager" element={<ManagerPage />} />
+        <Route path="/fleet" element={<FleetPage />} />
         <Route path="/settings/users/:userId/ti-export" element={<TiExportPage />} />
         <Route path="/settings" element={<SettingsLayout />}>
           <Route index element={<Navigate to="printers" replace />} />

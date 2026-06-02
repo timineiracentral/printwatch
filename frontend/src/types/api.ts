@@ -1,7 +1,81 @@
 /** Espelha schemas Pydantic do backend (D-65). */
 
+export type FleetConnectivityStatus = 'online' | 'offline' | 'unknown'
+export type FleetStatusSource = 'cups' | 'ping' | 'unknown'
+export type TonerSnapshotStatus = 'ok' | 'unavailable'
+
+export interface TonerDisplay {
+  black_pct?: number | null
+  color_pct?: number | null
+  partial_color: boolean
+  status: TonerSnapshotStatus
+  checked_at?: string | null
+}
+
+export interface FleetSummaryCounts {
+  online: number
+  offline: number
+  unknown: number
+  total: number
+}
+
+export interface FleetPrinterRow {
+  printer_id: number
+  display_name: string
+  cups_queue_name: string
+  ip_address?: string | null
+  fleet_status: FleetConnectivityStatus
+  fleet_source: FleetStatusSource
+  last_checked_at?: string | null
+  error_message?: string | null
+  snmp_enabled: boolean
+  toner?: TonerDisplay | null
+}
+
+export interface FleetListResponse {
+  items: FleetPrinterRow[]
+  summary: FleetSummaryCounts
+}
+
+export interface FleetPrinterDetail extends FleetPrinterRow {
+  meter_readings_snmp: MeterReadingBrief[]
+}
+
+export interface MeterReadingBrief {
+  id: number
+  timestamp: string
+  counter_total: number
+  counter_mono?: number | null
+  counter_color?: number | null
+  source: string
+}
+
+export interface SnmpTestResponse {
+  ok: boolean
+  message: string
+  counter_total?: number | null
+  black_pct?: number | null
+  color_pct?: number | null
+  partial_color: boolean
+}
+
+export interface FleetSummaryItem {
+  printer_id: number
+  display_name: string
+  fleet_status: string
+  snmp_enabled: boolean
+  black_pct?: number | null
+  toner_status?: string | null
+}
+
+export interface FleetSummaryBlock {
+  counts: FleetSummaryCounts
+  items: FleetSummaryItem[]
+}
+
 export interface JobOut {
   id?: number | null
+  printer_id?: number | null
   printer: string
   username: string
   job_id: number
@@ -98,6 +172,8 @@ export interface PrinterRead {
   location?: string | null
   department_id?: number | null
   is_active: boolean
+  snmp_enabled: boolean
+  snmp_community_override?: string | null
   created_at: string
   updated_at: string
 }
@@ -109,6 +185,8 @@ export interface PrinterCreate {
   manufacturer_model?: string | null
   location?: string | null
   department_id?: number | null
+  snmp_enabled?: boolean
+  snmp_community_override?: string | null
 }
 
 export interface PrinterUpdate {
@@ -118,6 +196,8 @@ export interface PrinterUpdate {
   manufacturer_model?: string | null
   location?: string | null
   department_id?: number | null
+  snmp_enabled?: boolean
+  snmp_community_override?: string | null
 }
 
 export interface DepartmentRead {
@@ -279,6 +359,7 @@ export interface ManagerSummaryResponse {
   top_printers: ManagerTopEntry[]
   top_departments: ManagerTopEntry[]
   meter_reconciliation: MeterReconciliationRow[]
+  fleet_summary?: FleetSummaryBlock | null
   has_rates: boolean
   pending_pct?: number | null
   pending_count: number

@@ -25,6 +25,11 @@ services:
       LOG_RETENTION_DAYS: ${LOG_RETENTION_DAYS:-90}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173,http://localhost,http://VM_HOST}
       API_TIMEZONE: ${API_TIMEZONE:-America/Sao_Paulo}
+      SNMP_COMMUNITY: ${SNMP_COMMUNITY:-public}
+      FLEET_HEALTH_INTERVAL_SEC: ${FLEET_HEALTH_INTERVAL_SEC:-900}
+      FLEET_SNMP_INTERVAL_SEC: ${FLEET_SNMP_INTERVAL_SEC:-43200}
+      CUPS_HOST: ${CUPS_HOST:-cups}
+      CUPS_PORT: ${CUPS_PORT:-631}
     volumes:
       - cups_logs:/var/log/cups:ro
       - db_data:/app/data

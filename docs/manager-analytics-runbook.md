@@ -17,7 +17,7 @@ Na VM ou ambiente de deploy:
 
 ```bash
 cd backend
-export DB_PATH=/caminho/para/printwatch.db   # se necessário
+export DB_PATH=/app/data/printwatch.db   # dentro do container backend
 python -m alembic upgrade head
 ```
 

@@ -26,3 +26,21 @@ export function presetMonthToDate(): { date_from: string; date_to: string } {
     date_to: format(now, 'yyyy-MM-dd'),
   }
 }
+
+export function presetLast30Days(): { date_from: string; date_to: string } {
+  const end = TZDate.tz(TZ)
+  const start = subDays(end, 29)
+  return {
+    date_from: format(start, 'yyyy-MM-dd'),
+    date_to: format(end, 'yyyy-MM-dd'),
+  }
+}
+
+export function presetLast90Days(): { date_from: string; date_to: string } {
+  const end = TZDate.tz(TZ)
+  const start = subDays(end, 89)
+  return {
+    date_from: format(start, 'yyyy-MM-dd'),
+    date_to: format(end, 'yyyy-MM-dd'),
+  }
+}

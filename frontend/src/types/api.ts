@@ -241,3 +241,70 @@ export type ImportEntity =
   | 'cost-centers'
   | 'users'
   | 'printers'
+
+export interface ManagerTopEntry {
+  name: string
+  pages: number
+  estimated_cost?: number | null
+}
+
+export interface PeriodKpi {
+  pages_mono: number
+  pages_color: number
+  pages_billable: number
+  pages_pending: number
+  estimated_cost?: number | null
+  previous?: PeriodKpi | null
+  delta_pct_pages?: number | null
+  delta_pct_cost?: number | null
+}
+
+export interface MeterReconciliationRow {
+  printer_id: number
+  printer_name: string
+  reading_start?: string | null
+  reading_end?: string | null
+  pages_meter?: number | null
+  cost_meter?: number | null
+  pages_jobs: number
+  divergence_pct?: number | null
+  partial_interval: boolean
+  counter_reset: boolean
+  proportional_cost_note?: string | null
+}
+
+export interface ManagerSummaryResponse {
+  period: PeriodKpi
+  top_users: ManagerTopEntry[]
+  top_printers: ManagerTopEntry[]
+  top_departments: ManagerTopEntry[]
+  meter_reconciliation: MeterReconciliationRow[]
+  has_rates: boolean
+  pending_pct?: number | null
+  pending_count: number
+}
+
+export interface ManagerFilters {
+  date_from: string
+  date_to: string
+  preset?: string
+}
+
+export interface MeterReadingCreate {
+  timestamp: string
+  counter_total: number
+  counter_mono?: number | null
+  counter_color?: number | null
+  source?: 'manual' | 'import'
+}
+
+export interface MeterReadingRead {
+  id: number
+  printer_id: number
+  timestamp: string
+  counter_total: number
+  counter_mono?: number | null
+  counter_color?: number | null
+  source: string
+  created_at: string
+}

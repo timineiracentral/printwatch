@@ -4,6 +4,7 @@ import { PrinterUsersPanel } from '../../components/settings/PrinterUsersPanel'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { ConfirmDialog } from '../../components/settings/ConfirmDialog'
 import { SettingsSearch } from '../../components/settings/SettingsSearch'
+import { MeterReadingDialog } from '../../components/manager/MeterReadingDialog'
 import { UnmappedQueuesBanner } from '../../components/settings/UnmappedQueuesBanner'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
@@ -56,6 +57,7 @@ export function PrintersPage() {
   const [editing, setEditing] = useState<PrinterRead | null>(null)
   const [form, setForm] = useState<FormState>(emptyForm)
   const [confirmId, setConfirmId] = useState<number | null>(null)
+  const [meterPrinter, setMeterPrinter] = useState<PrinterRead | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
 
@@ -253,6 +255,16 @@ export function PrintersPage() {
                                 <Button
                                   variant="ghost"
                                   className="min-h-8 px-2 py-1 text-xs"
+                                  aria-label={`Registrar contador ${p.display_name}`}
+                                  onClick={() => setMeterPrinter(p)}
+                                >
+                                  Contador
+                                </Button>
+                              ) : null}
+                              {p.is_active ? (
+                                <Button
+                                  variant="ghost"
+                                  className="min-h-8 px-2 py-1 text-xs"
                                   aria-label={`Desativar impressora ${p.display_name}`}
                                   onClick={() => setConfirmId(p.id)}
                                 >
@@ -367,6 +379,15 @@ export function PrintersPage() {
         onConfirm={() => void handleDeactivate()}
         onClose={() => setConfirmId(null)}
       />
+
+      {meterPrinter ? (
+        <MeterReadingDialog
+          printerId={meterPrinter.id}
+          printerName={meterPrinter.display_name}
+          open
+          onClose={() => setMeterPrinter(null)}
+        />
+      ) : null}
     </>
   )
 }

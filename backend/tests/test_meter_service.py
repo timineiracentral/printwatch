@@ -4,6 +4,7 @@ from __future__ import annotations
 from datetime import date, datetime, timezone
 from decimal import Decimal
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.models import CostRate, PrinterMeterReading
@@ -166,9 +167,37 @@ def test_build_summary_includes_meter_reconciliation(db_session: Session) -> Non
     assert match[0].pages_meter == 100
 
 
-def test_no_snmp_in_meter_service() -> None:
+def test_upsert_snmp_reading_same_day_replaces_manual(db_session: Session) -> None:
+    fx = seed_manager_fixtures(db_session)
+    pid = fx["allowed"].id
+    day = datetime(2026, 6, 2, 10, 0, 0, tzinfo=timezone.utc)
+    meter_service.create_reading(
+        db_session,
+        pid,
+        MeterReadingCreate(
+            timestamp=day,
+            counter_total=1000,
+            source="manual",
+        ),
+    )
+    meter_service.upsert_snmp_reading_same_day(
+        db_session, pid, day, 1500, None, None
+    )
+    rows = list(
+        db_session.scalars(
+            select(PrinterMeterReading).where(PrinterMeterReading.printer_id == pid)
+        ).all()
+    )
+    snmp_rows = [r for r in rows if r.source == "snmp"]
+    manual_rows = [r for r in rows if r.source == "manual"]
+    assert len(snmp_rows) == 1
+    assert snmp_rows[0].counter_total == 1500
+    assert manual_rows == []
+
+
+def test_no_pysnmp_poll_in_meter_service() -> None:
     from pathlib import Path
 
     text = Path("app/services/meter_service.py").read_text(encoding="utf-8").lower()
-    assert "snmp" not in text
     assert "pysnmp" not in text
+    assert "snmp_get" not in text

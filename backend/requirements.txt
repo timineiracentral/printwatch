@@ -7,3 +7,4 @@ uvicorn[standard]==0.48.0
 pydantic==2.13.4
 pytest==8.3.5
 pytest-cov==6.0.0
+pysnmp==6.2.6

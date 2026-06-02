@@ -5,7 +5,9 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db_dep
+from app.schemas.fleet import SnmpTestResponse
 from app.schemas.printer import PrinterCreate, PrinterRead, PrinterUpdate
+from app.services import snmp_service
 from app.schemas.user_printer_access import PrinterUserAccessRead
 from app.services import user_printer_access_service
 from app.services import printers_service
@@ -67,6 +69,14 @@ def update_printer_endpoint(
     row = printers_service.update_printer(db, printer_id, payload)
     background_tasks.add_task(schedule_match_for_queue, row.cups_queue_name)
     return row
+
+
+@router.post("/{printer_id}/snmp-test", response_model=SnmpTestResponse)
+async def snmp_test_endpoint(
+    printer_id: int,
+    db: Session = Depends(get_db_dep),
+) -> SnmpTestResponse:
+    return await snmp_service.run_snmp_test(printer_id, db)
 
 
 @router.delete("/{printer_id}", response_model=PrinterRead)

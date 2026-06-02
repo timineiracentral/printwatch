@@ -3,12 +3,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
+from zoneinfo import ZoneInfo
 from decimal import Decimal
 
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.core.normalize import normalize_printer_name
 from app.db.models import Printer, PrinterMeterReading, PrintJob
 from app.schemas.meter import MeterReadingCreate, MeterReconciliationRow
@@ -34,6 +36,52 @@ METER_CSV_HEADERS = (
 
 def _utc_now() -> datetime:
     return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+def _calendar_date_utc(ts: datetime) -> date:
+    tz = ZoneInfo(settings.api_timezone)
+    if ts.tzinfo is None:
+        ts = ts.replace(tzinfo=timezone.utc)
+    return ts.astimezone(tz).date()
+
+
+def upsert_snmp_reading_same_day(
+    db: Session,
+    printer_id: int,
+    timestamp: datetime,
+    counter_total: int,
+    counter_mono: int | None,
+    counter_color: int | None,
+) -> PrinterMeterReading:
+    """D-17: leitura SNMP substitui manual/import no mesmo dia calendário."""
+    day = _calendar_date_utc(timestamp)
+    for row in list(db.scalars(select(PrinterMeterReading).where(
+        PrinterMeterReading.printer_id == printer_id
+    ))):
+        if row.source in ("manual", "import") and _calendar_date_utc(row.timestamp) == day:
+            db.delete(row)
+
+    existing_snmp = [
+        r
+        for r in db.scalars(
+            select(PrinterMeterReading).where(
+                PrinterMeterReading.printer_id == printer_id,
+                PrinterMeterReading.source == "snmp",
+            )
+        )
+        if _calendar_date_utc(r.timestamp) == day
+    ]
+    for row in existing_snmp:
+        db.delete(row)
+
+    payload = MeterReadingCreate(
+        timestamp=timestamp,
+        counter_total=counter_total,
+        counter_mono=counter_mono,
+        counter_color=counter_color,
+        source="snmp",
+    )
+    return create_reading(db, printer_id, payload)
 
 
 def create_reading(

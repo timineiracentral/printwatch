@@ -64,10 +64,6 @@ class SnmpTestResponse(BaseModel):
     partial_color: bool = False
 
 
-class FleetPrinterDetail(FleetPrinterRow):
-    meter_readings_snmp: list["MeterReadingBrief"] = Field(default_factory=list)
-
-
 class MeterReadingBrief(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -79,4 +75,5 @@ class MeterReadingBrief(BaseModel):
     source: str
 
 
-FleetPrinterDetail.model_rebuild()
+class FleetPrinterDetail(FleetPrinterRow):
+    meter_readings_snmp: list[MeterReadingBrief] = Field(default_factory=list)

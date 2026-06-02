@@ -66,7 +66,7 @@ completed: 2026-05-27
 1. **Task 1: chargeback_export service** - `ef2fc43` (feat)
 2. **Task 2: Rotas export chargeback** - `cce4296` (feat)
 
-**Plan metadata:** (docs commit follows)
+**Plan metadata:** `55b9c09` (docs: complete plan)
 
 ## Files Created/Modified
 

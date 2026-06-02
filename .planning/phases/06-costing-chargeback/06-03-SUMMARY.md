@@ -73,7 +73,7 @@ completed: 2026-05-27
 1. **Task 1: Agregação billable + estimated_cost** - `b7acaad` (feat)
 2. **Task 2+3: GET linhas + PATCH color-mode** - `6fa965f` (feat)
 
-**Plan metadata:** pending final docs commit
+**Plan metadata:** `9dbaed0` (docs: complete plan)
 
 ## Files Created/Modified
 

@@ -79,7 +79,7 @@ completed: 2026-05-27
 2. **Task 2: Model CostRate + color_mode normalizer** - `e9636e3` (feat)
 3. **Task 3: CUPS capture runbook** - `b162275` (docs)
 
-**Plan metadata:** (pending final docs commit)
+**Plan metadata:** `420bf2f` (docs: complete plan)
 
 ## Files Created/Modified
 

@@ -24,12 +24,19 @@ set -euo pipefail
 cancel -a '${QUEUE_NAME}' 2>/dev/null || true
 lpadmin -x '${QUEUE_NAME}' 2>/dev/null || true
 rm -f '/etc/cups/ppd/${QUEUE_NAME}.ppd'
-lpadmin -p '${QUEUE_NAME}' -v '${PRINTER_URI}' -m '${PPD}' -E 2>/dev/null || true
+if ! lpadmin -p '${QUEUE_NAME}' -v '${PRINTER_URI}' -m '${PPD}' -E; then
+  echo '[WARN] lpadmin com PPD Samsung falhou; tentando driver everybodysuccessful...' >&2
+  lpadmin -p '${QUEUE_NAME}' -v '${PRINTER_URI}' -m everywhere -E
+fi
 lpoptions -p '${QUEUE_NAME}' -o ColorModel=Color
 lpadmin -p '${QUEUE_NAME}' -o printer-error-policy=abort-job
-sed -i '/Option print-color-mode monochrome/d' /etc/cups/printers.conf
-if ! grep -q 'Option print-color-mode color' /etc/cups/printers.conf; then
-  sed -i \"/<Printer ${QUEUE_NAME}>/,/<\\/Printer>/ s|</Printer>|Option print-color-mode color\\n</Printer>|\" /etc/cups/printers.conf
+if [ -f /etc/cups/printers.conf ]; then
+  sed -i '/Option print-color-mode monochrome/d' /etc/cups/printers.conf
+  if ! grep -q 'Option print-color-mode color' /etc/cups/printers.conf; then
+    sed -i \"/<Printer ${QUEUE_NAME}>/,/<\\/Printer>/ s|</Printer>|Option print-color-mode color\\n</Printer>|\" /etc/cups/printers.conf
+  fi
+else
+  echo '[WARN] /etc/cups/printers.conf ausente após lpadmin; reinicie o container cups se a fila não aparecer.' >&2
 fi
 kill -HUP 1 2>/dev/null || true
 sleep 1

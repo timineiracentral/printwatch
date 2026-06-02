@@ -36,7 +36,7 @@ async def _fleet_health_loop() -> None:
         await asyncio.sleep(settings.fleet_health_interval_sec)
         session = SessionLocal()
         try:
-            n = fleet_service.run_health_cycle(session)
+            n = await fleet_service.run_health_cycle_async(session)
             if n:
                 logger.info("fleet health cycle: %d printer(s) checked", n)
         except Exception:
@@ -51,7 +51,7 @@ async def _fleet_snmp_loop() -> None:
         await asyncio.sleep(settings.fleet_snmp_interval_sec)
         session = SessionLocal()
         try:
-            n = snmp_service.run_snmp_cycle(session)
+            n = await snmp_service.run_snmp_cycle_async(session)
             if n:
                 logger.info("fleet snmp cycle: %d printer(s) polled", n)
         except Exception:

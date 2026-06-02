@@ -202,7 +202,7 @@ async def poll_printer_snmp(printer: Printer, session: Session) -> None:
         upsert_toner_snapshot(session, printer.id, status="unavailable")
 
 
-def run_snmp_cycle(db: Session) -> int:
+async def run_snmp_cycle_async(db: Session) -> int:
     printers = list(
         db.scalars(
             select(Printer).where(
@@ -214,17 +214,19 @@ def run_snmp_cycle(db: Session) -> int:
     if not printers:
         return 0
 
-    async def _run() -> None:
-        sem = asyncio.Semaphore(5)
+    sem = asyncio.Semaphore(5)
 
-        async def _one(p: Printer) -> None:
-            async with sem:
-                await poll_printer_snmp(p, db)
+    async def _one(p: Printer) -> None:
+        async with sem:
+            await poll_printer_snmp(p, db)
 
-        await asyncio.gather(*[_one(p) for p in printers])
-
-    asyncio.run(_run())
+    await asyncio.gather(*[_one(p) for p in printers])
     return len(printers)
+
+
+def run_snmp_cycle(db: Session) -> int:
+    """Wrapper síncrono para testes e execução manual."""
+    return asyncio.run(run_snmp_cycle_async(db))
 
 
 async def run_snmp_test(printer_id: int, db: Session) -> SnmpTestResponse:

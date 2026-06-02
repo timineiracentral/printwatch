@@ -125,7 +125,7 @@ def test_catastrophic_cycle_marks_all_unknown(db_session: Session, monkeypatch) 
     def _boom(db, printers):
         raise RuntimeError("cycle exploded")
 
-    monkeypatch.setattr(fleet_service, "_run_health_cycle_inner", _boom)
+    monkeypatch.setattr(fleet_service, "_run_health_cycle_inner_async", _boom)
     n = fleet_service.run_health_cycle(db_session)
     assert n == 2
     rows = db_session.query(PrinterFleetStatus).all()

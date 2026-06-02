@@ -93,8 +93,8 @@ async def check_printer_connectivity(
     return "offline", "ping", cups_err
 
 
-def run_health_cycle(db: Session) -> int:
-    """Executa ciclo de health para impressoras ativas. Retorna contagem processada."""
+async def run_health_cycle_async(db: Session) -> int:
+    """Executa ciclo de health para impressoras ativas (await-safe no lifespan)."""
     printers = list(
         db.scalars(select(Printer).where(Printer.is_active.is_(True))).all()
     )
@@ -102,7 +102,7 @@ def run_health_cycle(db: Session) -> int:
         return 0
 
     try:
-        return _run_health_cycle_inner(db, printers)
+        return await _run_health_cycle_inner_async(db, printers)
     except Exception as exc:
         logger.exception("fleet health cycle catastrophic failure")
         msg = str(exc)[:512]
@@ -117,12 +117,19 @@ def run_health_cycle(db: Session) -> int:
         return len(printers)
 
 
-def _run_health_cycle_inner(db: Session, printers: list[Printer]) -> int:
+def run_health_cycle(db: Session) -> int:
+    """Wrapper síncrono para testes e execução manual (docker exec)."""
+    return asyncio.run(run_health_cycle_async(db))
+
+
+async def _run_health_cycle_inner_async(
+    db: Session, printers: list[Printer]
+) -> int:
     processed = 0
     for printer in printers:
         try:
-            status, source, error_message = asyncio.run(
-                check_printer_connectivity(printer)
+            status, source, error_message = await check_printer_connectivity(
+                printer
             )
             upsert_printer_fleet_status(
                 db,

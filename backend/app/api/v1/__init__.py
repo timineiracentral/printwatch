@@ -6,6 +6,7 @@ from app.api.v1 import (
     cost_rates,
     departments,
     export,
+    fleet,
     health,
     import_routes,
     jobs,
@@ -31,6 +32,7 @@ api_v1_router.include_router(
 api_v1_router.include_router(users.router, prefix="/users", tags=["users"])
 api_v1_router.include_router(stats.router, prefix="/stats", tags=["stats"])
 api_v1_router.include_router(manager.router, prefix="/manager", tags=["manager"])
+api_v1_router.include_router(fleet.router, prefix="/fleet", tags=["fleet"])
 api_v1_router.include_router(
     meter_readings.router, tags=["meter-readings"]
 )

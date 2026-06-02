@@ -59,15 +59,8 @@ id_ed25519.pub
 # git filter-repo replacements — contém padrões com dados reais
 replacements.txt
 
-# UAT local com credenciais/IPs reais (nunca commitar)
-.planning/**/*-HUMAN-UAT.local.md
-.planning/**/*-VERIFICATION.local.md
-
-# Planning: arquivos de investigação/evidência acumulam dados reais de infra
-.planning/phases/**/*INVESTIGATION*.md
-.planning/phases/**/*EVIDENCE*.md
-.planning/phases/**/*DUMP*.md
-.planning/phases/**/*TRACE*.md
+# GSD / planning — apenas local, nunca versionar
+.planning/
 
 # Exports CSV temporários (downloads locais)
 exports/

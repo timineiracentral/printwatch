@@ -69,6 +69,9 @@ def _build_aggregated_query(filters: JobFilters):
     pages_pending_expr = func.sum(
         case((PrintJob.color_mode.is_(None), 1), else_=0)
     )
+    has_manual_expr = func.sum(
+        case((PrintJob.color_mode_source == "manual", 1), else_=0)
+    ).label("has_manual_correction_count")
 
     stmt = (
         select(
@@ -82,6 +85,7 @@ def _build_aggregated_query(filters: JobFilters):
             pages_mono_expr.label("pages_mono"),
             pages_color_expr.label("pages_color"),
             pages_pending_expr.label("pages_pending_color"),
+            has_manual_expr,
             func.max(PrintJob.color_mode).label("color_mode"),
             func.max(PrintJob.host_origin).label("host_origin"),
             func.max(PrintJob.media).label("media"),
@@ -126,6 +130,7 @@ def _normalize_count_fields(item: dict[str, Any]) -> None:
     item["pages_color"] = color
     item["pages_pending_color"] = pending
     item["pages_billable"] = mono + color
+    item["has_manual_correction"] = bool(item.get("has_manual_correction_count") or 0)
 
 
 def _sum_estimated_cost(db: Session, lines: list[PrintJob]) -> Decimal | None:
@@ -281,6 +286,9 @@ def get_job_by_id(db: Session, job_db_id: int) -> dict[str, Any] | None:
             func.sum(
                 case((PrintJob.color_mode.is_(None), 1), else_=0)
             ).label("pages_pending_color"),
+            func.sum(
+                case((PrintJob.color_mode_source == "manual", 1), else_=0)
+            ).label("has_manual_correction_count"),
             func.max(PrintJob.color_mode).label("color_mode"),
             func.max(PrintJob.host_origin).label("host_origin"),
             func.max(PrintJob.media).label("media"),

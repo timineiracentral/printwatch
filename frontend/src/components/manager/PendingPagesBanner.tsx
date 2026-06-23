@@ -9,7 +9,7 @@ export function PendingPagesBanner({
   pendingPct,
   pendingCount,
 }: PendingPagesBannerProps) {
-  if (pendingPct <= 5) {
+  if (pendingCount === 0) {
     return null
   }
 

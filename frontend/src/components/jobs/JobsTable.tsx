@@ -1,4 +1,4 @@
-import { FileQuestion } from 'lucide-react'
+import { FileQuestion, Pencil } from 'lucide-react'
 import { useState } from 'react'
 import { useFleetStatusMap } from '../../hooks/useFleetStatusMap'
 import { useJobs } from '../../hooks/useJobs'
@@ -152,6 +152,9 @@ export function JobsTable() {
                       ))
                     : items.map((job, index) => {
                         const pending = (job.pages_pending_color ?? 0) > 0
+                        const hasManual = job.has_manual_correction === true
+                        const showCorrection =
+                          (pending || hasManual) && job.minute_bucket != null
                         const fleetStatus =
                           job.printer_id != null
                             ? fleetStatusMap.get(job.printer_id)
@@ -213,6 +216,23 @@ export function JobsTable() {
                                     {`${formatNumberPtBr(job.pages_pending_color!)} pendente${(job.pages_pending_color ?? 0) === 1 ? '' : 's'}`}
                                   </Badge>
                                 ) : null}
+                                {hasManual ? (
+                                  <span
+                                    className="inline-flex items-center gap-0.5"
+                                    title="Contém correção manual de modo de cor"
+                                  >
+                                    <Pencil
+                                      className="size-3 text-[var(--text-secondary)]"
+                                      aria-hidden
+                                    />
+                                    <Badge
+                                      variant="muted"
+                                      title="Contém correção manual de modo de cor"
+                                    >
+                                      Corrigido
+                                    </Badge>
+                                  </span>
+                                ) : null}
                               </div>
                             </td>
                             {showCostColumn ? (
@@ -227,7 +247,7 @@ export function JobsTable() {
                               {job.host_origin ?? '—'}
                             </td>
                             <td className="px-3 py-2">
-                              {pending && job.minute_bucket ? (
+                              {showCorrection ? (
                                 <Button
                                   variant="ghost"
                                   className="min-h-8 px-2 text-xs"

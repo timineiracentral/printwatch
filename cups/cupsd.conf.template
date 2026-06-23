@@ -1,7 +1,7 @@
 # PrintWatch CUPS — template gerado em runtime via envsubst (D-05–D-08, D-15)
 LogLevel warn
 
-PageLogFormat "%p %u %j %T %P %C %{job-billing} %{job-originating-host-name} %{job-name} %{media} %{sides}"
+PageLogFormat "%p %u %j %T %P %C %{print-color-mode} %{job-originating-host-name} %{job-name} %{media} %{sides}"
 
 Listen *:631
 

@@ -59,6 +59,8 @@ class Printer(Base):
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
     snmp_enabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     snmp_community_override: Mapped[Optional[str]] = mapped_column(String(255))
+    # NULL = não configurado = color-capable (compatibilidade retroativa); valores: "mono_only" | "color" | NULL
+    color_capability: Mapped[Optional[str]] = mapped_column(String(20))
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 

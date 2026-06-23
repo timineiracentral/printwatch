@@ -7,10 +7,8 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db_dep
 from app.schemas.fleet import SnmpTestResponse
 from app.schemas.printer import PrinterCreate, PrinterRead, PrinterUpdate
-from app.services import snmp_service
 from app.schemas.user_printer_access import PrinterUserAccessRead
-from app.services import user_printer_access_service
-from app.services import printers_service
+from app.services import jobs_service, printers_service, snmp_service, user_printer_access_service
 from app.services.matcher_hooks import schedule_match_for_queue
 
 router = APIRouter()
@@ -66,7 +64,15 @@ def update_printer_endpoint(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db_dep),
 ) -> PrinterRead:
+    existing = printers_service.get_printer_by_id(db, printer_id)
+    if existing is None:
+        raise HTTPException(status_code=404, detail="printer not found")
+    old_capability = existing.color_capability
     row = printers_service.update_printer(db, printer_id, payload)
+    if payload.color_capability == "mono_only" and old_capability != "mono_only":
+        background_tasks.add_task(
+            jobs_service.backfill_mono_only_printer, db, row.cups_queue_name
+        )
     background_tasks.add_task(schedule_match_for_queue, row.cups_queue_name)
     return row
 

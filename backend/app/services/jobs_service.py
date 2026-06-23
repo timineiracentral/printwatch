@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 
 from decimal import Decimal
 
-from sqlalchemy import case, func, select
+from sqlalchemy import case, func, select, update
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
@@ -345,6 +345,21 @@ def patch_line_color_mode(
     db.commit()
     db.refresh(row)
     return row
+
+
+def backfill_mono_only_printer(db: Session, printer_queue: str) -> int:
+    """Reclassifica linhas históricas da impressora como mono_only.
+
+    Respeita correções manuais: WHERE color_mode_source != 'manual'.
+    """
+    result = db.execute(
+        update(PrintJob)
+        .where(PrintJob.printer == printer_queue)
+        .where(PrintJob.color_mode_source != "manual")
+        .values(color_mode="mono", color_mode_source="mono_only")
+    )
+    db.commit()
+    return result.rowcount
 
 
 def list_printer_names(db: Session) -> list[str]:

@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Any, Optional
 
 from app.core.normalize import normalize_printer_name
+from app.services.color_classifier import classify_color_mode
 from app.services.color_mode import normalize_color_mode
 
 PAGE_LOG_REGEX = re.compile(
@@ -17,13 +18,19 @@ def _null_if_dash(value: str) -> Optional[str]:
     return None if value.strip() == "-" else value.strip()
 
 
-def parse_page_log_line(line: str) -> Optional[dict[str, Any]]:
+def parse_page_log_line(
+    line: str,
+    printer_color_capability: str | None = None,
+) -> Optional[dict[str, Any]]:
     m = PAGE_LOG_REGEX.match(line.strip())
     if m is None:
         return None
     raw_color = _null_if_dash(m.group(6))
-    canonical, _ = normalize_color_mode(raw_color)
-    color_mode_source = "captured" if canonical is not None else None
+    raw_canonical, _ = normalize_color_mode(raw_color)
+    raw_source = "captured" if raw_canonical is not None else None
+    canonical, color_mode_source = classify_color_mode(
+        raw_canonical, raw_source, printer_color_capability
+    )
 
     return {
         "printer": normalize_printer_name(m.group(1)),

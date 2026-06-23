@@ -34,6 +34,7 @@ type FormState = {
   manufacturer_model: string
   location: string
   department_id: string
+  color_capability: string
   snmp_enabled: boolean
   snmp_community_override: string
 }
@@ -45,6 +46,7 @@ const emptyForm = (): FormState => ({
   manufacturer_model: '',
   location: '',
   department_id: '',
+  color_capability: '',
   snmp_enabled: false,
   snmp_community_override: '',
 })
@@ -58,6 +60,7 @@ function toForm(p: PrinterRead): FormState {
     manufacturer_model: p.manufacturer_model ?? '',
     location: p.location ?? '',
     department_id: p.department_id != null ? String(p.department_id) : '',
+    color_capability: p.color_capability ?? '',
     snmp_enabled: p.snmp_enabled,
     snmp_community_override:
       override && override !== '***' ? override : '',
@@ -134,6 +137,10 @@ export function PrintersPage() {
     e.preventDefault()
     setFormError(null)
     const ip = form.ip_address.trim() || null
+    const colorCap =
+      form.color_capability === 'color' || form.color_capability === 'mono_only'
+        ? form.color_capability
+        : null
     const body: PrinterCreate = {
       display_name: form.display_name.trim(),
       cups_queue_name: form.cups_queue_name.trim(),
@@ -141,6 +148,7 @@ export function PrintersPage() {
       manufacturer_model: form.manufacturer_model.trim() || null,
       location: form.location.trim() || null,
       department_id: form.department_id ? Number(form.department_id) : null,
+      color_capability: colorCap,
       snmp_enabled: ip ? form.snmp_enabled : false,
       snmp_community_override: form.snmp_community_override.trim() || null,
     }
@@ -286,7 +294,14 @@ export function PrintersPage() {
                             idx % 2 === 1 ? 'bg-[var(--bg-muted)]/40' : '',
                           ].join(' ')}
                         >
-                          <td className="px-3 py-2 font-medium">{p.display_name}</td>
+                          <td className="px-3 py-2 font-medium">
+                            <div className="flex flex-wrap items-center gap-1">
+                              {p.display_name}
+                              {p.color_capability === 'mono_only' ? (
+                                <Badge variant="muted">Somente P&B</Badge>
+                              ) : null}
+                            </div>
+                          </td>
                           <td className="px-3 py-2 text-[var(--text-secondary)]">
                             {p.cups_queue_name}
                           </td>
@@ -447,6 +462,18 @@ export function PrintersPage() {
             placeholder="Nenhum"
             value={form.department_id}
             onChange={(e) => setForm((f) => ({ ...f, department_id: e.target.value }))}
+          />
+          <Select
+            label="Capacidade de cor"
+            options={[
+              { value: '', label: 'Não configurado (color-capable)' },
+              { value: 'color', label: 'Color-capable' },
+              { value: 'mono_only', label: 'Somente P&B (mono-only)' },
+            ]}
+            value={form.color_capability}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, color_capability: e.target.value }))
+            }
           />
           <label className="flex cursor-pointer items-center gap-2 text-sm">
             <input

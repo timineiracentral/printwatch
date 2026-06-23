@@ -88,6 +88,7 @@ export interface JobOut {
   pages_mono?: number
   pages_color?: number
   estimated_cost?: number | null
+  has_manual_correction?: boolean
   color_mode?: string | null
   host_origin?: string | null
   media?: string | null
@@ -174,6 +175,7 @@ export interface PrinterRead {
   is_active: boolean
   snmp_enabled: boolean
   snmp_community_override?: string | null
+  color_capability?: 'color' | 'mono_only' | null
   created_at: string
   updated_at: string
 }
@@ -187,6 +189,7 @@ export interface PrinterCreate {
   department_id?: number | null
   snmp_enabled?: boolean
   snmp_community_override?: string | null
+  color_capability?: 'color' | 'mono_only' | null
 }
 
 export interface PrinterUpdate {
@@ -198,6 +201,7 @@ export interface PrinterUpdate {
   department_id?: number | null
   snmp_enabled?: boolean
   snmp_community_override?: string | null
+  color_capability?: 'color' | 'mono_only' | null
 }
 
 export interface DepartmentRead {

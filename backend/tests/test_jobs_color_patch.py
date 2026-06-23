@@ -85,6 +85,35 @@ def test_patch_null_to_mono_updates_aggregated_job(
     assert len(lines.json()) == 1
 
 
+def test_patch_captured_line_sets_manual_source(
+    client: TestClient, db_session: Session
+) -> None:
+    """COLOR-06 D-04: sobrescrever linha captured → color_mode_source=manual."""
+    ts = datetime(2026, 5, 28, 11, 0, 0, tzinfo=timezone.utc).replace(tzinfo=None)
+    row = PrintJob(
+        printer="epson",
+        username="carol",
+        job_id=901,
+        job_name="scan.pdf",
+        timestamp=ts,
+        pages=1,
+        color_mode="color",
+        color_mode_source="captured",
+    )
+    db_session.add(row)
+    db_session.commit()
+    db_session.refresh(row)
+
+    patch = client.patch(
+        f"/api/v1/jobs/lines/{row.id}/color-mode",
+        json={"color_mode": "mono"},
+    )
+    assert patch.status_code == 200, patch.text
+    body = patch.json()
+    assert body["color_mode"] == "mono"
+    assert body["color_mode_source"] == "manual"
+
+
 def test_patch_line_not_found(client: TestClient) -> None:
     r = client.patch(
         "/api/v1/jobs/lines/99999/color-mode",

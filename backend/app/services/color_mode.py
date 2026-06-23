@@ -11,6 +11,10 @@ _MONO_ALIASES = frozenset(
         "black-and-white",
         "1",
         "mono",
+        "auto-monochrome",
+        "process-monochrome",
+        "bi-level",
+        "color-monochrome",
     }
 )
 

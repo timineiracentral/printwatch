@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
@@ -20,6 +20,7 @@ class PrinterCreate(BaseModel):
         max_length=255,
         description="Override opcional da community SNMP; armazenado criptografado em produção",
     )
+    color_capability: Optional[Literal["color", "mono_only"]] = None
 
 
 class PrinterUpdate(BaseModel):
@@ -35,6 +36,7 @@ class PrinterUpdate(BaseModel):
         max_length=255,
         description="Override opcional da community SNMP",
     )
+    color_capability: Optional[Literal["color", "mono_only"]] = None
 
 
 class PrinterRead(BaseModel):
@@ -53,6 +55,7 @@ class PrinterRead(BaseModel):
         None,
         description="Mascarado como *** quando configurado (T-08-01)",
     )
+    color_capability: Optional[Literal["color", "mono_only"]] = None
     created_at: datetime
     updated_at: datetime
 

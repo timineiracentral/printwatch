@@ -51,6 +51,7 @@ class JobOut(BaseModel):
     media: Optional[str] = None
     sides: Optional[str] = None
     outside_policy: bool = False
+    has_manual_correction: bool = False
 
     @field_serializer("estimated_cost")
     def _serialize_estimated_cost(self, value: Decimal | None) -> float | None:

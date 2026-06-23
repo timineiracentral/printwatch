@@ -110,6 +110,22 @@ def test_snmp_enabled_without_ip_422(client: TestClient) -> None:
     assert "ip_address" in r.json()["detail"].lower() or "SNMP" in r.json()["detail"]
 
 
+def test_patch_printer_mono_only_persists(client: TestClient) -> None:
+    created = _create(client, cups_queue_name="mono_printer")
+    assert created.get("color_capability") != "mono_only"
+
+    r = client.patch(
+        f"/api/v1/printers/{created['id']}",
+        json={"color_capability": "mono_only"},
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["color_capability"] == "mono_only"
+
+    r = client.get(f"/api/v1/printers/{created['id']}")
+    assert r.status_code == 200
+    assert r.json()["color_capability"] == "mono_only"
+
+
 def test_openapi_lists_printer_paths(client: TestClient) -> None:
     r = client.get("/api/v1/openapi.json")
     assert r.status_code == 200

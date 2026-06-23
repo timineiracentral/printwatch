@@ -28,24 +28,70 @@ Runbook operacional para classificar impressões como **mono** ou **color** na c
 
 ## Passo 1 — `PageLogFormat` (uma vez por ambiente)
 
-No container, o template do repositório é aplicado via `cups/cupsd.conf.template`. O formato **recomendado** (ainda pendente de merge no template em alguns deploys):
+No container, o template do repositório é aplicado via `cups/cupsd.conf.template`. O formato **recomendado** (Fase 9 — já no template):
 
 ```text
 PageLogFormat "%p %u %j %T %P %C %{print-color-mode} %{job-originating-host-name} %{job-name} %{media} %{sides}"
 ```
 
-Após alterar:
+Após alterar o template:
 
 ```bash
-docker compose up -d --build cups
-# ou reiniciar apenas o serviço cups conforme seu fluxo de deploy
+docker compose build cups && docker compose up -d cups
 ```
 
-Conferir:
+Conferir que `%{print-color-mode}` está ativo (não `%{job-billing}`):
 
 ```bash
 docker compose exec cups grep PageLogFormat /etc/cups/cupsd.conf
 ```
+
+---
+
+## Pós-deploy template (Fase 9)
+
+Após merge ou alteração em `cups/cupsd.conf.template`:
+
+1. **Rebuild e restart do container CUPS:**
+
+   ```bash
+   docker compose build cups && docker compose up -d cups
+   ```
+
+2. **Verificar `PageLogFormat`** contém `%{print-color-mode}` (campo 6 do parser — **não** `%{job-billing}`):
+
+   ```bash
+   docker compose exec cups grep PageLogFormat /etc/cups/cupsd.conf
+   ```
+
+3. **Imprimir job de teste** (após configurar fila — ver Passo 2):
+
+   ```bash
+   docker compose exec cups lp -d <nome_fila> /usr/share/cups/data/default-testpage.pdf
+   ```
+
+4. **Validar `page_log`** — campo 6 deve conter valor IPP (`monochrome`, `color`, `auto`, etc.), não vazio:
+
+   ```bash
+   docker compose exec cups tail -5 /var/log/cups/page_log
+   ```
+
+   Critério: na nova linha, o **6º campo** (após `total <N>`) contém valor IPP — não `-` nem vazio após job de teste.
+
+5. **Filas Samsung com PPD mono forçado:** usar `scripts/fix-cups-color-queue.sh` (ver Passo 2).
+
+---
+
+## Mapeamento print-color-mode → color_mode
+
+Valores IPP no campo 6 do `page_log` e como o PrintWatch classifica (`color_mode.py`, `_MONO_ALIASES`):
+
+| Valor IPP (page_log campo 6) | color_mode | color_mode_source | Notas |
+|------------------------------|------------|-------------------|-------|
+| auto-monochrome, process-monochrome, bi-level, color-monochrome, monochrome, gray | mono | captured | aliases em `_MONO_ALIASES` |
+| color | color | captured | |
+| auto | NULL | NULL | ambíguo — permanece pendente |
+| (vazio/desconhecido) | NULL | NULL | pendente até correção manual |
 
 ---
 

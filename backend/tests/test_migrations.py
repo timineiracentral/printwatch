@@ -116,11 +116,12 @@ def test_upgrade_head_creates_master_tables_and_printer_id(migration_db: Path) -
             text("SELECT version_num FROM alembic_version")
         ).scalar_one()
     engine.dispose()
-    assert current == "a3b7c2d4e5f6"
+    assert current == "b7b7e1a82ec4"
     assert _table_exists(migration_db, "user_printer_access")
     assert _table_exists(migration_db, "cost_rates")
     assert _table_exists(migration_db, "printer_meter_readings")
     assert "color_mode_source" in _table_columns(migration_db, "print_jobs")
+    assert "color_capability" in _table_columns(migration_db, "printers")
 
 
 def test_downgrade_user_printer_access_and_reupgrade(migration_db: Path) -> None:
@@ -164,4 +165,4 @@ def test_alembic_current_shows_head(migration_db: Path) -> None:
             text("SELECT version_num FROM alembic_version")
         ).scalar_one()
     engine.dispose()
-    assert current == "a3b7c2d4e5f6"
+    assert current == "b7b7e1a82ec4"

@@ -18,6 +18,11 @@ from app.services.parser import parse_page_log_line
         (None, None),
         ("-", None),
         ("unknown-value", None),
+        ("auto-monochrome", "mono"),
+        ("process-monochrome", "mono"),
+        ("bi-level", "mono"),
+        ("color-monochrome", "mono"),
+        ("auto", None),
     ],
 )
 def test_normalize_color_mode_aliases(raw: str | None, expected: str | None) -> None:

@@ -135,3 +135,96 @@ def test_get_job_by_id_not_found(client: TestClient) -> None:
     r = client.get("/api/v1/jobs/999999")
     assert r.status_code == 404
     assert "not found" in r.json()["detail"]
+
+
+def test_jobs_list_has_manual_correction_aggregate(
+    client: TestClient, db_session
+) -> None:
+    from app.db.models import PrintJob
+
+    ts = datetime(2026, 5, 27, 10, 0, 0, tzinfo=timezone.utc)
+    manual_rows = [
+        PrintJob(
+            printer="gamma",
+            username="usr4",
+            job_id=401,
+            job_name="Manual.pdf",
+            timestamp=ts,
+            pages=1,
+            color_mode="mono",
+            color_mode_source="manual",
+            host_origin="192.0.2.40",
+        ),
+        PrintJob(
+            printer="gamma",
+            username="usr4",
+            job_id=401,
+            job_name="Manual.pdf",
+            timestamp=datetime(2026, 5, 27, 10, 0, 15, tzinfo=timezone.utc),
+            pages=1,
+            color_mode="color",
+            color_mode_source="captured",
+            host_origin="192.0.2.40",
+        ),
+    ]
+    captured_only = PrintJob(
+        printer="gamma",
+        username="usr5",
+        job_id=402,
+        job_name="Captured.pdf",
+        timestamp=ts,
+        pages=1,
+        color_mode="color",
+        color_mode_source="captured",
+        host_origin="192.0.2.41",
+    )
+    for row in [*manual_rows, captured_only]:
+        db_session.add(row)
+    db_session.commit()
+
+    r = client.get("/api/v1/jobs", params={"printer": "gamma"})
+    assert r.status_code == 200, r.text
+    by_job = {i["job_id"]: i for i in r.json()["items"]}
+    assert by_job[401]["has_manual_correction"] is True
+    assert by_job[402]["has_manual_correction"] is False
+
+
+def test_job_detail_has_manual_correction(
+    client: TestClient, db_session
+) -> None:
+    from app.db.models import PrintJob
+
+    ts = datetime(2026, 5, 27, 11, 0, 0, tzinfo=timezone.utc)
+    manual_row = PrintJob(
+        printer="delta",
+        username="usr6",
+        job_id=501,
+        job_name="DetailManual.pdf",
+        timestamp=ts,
+        pages=1,
+        color_mode="mono",
+        color_mode_source="manual",
+        host_origin="192.0.2.50",
+    )
+    captured_row = PrintJob(
+        printer="delta",
+        username="usr7",
+        job_id=502,
+        job_name="DetailCaptured.pdf",
+        timestamp=ts,
+        pages=1,
+        color_mode="color",
+        color_mode_source="captured",
+        host_origin="192.0.2.51",
+    )
+    db_session.add(manual_row)
+    db_session.add(captured_row)
+    db_session.commit()
+
+    r_manual = client.get(f"/api/v1/jobs/{manual_row.id}")
+    assert r_manual.status_code == 200, r_manual.text
+    assert r_manual.json()["has_manual_correction"] is True
+
+    r_captured = client.get(f"/api/v1/jobs/{captured_row.id}")
+    assert r_captured.status_code == 200, r_captured.text
+    assert r_captured.json()["has_manual_correction"] is False

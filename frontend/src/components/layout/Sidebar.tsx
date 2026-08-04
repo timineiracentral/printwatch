@@ -4,6 +4,7 @@ import {
   Briefcase,
   Building2,
   Coins,
+  Contact,
   Menu,
   Printer,
   Upload,
@@ -12,6 +13,7 @@ import {
   X,
 } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
+import { useSimpressHealth } from '../../hooks/useSimpressHealth'
 
 export interface SidebarProps {
   mobileOpen: boolean
@@ -27,6 +29,8 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   ].join(' ')
 
 export function Sidebar({ mobileOpen, onMobileToggle }: SidebarProps) {
+  const { data: simpressEnabled } = useSimpressHealth()
+
   return (
     <>
       <button
@@ -72,6 +76,22 @@ export function Sidebar({ mobileOpen, onMobileToggle }: SidebarProps) {
             <Activity className="size-4" aria-hidden />
             Frota
           </NavLink>
+
+          {simpressEnabled ? (
+            <>
+              <p className="mb-2 mt-6 px-3 text-xs font-medium uppercase tracking-wide text-[var(--text-tertiary)]">
+                Simpress
+              </p>
+              <NavLink to="/simpress/cnpjs" className={navLinkClass}>
+                <Building2 className="size-4" aria-hidden />
+                CNPJs
+              </NavLink>
+              <NavLink to="/simpress/contatos" className={navLinkClass}>
+                <Contact className="size-4" aria-hidden />
+                Contatos
+              </NavLink>
+            </>
+          ) : null}
 
           <p className="mb-2 mt-6 px-3 text-xs font-medium uppercase tracking-wide text-[var(--text-tertiary)]">
             Configurações

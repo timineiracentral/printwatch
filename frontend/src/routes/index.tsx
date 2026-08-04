@@ -2,6 +2,9 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { JobsPage } from '../pages/JobsPage'
 import { FleetPage } from '../pages/FleetPage'
 import { ManagerPage } from '../pages/ManagerPage'
+import { CnpjsPage } from '../pages/simpress/CnpjsPage'
+import { ContatosPage } from '../pages/simpress/ContatosPage'
+import { SimpressLayout } from '../pages/simpress/SimpressLayout'
 import { CostCentersPage } from '../pages/settings/CostCentersPage'
 import { CostRatesPage } from '../pages/settings/CostRatesPage'
 import { DepartmentsPage } from '../pages/settings/DepartmentsPage'
@@ -18,6 +21,11 @@ export function AppRoutes() {
         <Route path="/" element={<JobsPage />} />
         <Route path="/manager" element={<ManagerPage />} />
         <Route path="/fleet" element={<FleetPage />} />
+        <Route path="/simpress" element={<SimpressLayout />}>
+          <Route index element={<Navigate to="cnpjs" replace />} />
+          <Route path="cnpjs" element={<CnpjsPage />} />
+          <Route path="contatos" element={<ContatosPage />} />
+        </Route>
         <Route path="/settings/users/:userId/ti-export" element={<TiExportPage />} />
         <Route path="/settings" element={<SettingsLayout />}>
           <Route index element={<Navigate to="printers" replace />} />

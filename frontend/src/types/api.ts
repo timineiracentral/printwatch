@@ -393,3 +393,50 @@ export interface MeterReadingRead {
   source: string
   created_at: string
 }
+
+/** Simpress module — ISO-02: no secret fields */
+export interface CnpjRead {
+  id: number
+  cnpj: string
+  name: string
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface CnpjCreate {
+  cnpj: string
+  name: string
+}
+
+export interface CnpjUpdate {
+  cnpj?: string
+  name?: string
+}
+
+export interface ContactRead {
+  id: number
+  name: string
+  phone: string
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface ContactCreate {
+  name: string
+  phone: string
+}
+
+export interface ContactUpdate {
+  name?: string
+  phone?: string
+}
+
+export interface ContactIdsReplace {
+  contact_ids: number[]
+}
+
+export interface CnpjIdsReplace {
+  cnpj_ids: number[]
+}

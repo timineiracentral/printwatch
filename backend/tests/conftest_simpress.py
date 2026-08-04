@@ -62,3 +62,9 @@ def core_table_count(table: str) -> int:
         return 0
     finally:
         conn.close()
+
+
+@pytest.fixture
+def count_core_rows():
+    """Fixture wrapper — conftest modules não são importáveis nos testes."""
+    return core_table_count

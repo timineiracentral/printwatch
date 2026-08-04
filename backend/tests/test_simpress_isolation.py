@@ -1,9 +1,9 @@
 """Wave 0 RED stubs — ISO-01 mount/DB boundary."""
 from __future__ import annotations
 
-from fastapi.testclient import TestClient
+from collections.abc import Callable
 
-from conftest_simpress import core_table_count
+from fastapi.testclient import TestClient
 
 
 def test_health_200_when_enabled(simpress_client_on: TestClient) -> None:
@@ -21,11 +21,14 @@ def test_health_404_when_disabled(simpress_client_off: TestClient) -> None:
     assert r.status_code == 404
 
 
-def test_cnpj_create_does_not_touch_core_print_jobs(simpress_client_on: TestClient) -> None:
-    jobs_before = core_table_count("print_jobs")
+def test_cnpj_create_does_not_touch_core_print_jobs(
+    simpress_client_on: TestClient,
+    count_core_rows: Callable[[str], int],
+) -> None:
+    jobs_before = count_core_rows("print_jobs")
     r = simpress_client_on.post(
         "/api/v1/simpress/cnpjs",
         json={"cnpj": "11222333000181", "name": "Isolation Test Co"},
     )
     assert r.status_code == 201, r.text
-    assert core_table_count("print_jobs") == jobs_before
+    assert count_core_rows("print_jobs") == jobs_before

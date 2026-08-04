@@ -13,6 +13,8 @@ os.environ.setdefault(
     os.path.join(tempfile.gettempdir(), "printwatch-pytest.db"),
 )
 
+pytest_plugins = ["tests.conftest_simpress"]
+
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path

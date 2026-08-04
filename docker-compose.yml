@@ -30,6 +30,8 @@ services:
       FLEET_SNMP_INTERVAL_SEC: ${FLEET_SNMP_INTERVAL_SEC:-43200}
       CUPS_HOST: ${CUPS_HOST:-cups}
       CUPS_PORT: ${CUPS_PORT:-631}
+      SIMPRESS_ENABLED: ${SIMPRESS_ENABLED:-true}
+      SIMPRESS_DB_PATH: ${SIMPRESS_DB_PATH:-/app/data/simpress.db}
     volumes:
       - cups_logs:/var/log/cups:ro
       - db_data:/app/data

@@ -115,7 +115,7 @@ def replace_contacts_for_cnpj(
             row.updated_at = now
 
     db.commit()
-    return list_contacts_for_cnpj(db, cnpj_id, include_inactive=True)
+    return list_contacts_for_cnpj(db, cnpj_id)
 
 
 def list_cnpjs_for_contact(
@@ -174,4 +174,4 @@ def replace_cnpjs_for_contact(
             row.updated_at = now
 
     db.commit()
-    return list_cnpjs_for_contact(db, contact_id, include_inactive=True)
+    return list_cnpjs_for_contact(db, contact_id)

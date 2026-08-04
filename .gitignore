@@ -68,3 +68,5 @@ exports/
 # Scripts de smoke test temporários (execução pontual, não para versionamento)
 backend/scripts/smoke_*.sh
 backend/scripts/smoke_*.py
+
+.cursor/

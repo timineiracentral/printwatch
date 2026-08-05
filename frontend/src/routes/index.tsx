@@ -4,7 +4,9 @@ import { FleetPage } from '../pages/FleetPage'
 import { ManagerPage } from '../pages/ManagerPage'
 import { CnpjsPage } from '../pages/simpress/CnpjsPage'
 import { ContatosPage } from '../pages/simpress/ContatosPage'
+import { FaturasPage } from '../pages/simpress/FaturasPage'
 import { SimpressLayout } from '../pages/simpress/SimpressLayout'
+import { SyncPage } from '../pages/simpress/SyncPage'
 import { CostCentersPage } from '../pages/settings/CostCentersPage'
 import { CostRatesPage } from '../pages/settings/CostRatesPage'
 import { DepartmentsPage } from '../pages/settings/DepartmentsPage'
@@ -25,6 +27,8 @@ export function AppRoutes() {
           <Route index element={<Navigate to="cnpjs" replace />} />
           <Route path="cnpjs" element={<CnpjsPage />} />
           <Route path="contatos" element={<ContatosPage />} />
+          <Route path="sync" element={<SyncPage />} />
+          <Route path="faturas" element={<FaturasPage />} />
         </Route>
         <Route path="/settings/users/:userId/ti-export" element={<TiExportPage />} />
         <Route path="/settings" element={<SettingsLayout />}>

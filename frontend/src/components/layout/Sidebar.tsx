@@ -5,8 +5,10 @@ import {
   Building2,
   Coins,
   Contact,
+  FileText,
   Menu,
   Printer,
+  RefreshCw,
   Upload,
   Users,
   Wallet,
@@ -89,6 +91,14 @@ export function Sidebar({ mobileOpen, onMobileToggle }: SidebarProps) {
               <NavLink to="/simpress/contatos" className={navLinkClass}>
                 <Contact className="size-4" aria-hidden />
                 Contatos
+              </NavLink>
+              <NavLink to="/simpress/sync" className={navLinkClass}>
+                <RefreshCw className="size-4" aria-hidden />
+                Sync
+              </NavLink>
+              <NavLink to="/simpress/faturas" className={navLinkClass}>
+                <FileText className="size-4" aria-hidden />
+                Faturas
               </NavLink>
             </>
           ) : null}

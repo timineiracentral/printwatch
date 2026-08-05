@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from datetime import datetime
+from decimal import Decimal
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, String, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, ForeignKey, Numeric, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.simpress.db.base import SimpressBase
@@ -15,11 +16,17 @@ class Cnpj(SimpressBase):
     cnpj: Mapped[str] = mapped_column(String(14), nullable=False, unique=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    invoice_match_warning: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
     contact_links: Mapped[list["CnpjContact"]] = relationship(
         back_populates="cnpj", cascade="all, delete-orphan"
+    )
+    invoices: Mapped[list["Invoice"]] = relationship(
+        back_populates="cnpj_ref", cascade="all, delete-orphan"
     )
 
 
@@ -54,3 +61,44 @@ class CnpjContact(SimpressBase):
     __table_args__ = (
         UniqueConstraint("cnpj_id", "contact_id", name="uq_cnpj_contact"),
     )
+
+
+class Invoice(SimpressBase):
+    __tablename__ = "invoices"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    cnpj_id: Mapped[int] = mapped_column(ForeignKey("cnpjs.id"), nullable=False)
+    contract_code: Mapped[str] = mapped_column(String(64), nullable=False)
+    invoice_number: Mapped[str] = mapped_column(String(64), nullable=False)
+    cnpj: Mapped[str] = mapped_column(String(14), nullable=False)
+    status: Mapped[str] = mapped_column(String(32), nullable=False)
+    amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    issued_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    due_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    reference: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    zip_token: Mapped[str | None] = mapped_column(String(64), nullable=True, unique=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+    cnpj_ref: Mapped["Cnpj"] = relationship(back_populates="invoices")
+
+    __table_args__ = (
+        UniqueConstraint(
+            "contract_code", "invoice_number", name="uq_invoice_contract_nota"
+        ),
+    )
+
+
+class SyncRun(SimpressBase):
+    __tablename__ = "sync_runs"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    started_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    ok: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    contracts_count: Mapped[int] = mapped_column(nullable=False, default=0)
+    contract_codes_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    invoices_upserted: Mapped[int] = mapped_column(nullable=False, default=0)
+    zips_downloaded: Mapped[int] = mapped_column(nullable=False, default=0)
+    cnpj_warnings_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    errors_json: Mapped[str | None] = mapped_column(Text, nullable=True)

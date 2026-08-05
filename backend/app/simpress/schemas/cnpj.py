@@ -56,6 +56,7 @@ class CnpjRead(BaseModel):
     cnpj: str
     name: str
     is_active: bool
+    invoice_match_warning: bool = False
     created_at: datetime
     updated_at: datetime
 

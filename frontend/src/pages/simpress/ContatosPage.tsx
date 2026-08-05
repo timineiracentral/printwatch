@@ -30,6 +30,7 @@ export function ContatosPage() {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [confirmId, setConfirmId] = useState<number | null>(null)
+  const [confirmError, setConfirmError] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
 
@@ -159,7 +160,14 @@ export function ContatosPage() {
                           <Button variant="ghost" className="min-h-8 px-2 text-xs" onClick={() => openEdit(c)}>
                             Editar
                           </Button>
-                          <Button variant="ghost" className="min-h-8 px-2 text-xs" onClick={() => setConfirmId(c.id)}>
+                          <Button
+                            variant="ghost"
+                            className="min-h-8 px-2 text-xs"
+                            onClick={() => {
+                              setConfirmError(null)
+                              setConfirmId(c.id)
+                            }}
+                          >
                             Desativar
                           </Button>
                         </td>
@@ -197,18 +205,29 @@ export function ContatosPage() {
       <ConfirmDialog
         open={confirmId != null}
         title="Desativar contato"
-        message="O contato será marcado como inativo e deixará de aparecer nas listas."
+        message={
+          confirmError ??
+          'O contato será marcado como inativo e deixará de aparecer nas listas.'
+        }
         confirmLabel="Desativar contato"
         loading={deactivate.isPending}
         onConfirm={() => {
-          if (confirmId != null) {
-            void deactivate.mutateAsync(confirmId).then(() => {
+          if (confirmId == null) return
+          void (async () => {
+            setConfirmError(null)
+            try {
+              await deactivate.mutateAsync(confirmId)
               setSuccessMsg('Contato desativado.')
               setConfirmId(null)
-            })
-          }
+            } catch {
+              setConfirmError('Não foi possível desativar o contato. Tente novamente.')
+            }
+          })()
         }}
-        onClose={() => setConfirmId(null)}
+        onClose={() => {
+          setConfirmId(null)
+          setConfirmError(null)
+        }}
       />
     </>
   )

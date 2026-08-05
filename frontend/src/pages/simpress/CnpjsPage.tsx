@@ -25,6 +25,7 @@ export function CnpjsPage() {
   const [cnpj, setCnpj] = useState('')
   const [name, setName] = useState('')
   const [confirmId, setConfirmId] = useState<number | null>(null)
+  const [confirmError, setConfirmError] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
 
@@ -154,7 +155,14 @@ export function CnpjsPage() {
                           <Button variant="ghost" className="min-h-8 px-2 text-xs" onClick={() => openEdit(c)}>
                             Editar
                           </Button>
-                          <Button variant="ghost" className="min-h-8 px-2 text-xs" onClick={() => setConfirmId(c.id)}>
+                          <Button
+                            variant="ghost"
+                            className="min-h-8 px-2 text-xs"
+                            onClick={() => {
+                              setConfirmError(null)
+                              setConfirmId(c.id)
+                            }}
+                          >
                             Desativar
                           </Button>
                         </td>
@@ -189,18 +197,29 @@ export function CnpjsPage() {
       <ConfirmDialog
         open={confirmId != null}
         title="Desativar CNPJ"
-        message="O CNPJ será marcado como inativo. Vínculos com contatos serão desativados; contatos compartilhados permanecem."
+        message={
+          confirmError ??
+          'O CNPJ será marcado como inativo. Vínculos com contatos serão desativados; contatos compartilhados permanecem.'
+        }
         confirmLabel="Desativar CNPJ"
         loading={deactivate.isPending}
         onConfirm={() => {
-          if (confirmId != null) {
-            void deactivate.mutateAsync(confirmId).then(() => {
+          if (confirmId == null) return
+          void (async () => {
+            setConfirmError(null)
+            try {
+              await deactivate.mutateAsync(confirmId)
               setSuccessMsg('CNPJ desativado.')
               setConfirmId(null)
-            })
-          }
+            } catch {
+              setConfirmError('Não foi possível desativar o CNPJ. Tente novamente.')
+            }
+          })()
         }}
-        onClose={() => setConfirmId(null)}
+        onClose={() => {
+          setConfirmId(null)
+          setConfirmError(null)
+        }}
       />
     </>
   )

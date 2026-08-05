@@ -79,6 +79,31 @@ def test_acl_contracts_called_before_listing(
     assert fake_portal.contracts_called == 1
 
 
+def test_sem_cnpjs_ativos_nao_abre_portal(
+    simpress_session: Any, fake_portal: FakePortal
+) -> None:
+    summary = _run_sync(simpress_session, fake_portal)
+
+    assert fake_portal.contracts_called == 0
+    assert fake_portal.list_calls == []
+    assert summary.ok is True
+    assert summary.contracts_count == 0
+
+
+def test_listagem_ignora_rows_de_outro_cnpj(
+    simpress_session: Any, fake_portal: FakePortal
+) -> None:
+    _seed_cnpj(simpress_session)
+    fake_portal.rows_by_cnpj[_VALID_CNPJ] = [
+        portal_row(cnpj=_VALID_CNPJ, numero_nota="NF-OK"),
+        portal_row(cnpj=_OTHER_CNPJ, numero_nota="NF-SKIP"),
+    ]
+    _run_sync(simpress_session, fake_portal)
+
+    open_notas = {row.invoice_number for row in _open_invoices(simpress_session)}
+    assert open_notas == {"NF-OK"}
+
+
 def test_listagem_filtra_por_cnpjs_ativos(
     simpress_session: Any, fake_portal: FakePortal
 ) -> None:

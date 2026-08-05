@@ -84,11 +84,14 @@ class SimpressPortalClient:
         pg = self._page
         if pg is None:
             raise RuntimeError("portal não aberto")
+        cnpj_digits = re.sub(r"\D", "", cnpj or "")
+        if len(cnpj_digits) != 14:
+            raise ValueError("CNPJ obrigatório para listagem — busca por contrato inteiro é proibida")
         body = json.dumps(
             {
                 "faturamentoFiltroSelecionadoModel": {
                     "codigosContrato": contract_codes,
-                    "cnpj": cnpj,
+                    "cnpj": cnpj_digits,
                     "mesesReferencia": None,
                     "status": None,
                     "numeroNota": None,

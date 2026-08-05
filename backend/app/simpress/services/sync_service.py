@@ -11,6 +11,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.simpress.db.models import SyncRun
+from app.simpress.cnpj_id import normalize_cnpj
 from app.simpress.services import cnpjs_service, document_store, invoices_service
 
 try:
@@ -103,78 +104,85 @@ async def run_sync(
             portal: Any | None = None
 
             try:
-                factory = portal_factory or _default_portal_factory
-                portal = factory() if callable(factory) else factory()
-                if hasattr(portal, "open"):
-                    await portal.open()
-
-                contracts = await portal.fetch_contracts()
-                contract_codes = sorted(
-                    {
-                        str(c.get("codigoContrato"))
-                        for c in contracts
-                        if c.get("codigoContrato")
-                    }
-                )
-                run.contracts_count = len(contract_codes)
-                run.contract_codes_json = _dump_list(contract_codes)
-
                 active_cnpjs = cnpjs_service.list_cnpjs(db, include_inactive=False)
-                page_size = getattr(portal, "page_size", 25)
+                if not active_cnpjs:
+                    # ponytail: sem CNPJs cadastrados não abre portal — evita listagem “contrato inteiro”
+                    run.contracts_count = 0
+                    run.contract_codes_json = _dump_list([])
+                else:
+                    factory = portal_factory or _default_portal_factory
+                    portal = factory() if callable(factory) else factory()
+                    if hasattr(portal, "open"):
+                        await portal.open()
 
-                for cnpj_row in active_cnpjs:
-                    matched_any = False
-                    total_for_cnpj = 0
-                    page = 1
-                    while True:
-                        rows, total = await portal.list_invoices(
-                            contract_codes=contract_codes,
-                            cnpj=cnpj_row.cnpj,
-                            page=page,
-                            page_size=page_size,
-                        )
-                        total_for_cnpj = total
-                        for row in rows:
-                            status = invoices_service._normalize_status(
-                                row.get("statusPagamento")
+                    page_size = getattr(portal, "page_size", 25)
+
+                    contracts = await portal.fetch_contracts()
+                    contract_codes = sorted(
+                        {
+                            str(c.get("codigoContrato"))
+                            for c in contracts
+                            if c.get("codigoContrato")
+                        }
+                    )
+                    run.contracts_count = len(contract_codes)
+                    run.contract_codes_json = _dump_list(contract_codes)
+
+                    for cnpj_row in active_cnpjs:
+                        matched_any = False
+                        total_for_cnpj = 0
+                        page = 1
+                        while True:
+                            rows, total = await portal.list_invoices(
+                                contract_codes=contract_codes,
+                                cnpj=cnpj_row.cnpj,
+                                page=page,
+                                page_size=page_size,
                             )
-                            if status is None:
-                                continue
-                            matched_any = True
-                            if status in invoices_service.OPEN_STATUSES:
-                                inv = invoices_service.upsert_open_invoice(
-                                    db, cnpj_row.id, cnpj_row.cnpj, row
+                            total_for_cnpj = total
+                            for row in rows:
+                                row_cnpj = normalize_cnpj(str(row.get("cnpj") or ""))
+                                if row_cnpj != cnpj_row.cnpj:
+                                    continue
+                                status = invoices_service._normalize_status(
+                                    row.get("statusPagamento")
                                 )
-                                invoices_upserted += 1
-                                if inv.zip_token is None:
-                                    contract_code, invoice_number = (
-                                        invoices_service._portal_keys(row)
+                                if status is None:
+                                    continue
+                                matched_any = True
+                                if status in invoices_service.OPEN_STATUSES:
+                                    inv = invoices_service.upsert_open_invoice(
+                                        db, cnpj_row.id, cnpj_row.cnpj, row
                                     )
-                                    raw = await portal.download_zip(
-                                        contract_code=contract_code,
-                                        invoice_number=invoice_number,
+                                    invoices_upserted += 1
+                                    if inv.zip_token is None:
+                                        contract_code, invoice_number = (
+                                            invoices_service._portal_keys(row)
+                                        )
+                                        raw = await portal.download_zip(
+                                            contract_code=contract_code,
+                                            invoice_number=invoice_number,
+                                        )
+                                        document_store.save_zip(db, inv, raw)
+                                        zips_downloaded += 1
+                                elif status in invoices_service.CLOSED_STATUSES:
+                                    invoices_service.mark_closed_and_purge_zip(
+                                        db, row, status
                                     )
-                                    document_store.save_zip(db, inv, raw)
-                                    zips_downloaded += 1
-                            elif status in invoices_service.CLOSED_STATUSES:
-                                invoices_service.mark_closed_and_purge_zip(
-                                    db, row, status
-                                )
-                        if page * page_size >= total:
-                            break
-                        page += 1
+                            if page * page_size >= total:
+                                break
+                            page += 1
 
-                    if total_for_cnpj == 0:
-                        cnpj_row.invoice_match_warning = True
-                        warnings.append(cnpj_row.cnpj)
-                        db.add(cnpj_row)
-                        db.commit()
-                    elif matched_any and cnpj_row.invoice_match_warning:
-                        cnpj_row.invoice_match_warning = False
-                        db.add(cnpj_row)
-                        db.commit()
-                        warnings = [w for w in warnings if w != cnpj_row.cnpj]
-
+                        if total_for_cnpj == 0:
+                            cnpj_row.invoice_match_warning = True
+                            warnings.append(cnpj_row.cnpj)
+                            db.add(cnpj_row)
+                            db.commit()
+                        elif matched_any and cnpj_row.invoice_match_warning:
+                            cnpj_row.invoice_match_warning = False
+                            db.add(cnpj_row)
+                            db.commit()
+                            warnings = [w for w in warnings if w != cnpj_row.cnpj]
             except SyncInProgress:
                 raise
             except Exception as exc:

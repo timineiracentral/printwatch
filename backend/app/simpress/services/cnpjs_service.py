@@ -6,6 +6,7 @@ from typing import Optional
 
 from fastapi import HTTPException
 from sqlalchemy import or_, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.simpress.db.models import Cnpj, CnpjContact
@@ -66,7 +67,11 @@ def create_cnpj(db: Session, payload: CnpjCreate) -> Cnpj:
         updated_at=now,
     )
     db.add(row)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="cnpj já cadastrado") from None
     db.refresh(row)
     return row
 

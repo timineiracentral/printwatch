@@ -143,7 +143,17 @@ export function CnpjsPage() {
                         <td className="px-3 py-2 font-mono text-xs">{c.cnpj}</td>
                         <td className="px-3 py-2">{c.name}</td>
                         <td className="px-3 py-2">
-                          <Badge>Ativo</Badge>
+                          <div className="flex gap-1">
+                            {c.invoice_match_warning ? (
+                              <Badge
+                                variant="warning"
+                                title="Nenhuma fatura encontrada no portal na última sincronização."
+                              >
+                                Sem fatura
+                              </Badge>
+                            ) : null}
+                            <Badge>Ativo</Badge>
+                          </div>
                         </td>
                         <td className="px-3 py-2 flex gap-2">
                           <Button variant="ghost" className="min-h-8 px-2 text-xs" onClick={() => openEdit(c)}>

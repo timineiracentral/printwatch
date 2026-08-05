@@ -400,8 +400,37 @@ export interface CnpjRead {
   cnpj: string
   name: string
   is_active: boolean
+  invoice_match_warning: boolean
   created_at: string
   updated_at: string
+}
+
+export interface InvoiceRead {
+  id: number
+  cnpj: string
+  invoice_number: string
+  status: string
+  amount: string
+  issued_at: string | null
+  due_at: string | null
+  reference: string | null
+  has_zip: boolean
+}
+
+export interface SyncStatusRead {
+  in_progress: boolean
+}
+
+export interface SyncSummaryRead {
+  started_at: string
+  finished_at: string | null
+  ok: boolean | null
+  contracts_count: number
+  contract_codes: string[]
+  invoices_upserted: number
+  zips_downloaded: number
+  cnpj_warnings: string[]
+  errors: string[]
 }
 
 export interface CnpjCreate {

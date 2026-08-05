@@ -19,14 +19,14 @@ def _utc_now() -> datetime:
 
 def _get_cnpj_or_404(db: Session, cnpj_id: int) -> Cnpj:
     row = db.get(Cnpj, cnpj_id)
-    if row is None:
+    if row is None or not row.is_active:
         raise HTTPException(status_code=404, detail="cnpj not found")
     return row
 
 
 def _get_contact_or_404(db: Session, contact_id: int) -> Contact:
     row = db.get(Contact, contact_id)
-    if row is None:
+    if row is None or not row.is_active:
         raise HTTPException(status_code=404, detail="contact not found")
     return row
 

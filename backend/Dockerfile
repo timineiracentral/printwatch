@@ -13,6 +13,8 @@ RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh && chmod +x /usr/local/bin/ent
 COPY app/ ./app/
 COPY alembic.ini .
 COPY alembic/ ./alembic/
+COPY alembic_simpress.ini .
+COPY alembic_simpress/ ./alembic_simpress/
 COPY scripts/migrate_db.py ./scripts/migrate_db.py
 COPY scripts/ensure_db_schema.py ./scripts/ensure_db_schema.py
 

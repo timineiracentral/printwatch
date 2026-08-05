@@ -8,6 +8,10 @@ def _truthy(value: str | None) -> bool:
 class SimpressSettings:
     enabled: bool = _truthy(os.environ.get("SIMPRESS_ENABLED", "true"))
     db_path: str = os.environ.get("SIMPRESS_DB_PATH", "/app/data/simpress.db")
+    public_base_url: str = os.environ.get("PUBLIC_BASE_URL", "")
+    docs_path: str = os.environ.get("SIMPRESS_DOCS_PATH", "/app/data/simpress_docs")
+    timezone: str = "America/Sao_Paulo"
+    sync_hour: int = 8
     # ISO-02: env readers only — never persisted on models
     email: str = os.environ.get("SIMPRESS_EMAIL", "")
     password: str = os.environ.get("SIMPRESS_PASSWORD", "")

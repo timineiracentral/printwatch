@@ -1,5 +1,5 @@
 import { Building2 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { CnpjContactLinksSection } from '../../components/simpress/CnpjContactLinksSection'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { ConfirmDialog } from '../../components/settings/ConfirmDialog'
@@ -17,9 +17,12 @@ import { isValidCnpj, normalizeCnpj } from '../../lib/simpressCnpj'
 import type { CnpjCreate, CnpjRead, CnpjUpdate } from '../../types/api'
 
 export function CnpjsPage() {
-  const { list, create, update, deactivate } = useSimpressCnpjs(false)
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebouncedValue(search, 300)
+  const { list, create, update, deactivate } = useSimpressCnpjs(
+    false,
+    debouncedSearch.trim() || undefined,
+  )
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<CnpjRead | null>(null)
   const [cnpj, setCnpj] = useState('')
@@ -29,16 +32,7 @@ export function CnpjsPage() {
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
 
-  const filtered = useMemo(() => {
-    const items = list.data ?? []
-    const q = debouncedSearch.trim().toLowerCase()
-    if (!q) return items
-    return items.filter(
-      (c) =>
-        c.cnpj.includes(q.replace(/\D/g, '')) ||
-        c.name.toLowerCase().includes(q),
-    )
-  }, [list.data, debouncedSearch])
+  const items = list.data ?? []
 
   function openCreate() {
     setEditing(null)
@@ -130,7 +124,7 @@ export function CnpjsPage() {
                       ))}
                     </tr>
                   ))
-                : filtered.length === 0
+                : items.length === 0
                   ? (
                       <tr>
                         <td colSpan={4}>
@@ -144,7 +138,7 @@ export function CnpjsPage() {
                         </td>
                       </tr>
                     )
-                  : filtered.map((c, idx) => (
+                  : items.map((c, idx) => (
                       <tr key={c.id} className={idx % 2 === 1 ? 'bg-[var(--bg-muted)]/40' : ''}>
                         <td className="px-3 py-2 font-mono text-xs">{c.cnpj}</td>
                         <td className="px-3 py-2">{c.name}</td>

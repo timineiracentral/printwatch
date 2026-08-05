@@ -1,5 +1,5 @@
 import { Contact } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { ContactCnpjLinksSection } from '../../components/simpress/ContactCnpjLinksSection'
 import { PageHeader } from '../../components/layout/PageHeader'
 import { ConfirmDialog } from '../../components/settings/ConfirmDialog'
@@ -22,9 +22,12 @@ const PHONE_INVALID_MSG =
   'Informe um telefone com DDI e DDD (somente dígitos após salvar). Ex.: 5531999999999'
 
 export function ContatosPage() {
-  const { list, create, update, deactivate } = useSimpressContacts(false)
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebouncedValue(search, 300)
+  const { list, create, update, deactivate } = useSimpressContacts(
+    false,
+    debouncedSearch.trim() || undefined,
+  )
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<ContactRead | null>(null)
   const [name, setName] = useState('')
@@ -34,16 +37,7 @@ export function ContatosPage() {
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
 
-  const filtered = useMemo(() => {
-    const items = list.data ?? []
-    const q = debouncedSearch.trim().toLowerCase()
-    if (!q) return items
-    return items.filter(
-      (c) =>
-        c.name.toLowerCase().includes(q) ||
-        c.phone.includes(q.replace(/\D/g, '')),
-    )
-  }, [list.data, debouncedSearch])
+  const items = list.data ?? []
 
   function openCreate() {
     setEditing(null)
@@ -135,7 +129,7 @@ export function ContatosPage() {
                       ))}
                     </tr>
                   ))
-                : filtered.length === 0
+                : items.length === 0
                   ? (
                       <tr>
                         <td colSpan={4}>
@@ -149,7 +143,7 @@ export function ContatosPage() {
                         </td>
                       </tr>
                     )
-                  : filtered.map((c, idx) => (
+                  : items.map((c, idx) => (
                       <tr key={c.id} className={idx % 2 === 1 ? 'bg-[var(--bg-muted)]/40' : ''}>
                         <td className="px-3 py-2">{c.name}</td>
                         <td className="px-3 py-2 font-mono text-xs">{c.phone}</td>

@@ -181,7 +181,9 @@ app.add_middleware(
 
 app.include_router(api_v1_router, prefix="/api/v1")
 
-if os.environ.get("SIMPRESS_ENABLED", "true").strip().lower() in ("1", "true", "yes"):
+from app.simpress.config import simpress_settings
+
+if simpress_settings.enabled:
     from app.simpress.runtime import mount_simpress
 
     mount_simpress(app)

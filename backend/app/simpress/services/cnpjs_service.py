@@ -45,8 +45,17 @@ def _find_duplicate_cnpj(
 
 
 def create_cnpj(db: Session, payload: CnpjCreate) -> Cnpj:
-    if _find_duplicate_cnpj(db, payload.cnpj) is not None:
-        raise HTTPException(status_code=409, detail="cnpj já cadastrado")
+    existing = _find_duplicate_cnpj(db, payload.cnpj)
+    if existing is not None:
+        if existing.is_active:
+            raise HTTPException(status_code=409, detail="cnpj já cadastrado")
+        now = _utc_now()
+        existing.name = payload.name
+        existing.is_active = True
+        existing.updated_at = now
+        db.commit()
+        db.refresh(existing)
+        return existing
 
     now = _utc_now()
     row = Cnpj(

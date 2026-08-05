@@ -22,4 +22,9 @@ if [[ -f "$DB_PATH" ]]; then
   chmod 600 "$DB_PATH"
 fi
 
+if [[ "${SIMPRESS_ENABLED:-true}" =~ ^(1|true|yes)$ ]]; then
+  mkdir -p "$(dirname "${SIMPRESS_DB_PATH:-/app/data/simpress.db}")"
+  alembic -c /app/alembic_simpress.ini upgrade head
+fi
+
 exec uvicorn app.main:app --host 0.0.0.0 --port 8000

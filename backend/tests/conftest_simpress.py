@@ -290,6 +290,51 @@ def remind_send_instant_sleep(
     monkeypatch.setattr(asyncio, "sleep", _instant_sleep)
 
 
+def _seed_audit_rows(db: Any) -> None:
+    """Duas linhas com timestamps distintos — newest-first D-16."""
+    from datetime import datetime, timedelta, timezone
+
+    from sqlalchemy import func, select
+
+    from app.simpress.db.models import MessageAudit
+
+    count = db.scalar(select(func.count()).select_from(MessageAudit)) or 0
+    if count >= 2:
+        return
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
+    db.add_all(
+        [
+            MessageAudit(
+                channel="whatsapp",
+                part="text",
+                stage="new",
+                outcome="ok",
+                contact_id=1,
+                contact_name="Contato Audit",
+                contact_phone="5511999990001",
+                http_status=200,
+                provider_message_id="msg-newer",
+                variant_id="v1",
+                created_at=now,
+            ),
+            MessageAudit(
+                channel="whatsapp",
+                part="document",
+                stage="new",
+                outcome="fail",
+                contact_id=1,
+                contact_name="Contato Audit",
+                contact_phone="5511999990001",
+                http_status=400,
+                provider_message_id=None,
+                variant_id="v1",
+                created_at=now - timedelta(hours=1),
+            ),
+        ]
+    )
+    db.commit()
+
+
 @pytest.fixture(autouse=True)
 def remind_pipeline_seed(
     request: pytest.FixtureRequest,
@@ -299,6 +344,12 @@ def remind_pipeline_seed(
     mod = getattr(request.module, "__name__", "")
     if mod in ("tests.test_simpress_send_pipeline", "tests.test_simpress_pacing"):
         _seed_remind_pipeline(simpress_session, simpress_docs_path)
+
+
+@pytest.fixture(autouse=True)
+def audit_api_seed(request: pytest.FixtureRequest, simpress_session: Any) -> None:
+    if getattr(request.module, "__name__", "") == "tests.test_simpress_audit_api":
+        _seed_audit_rows(simpress_session)
 
 
 @pytest.fixture

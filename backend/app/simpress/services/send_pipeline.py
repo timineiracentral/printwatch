@@ -1,4 +1,7 @@
-"""Orquestração batch Zap: claims-on-success, pacing, audit (CAD-02/03/04, OPS-02)."""
+"""Orquestração batch Zap: claims-on-success, pacing, audit (CAD-02/03/04, OPS-02).
+
+Pacing D-07/D-08 é obrigatório (sem flag de desligamento nesta fase).
+"""
 from __future__ import annotations
 
 import asyncio

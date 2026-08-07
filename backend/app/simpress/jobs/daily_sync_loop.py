@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 
 from app.simpress.config import simpress_settings
 from app.simpress.db.session import SimpressSessionLocal
-from app.simpress.services import sync_service
+from app.simpress.services import send_pipeline, sync_service
 
 logger = logging.getLogger(__name__)
 _TZ = ZoneInfo(simpress_settings.timezone)
@@ -48,6 +48,12 @@ async def daily_sync_loop() -> None:
                         pass
                     except Exception:
                         logger.exception("daily sync falhou")
+                    try:
+                        await send_pipeline.run_remind_batch(db)
+                    except send_pipeline.RemindInProgress:
+                        pass
+                    except Exception:
+                        logger.exception("daily remind batch falhou")
             finally:
                 db.close()
         except Exception:

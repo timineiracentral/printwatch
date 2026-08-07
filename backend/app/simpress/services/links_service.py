@@ -175,3 +175,17 @@ def replace_cnpjs_for_contact(
 
     db.commit()
     return list_cnpjs_for_contact(db, contact_id)
+
+
+def replace_links(
+    db: Session,
+    cnpj_id: int,
+    contact_ids: ContactIdsReplace | list[int],
+) -> list[ContactRead]:
+    """Alias usado pelos testes Wave 0 — delega a replace_contacts_for_cnpj."""
+    payload = (
+        contact_ids
+        if isinstance(contact_ids, ContactIdsReplace)
+        else ContactIdsReplace(contact_ids=contact_ids)
+    )
+    return replace_contacts_for_cnpj(db, cnpj_id, payload)

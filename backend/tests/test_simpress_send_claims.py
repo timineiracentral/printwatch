@@ -41,14 +41,21 @@ def _seed_contact(db: Any) -> tuple[Any, Any]:
 
 
 def _seed_invoice(db: Any, cnpj: Any) -> Any:
+    from datetime import datetime, timezone
+
     from app.simpress.db.models import Invoice
 
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     inv = Invoice(
         cnpj_id=cnpj.id,
+        contract_code="CTR001",
         invoice_number="NF-CLAIM-001",
+        cnpj=cnpj.cnpj,
         amount=100.0,
         status="Vencido",
         reference="08/2026",
+        created_at=now,
+        updated_at=now,
     )
     db.add(inv)
     db.commit()
@@ -129,11 +136,15 @@ def test_cad03_integrity_error_on_raw_duplicate_insert(
     cnpj, contact = _seed_contact(simpress_session)
     invoice = _seed_invoice(simpress_session, cnpj)
 
+    from datetime import datetime, timezone
+
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     row = SendClaim(
         invoice_id=invoice.id,
         stage="new",
         contact_id=contact.id,
         part="text",
+        created_at=now,
     )
     simpress_session.add(row)
     simpress_session.commit()
@@ -143,6 +154,7 @@ def test_cad03_integrity_error_on_raw_duplicate_insert(
         stage="new",
         contact_id=contact.id,
         part="text",
+        created_at=now,
     )
     simpress_session.add(dup)
     with pytest.raises(IntegrityError):

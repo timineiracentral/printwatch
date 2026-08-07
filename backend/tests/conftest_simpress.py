@@ -216,6 +216,91 @@ def fake_portal() -> FakePortal:
     return FakePortal()
 
 
+def _seed_remind_pipeline(db: Any, docs_path: Path) -> None:
+    """CNPJ+contato+fatura launch-day com ZIP — send/pacing Wave 0."""
+    from datetime import datetime, timezone
+    from decimal import Decimal
+
+    from sqlalchemy import select
+
+    from app.simpress.db.models import Cnpj, Invoice
+    from app.simpress.schemas.cnpj import CnpjCreate, ContactIdsReplace
+    from app.simpress.schemas.contact import ContactCreate
+    from app.simpress.services import (
+        cnpjs_service,
+        contacts_service,
+        document_store,
+        invoices_service,
+        links_service,
+    )
+
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
+    cnpj_digits = "11222333000181"
+    cnpj = db.scalars(select(Cnpj).where(Cnpj.cnpj == cnpj_digits)).first()
+    if cnpj is None:
+        cnpj = cnpjs_service.create_cnpj(
+            db, CnpjCreate(cnpj=cnpj_digits, name="Empresa Remind")
+        )
+    contact = contacts_service.create_contact(
+        db,
+        ContactCreate(name="Contato Remind", phone="5511999990001"),
+    )
+    links_service.replace_links(
+        db, cnpj.id, [contact.id]
+    )
+    launch = invoices_service._sp_today()
+    inv = db.scalars(
+        select(Invoice).where(Invoice.invoice_number == "NF-REMIND-001")
+    ).first()
+    if inv is None:
+        inv = Invoice(
+            cnpj_id=cnpj.id,
+            contract_code="CTR001",
+            invoice_number="NF-REMIND-001",
+            cnpj=cnpj_digits,
+            status="Vencido",
+            amount=Decimal("150.00"),
+            due_at=datetime(2026, 8, 15),
+            reference="08/2026",
+            zip_token=None,
+            reminder_stage="new",
+            launch_date=launch,
+            created_at=now,
+            updated_at=now,
+        )
+        db.add(inv)
+        db.commit()
+        db.refresh(inv)
+    if inv.zip_token is None:
+        document_store.save_zip(db, inv, DEFAULT_ZIP_BYTES)
+        db.refresh(inv)
+
+
+@pytest.fixture(autouse=True)
+def remind_send_instant_sleep(
+    request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Evita sleeps reais de 20–60s nos testes de pipeline (sem monkeypatch local)."""
+    if getattr(request.module, "__name__", "") != "tests.test_simpress_send_pipeline":
+        return
+
+    async def _instant_sleep(seconds: float) -> None:
+        return None
+
+    monkeypatch.setattr(asyncio, "sleep", _instant_sleep)
+
+
+@pytest.fixture(autouse=True)
+def remind_pipeline_seed(
+    request: pytest.FixtureRequest,
+    simpress_session: Any,
+    simpress_docs_path: Path,
+) -> None:
+    mod = getattr(request.module, "__name__", "")
+    if mod in ("tests.test_simpress_send_pipeline", "tests.test_simpress_pacing"):
+        _seed_remind_pipeline(simpress_session, simpress_docs_path)
+
+
 @pytest.fixture
 def simpress_session(simpress_client_on: TestClient) -> Iterator[Any]:
     """Session SQLAlchemy Simpress — schema já criado pelo client fixture."""

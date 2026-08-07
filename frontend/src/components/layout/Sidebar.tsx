@@ -9,6 +9,7 @@ import {
   Menu,
   Printer,
   RefreshCw,
+  ScrollText,
   Upload,
   Users,
   Wallet,
@@ -99,6 +100,10 @@ export function Sidebar({ mobileOpen, onMobileToggle }: SidebarProps) {
               <NavLink to="/simpress/faturas" className={navLinkClass}>
                 <FileText className="size-4" aria-hidden />
                 Faturas
+              </NavLink>
+              <NavLink to="/simpress/audit" className={navLinkClass}>
+                <ScrollText className="size-4" aria-hidden />
+                Audit
               </NavLink>
             </>
           ) : null}

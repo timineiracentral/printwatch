@@ -469,3 +469,19 @@ export interface ContactIdsReplace {
 export interface CnpjIdsReplace {
   cnpj_ids: number[]
 }
+
+/** Simpress audit — ISO-02: summary-only, no body/secrets */
+export interface MessageAuditRead {
+  id: number
+  created_at: string
+  outcome: string
+  stage: string
+  part: string
+  channel: string
+  contact_id?: number | null
+  contact_name?: string | null
+  contact_phone?: string | null
+  http_status?: number | null
+  variant_id?: string | null
+  provider_message_id?: string | null
+}

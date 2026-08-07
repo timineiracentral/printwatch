@@ -17,6 +17,9 @@ class SimpressSettings:
     password: str = os.environ.get("SIMPRESS_PASSWORD", "")
     zap_api_key: str = os.environ.get("ZAP_API_KEY", "")
     zap_session_id: str = os.environ.get("ZAP_SESSION_ID", "")
+    zap_base_url: str = os.environ.get(
+        "ZAP_BASE_URL", "https://api.zapresponder.com.br"
+    )
 
 
 simpress_settings = SimpressSettings()

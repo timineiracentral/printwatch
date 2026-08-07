@@ -1,0 +1,122 @@
+[
+  {
+    "id": "reminded_10d-01",
+    "body": "[01] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-02",
+    "body": "[02] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-03",
+    "body": "[03] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-04",
+    "body": "[04] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-05",
+    "body": "[05] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-06",
+    "body": "[06] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-07",
+    "body": "[07] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-08",
+    "body": "[08] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-09",
+    "body": "[09] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-10",
+    "body": "[10] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-11",
+    "body": "[11] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-12",
+    "body": "[12] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-13",
+    "body": "[13] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-14",
+    "body": "[14] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-15",
+    "body": "[15] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-16",
+    "body": "[16] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-17",
+    "body": "[17] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-18",
+    "body": "[18] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-19",
+    "body": "[19] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-20",
+    "body": "[20] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-21",
+    "body": "[21] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-22",
+    "body": "[22] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-23",
+    "body": "[23] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-24",
+    "body": "[24] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-25",
+    "body": "[25] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-26",
+    "body": "[26] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-27",
+    "body": "[27] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-28",
+    "body": "[28] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-29",
+    "body": "[29] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  },
+  {
+    "id": "reminded_10d-30",
+    "body": "[30] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+  }
+]

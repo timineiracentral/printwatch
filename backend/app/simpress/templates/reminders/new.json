@@ -1,0 +1,122 @@
+[
+  {
+    "id": "new-01",
+    "body": "[01] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-02",
+    "body": "[02] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-03",
+    "body": "[03] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-04",
+    "body": "[04] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-05",
+    "body": "[05] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-06",
+    "body": "[06] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-07",
+    "body": "[07] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-08",
+    "body": "[08] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-09",
+    "body": "[09] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-10",
+    "body": "[10] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-11",
+    "body": "[11] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-12",
+    "body": "[12] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-13",
+    "body": "[13] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-14",
+    "body": "[14] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-15",
+    "body": "[15] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-16",
+    "body": "[16] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-17",
+    "body": "[17] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-18",
+    "body": "[18] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-19",
+    "body": "[19] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-20",
+    "body": "[20] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-21",
+    "body": "[21] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-22",
+    "body": "[22] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-23",
+    "body": "[23] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-24",
+    "body": "[24] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-25",
+    "body": "[25] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-26",
+    "body": "[26] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-27",
+    "body": "[27] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-28",
+    "body": "[28] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-29",
+    "body": "[29] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  },
+  {
+    "id": "new-30",
+    "body": "[30] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+  }
+]

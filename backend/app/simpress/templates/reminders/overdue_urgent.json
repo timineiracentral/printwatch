@@ -1,0 +1,122 @@
+[
+  {
+    "id": "overdue_urgent-01",
+    "body": "[01] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-02",
+    "body": "[02] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-03",
+    "body": "[03] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-04",
+    "body": "[04] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-05",
+    "body": "[05] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-06",
+    "body": "[06] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-07",
+    "body": "[07] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-08",
+    "body": "[08] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-09",
+    "body": "[09] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-10",
+    "body": "[10] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-11",
+    "body": "[11] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-12",
+    "body": "[12] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-13",
+    "body": "[13] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-14",
+    "body": "[14] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-15",
+    "body": "[15] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-16",
+    "body": "[16] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-17",
+    "body": "[17] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-18",
+    "body": "[18] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-19",
+    "body": "[19] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-20",
+    "body": "[20] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-21",
+    "body": "[21] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-22",
+    "body": "[22] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-23",
+    "body": "[23] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-24",
+    "body": "[24] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-25",
+    "body": "[25] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-26",
+    "body": "[26] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-27",
+    "body": "[27] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-28",
+    "body": "[28] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-29",
+    "body": "[29] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  },
+  {
+    "id": "overdue_urgent-30",
+    "body": "[30] URGENTE: NF {invoice_number} vencida ({due_date}). Valor R$ {amount}. {cnpj_name} — ref {reference}."
+  }
+]

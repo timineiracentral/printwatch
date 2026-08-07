@@ -133,6 +133,60 @@ class FakePortal:
         return None
 
 
+class FakeZap:
+    """Zap determinístico — sem httpx/rede/credenciais (espelha FakePortal)."""
+
+    def __init__(
+        self,
+        *,
+        connected: bool = True,
+        fail_text: bool = False,
+        fail_document: bool = False,
+    ) -> None:
+        self._connected = connected
+        self._fail_text = fail_text
+        self._fail_document = fail_document
+        self.is_connected_calls = 0
+        self.text_calls: list[dict[str, Any]] = []
+        self.document_calls: list[dict[str, Any]] = []
+
+    async def is_connected(self) -> bool:
+        self.is_connected_calls += 1
+        return self._connected
+
+    async def send_text(
+        self,
+        *,
+        number: str,
+        message: str,
+        **extra: Any,
+    ) -> dict[str, Any]:
+        self.text_calls.append({"number": number, "message": message, **extra})
+        if self._fail_text:
+            return {"error": True, "status": 400}
+        return {"error": False, "status": 200, "id": "fake-zap-text"}
+
+    async def send_document(
+        self,
+        *,
+        number: str,
+        url: str,
+        file_name: str,
+        **extra: Any,
+    ) -> dict[str, Any]:
+        self.document_calls.append(
+            {"number": number, "url": url, "file_name": file_name, **extra}
+        )
+        if self._fail_document:
+            return {"error": True, "status": 400}
+        return {"error": False, "status": 200, "id": "fake-zap-document"}
+
+
+@pytest.fixture
+def fake_zap() -> FakeZap:
+    return FakeZap()
+
+
 @pytest.fixture
 def simpress_db_path(tmp_path: Path) -> str:
     return str(tmp_path / "simpress-pytest.db")

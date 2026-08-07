@@ -1,0 +1,122 @@
+[
+  {
+    "id": "reminded_5d-01",
+    "body": "[01] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-02",
+    "body": "[02] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-03",
+    "body": "[03] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-04",
+    "body": "[04] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-05",
+    "body": "[05] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-06",
+    "body": "[06] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-07",
+    "body": "[07] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-08",
+    "body": "[08] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-09",
+    "body": "[09] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-10",
+    "body": "[10] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-11",
+    "body": "[11] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-12",
+    "body": "[12] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-13",
+    "body": "[13] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-14",
+    "body": "[14] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-15",
+    "body": "[15] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-16",
+    "body": "[16] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-17",
+    "body": "[17] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-18",
+    "body": "[18] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-19",
+    "body": "[19] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-20",
+    "body": "[20] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-21",
+    "body": "[21] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-22",
+    "body": "[22] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-23",
+    "body": "[23] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-24",
+    "body": "[24] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-25",
+    "body": "[25] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-26",
+    "body": "[26] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-27",
+    "body": "[27] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-28",
+    "body": "[28] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-29",
+    "body": "[29] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  },
+  {
+    "id": "reminded_5d-30",
+    "body": "[30] Lembrete (+5d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
+  }
+]

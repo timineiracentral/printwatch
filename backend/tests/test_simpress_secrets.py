@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib
 import inspect
+import json
 import pkgutil
 import re
 from typing import Any
@@ -12,6 +13,8 @@ from fastapi.testclient import TestClient
 
 _FORBIDDEN = re.compile(r"(password|api_key|token|secret)", re.I)
 _ALLOWED_HEALTH_KEYS = frozenset({"status", "db_reachable", "detail"})
+# ponytail: zip_token is opaque doc id, not a credential — allowlist avoids false positive
+_ALLOWED_FIELD_NAMES = frozenset({"zip_token"})
 
 
 def _iter_simpress_schema_model_modules():
@@ -34,13 +37,41 @@ def _field_names_from_module(mod: Any) -> list[str]:
     return names
 
 
+def _secret_like_field_names(*classes: Any) -> list[str]:
+    offenders: list[str] = []
+    for cls in classes:
+        label = f"{cls.__module__}.{cls.__name__}"
+        if hasattr(cls, "model_fields"):
+            field_names = cls.model_fields.keys()
+        elif hasattr(cls, "__table__"):
+            field_names = (c.name for c in cls.__table__.columns)
+        else:
+            continue
+        for name in field_names:
+            if name in _ALLOWED_FIELD_NAMES:
+                continue
+            if _FORBIDDEN.search(name):
+                offenders.append(f"{label}.{name}")
+    return offenders
+
+
 def test_simpress_schemas_have_no_secret_field_names() -> None:
     offenders: list[str] = []
     for mod in _iter_simpress_schema_model_modules():
         for name in _field_names_from_module(mod):
+            if name in _ALLOWED_FIELD_NAMES:
+                continue
             if _FORBIDDEN.search(name):
                 offenders.append(f"{mod.__name__}.{name}")
     assert offenders == [], f"secret-like fields found: {offenders}"
+
+
+def test_audit_schema_and_model_have_no_secret_field_names() -> None:
+    from app.simpress.db.models import MessageAudit
+    from app.simpress.schemas.audit import MessageAuditRead
+
+    offenders = _secret_like_field_names(MessageAudit, MessageAuditRead)
+    assert offenders == [], f"audit secret-like fields: {offenders}"
 
 
 def test_simpress_package_has_no_users_departments_fk_imports() -> None:
@@ -62,3 +93,13 @@ def test_health_body_keys_are_slim_and_secret_free(simpress_client_on: TestClien
     assert keys <= _ALLOWED_HEALTH_KEYS
     for key in keys:
         assert not _FORBIDDEN.search(key)
+
+
+def test_audit_list_response_has_no_secrets(simpress_client_on: TestClient) -> None:
+    """ISO-02 / D-17 — GET /audit summary must not echo credentials or message body."""
+    r = simpress_client_on.get("/api/v1/simpress/audit")
+    assert r.status_code == 200, r.text
+    payload = json.dumps(r.json())
+    assert "ZAP_API_KEY" not in payload
+    assert "pytest-secret-password-value" not in payload
+    assert not re.search(r"message_body|body_text", payload, re.I)

@@ -1,122 +1,122 @@
 [
   {
     "id": "new-01",
-    "body": "[01] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Ola! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
   },
   {
     "id": "new-02",
-    "body": "[02] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Prezado(a), encaminhamos a fatura NF {invoice_number}, valor R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "new-03",
-    "body": "[03] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Bom dia! Disponibilizamos o documento de cobranca NF {invoice_number}, R$ {amount}, com vencimento em {due_date}. Ref: {reference} — {cnpj_name}."
   },
   {
     "id": "new-04",
-    "body": "[04] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Informamos que a NF {invoice_number} no valor de R$ {amount} vence em {due_date}. Referencia {reference}. Empresa: {cnpj_name}."
   },
   {
     "id": "new-05",
-    "body": "[05] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Segue, conforme combinado, a fatura {invoice_number} (R$ {amount}), vencimento {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "new-06",
-    "body": "[06] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Encaminhamos o boleto referente a NF {invoice_number}, total R$ {amount}, data limite {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "new-07",
-    "body": "[07] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "A fatura numero {invoice_number}, no valor de R$ {amount}, tem vencimento em {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "new-08",
-    "body": "[08] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Documento de cobranca: NF {invoice_number}, R$ {amount}, venc. {due_date}. Competencia {reference}. Titular: {cnpj_name}."
   },
   {
     "id": "new-09",
-    "body": "[09] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Enviamos o titulo da NF {invoice_number} (R$ {amount}) com vencimento {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "new-10",
-    "body": "[10] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Por gentileza, observe a NF {invoice_number}: R$ {amount}, vencimento {due_date}. Referencia {reference} ({cnpj_name})."
   },
   {
     "id": "new-11",
-    "body": "[11] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Cobranca registrada: NF {invoice_number}, valor R$ {amount}, venc. {due_date}. Ref: {reference} — {cnpj_name}."
   },
   {
     "id": "new-12",
-    "body": "[12] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Segue anexo o boleto da nota {invoice_number} (R$ {amount}), valido ate {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "new-13",
-    "body": "[13] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Notificamos a emissao da NF {invoice_number}, R$ {amount}, com vencimento em {due_date}. Ref: {reference} — {cnpj_name}."
   },
   {
     "id": "new-14",
-    "body": "[14] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Fatura {invoice_number} disponivel: R$ {amount}, vencimento {due_date}. Competencia {reference}. Cliente: {cnpj_name}."
   },
   {
     "id": "new-15",
-    "body": "[15] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "O titulo NF {invoice_number} (R$ {amount}) vence em {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "new-16",
-    "body": "[16] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Conforme faturamento, segue NF {invoice_number}, total R$ {amount}, venc. {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "new-17",
-    "body": "[17] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Lancamento referente a NF {invoice_number}, R$ {amount}, data de vencimento {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "new-18",
-    "body": "[18] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Disponibilizamos para pagamento a NF {invoice_number} (R$ {amount}), vencimento {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "new-19",
-    "body": "[19] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Registro de cobranca NF {invoice_number}: R$ {amount}, venc. {due_date}. Competencia {reference} — {cnpj_name}."
   },
   {
     "id": "new-20",
-    "body": "[20] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Envio da fatura {invoice_number}, valor R$ {amount}, com prazo ate {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "new-21",
-    "body": "[21] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Titulo emitido: NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref: {reference} — {cnpj_name}."
   },
   {
     "id": "new-22",
-    "body": "[22] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "A NF {invoice_number} no montante de R$ {amount} vence dia {due_date}. Referencia {reference}. {cnpj_name}."
   },
   {
     "id": "new-23",
-    "body": "[23] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Segue cobranca da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "new-24",
-    "body": "[24] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Faturamento {reference}: NF {invoice_number}, R$ {amount}, vencimento {due_date}. Empresa {cnpj_name}."
   },
   {
     "id": "new-25",
-    "body": "[25] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Documento fiscal {invoice_number}, total R$ {amount}, vencimento em {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "new-26",
-    "body": "[26] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Informamos o vencimento da NF {invoice_number} (R$ {amount}) em {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "new-27",
-    "body": "[27] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Boleto da nota fiscal {invoice_number}, R$ {amount}, valido ate {due_date}. Competencia {reference}. {cnpj_name}."
   },
   {
     "id": "new-28",
-    "body": "[28] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Encaminhamento da NF {invoice_number}: R$ {amount}, venc. {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "new-29",
-    "body": "[29] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Cobranca referente a {reference}: NF {invoice_number}, R$ {amount}, vencimento {due_date}. {cnpj_name}."
   },
   {
     "id": "new-30",
-    "body": "[30] Olá! Segue o boleto da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} — {cnpj_name}."
+    "body": "Segue, para ciencia, NF {invoice_number} (R$ {amount}) com vencimento {due_date}. Ref: {reference} — {cnpj_name}."
   }
 ]

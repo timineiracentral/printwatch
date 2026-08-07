@@ -1,122 +1,122 @@
 [
   {
     "id": "reminded_10d-01",
-    "body": "[01] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Segundo lembrete (+10d): NF {invoice_number}, R$ {amount}, venc. {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-02",
-    "body": "[02] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Ha 10 dias da primeira cobranca: NF {invoice_number} (R$ {amount}), vencimento {due_date}. Ref: {reference} — {cnpj_name}."
   },
   {
     "id": "reminded_10d-03",
-    "body": "[03] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Reforco importante: fatura {invoice_number}, R$ {amount}, venc. {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-04",
-    "body": "[04] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "NF {invoice_number} permanece em aberto, R$ {amount}, vencimento {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-05",
-    "body": "[05] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Solicitamos regularizacao da NF {invoice_number} (R$ {amount}), venc. {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "reminded_10d-06",
-    "body": "[06] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Aviso (+10d) titulo {invoice_number}, valor R$ {amount}, venc. {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-07",
-    "body": "[07] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Cobranca em atraso iminente: NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-08",
-    "body": "[08] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Pendencia NF {invoice_number} (R$ {amount}), venc. {due_date}. Competencia {reference} — {cnpj_name}."
   },
   {
     "id": "reminded_10d-09",
-    "body": "[09] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Retorno (+10d) sobre NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-10",
-    "body": "[10] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Favor providenciar pagamento NF {invoice_number}, R$ {amount}, venc. {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "reminded_10d-11",
-    "body": "[11] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Titulo {invoice_number} aguarda quitacao (R$ {amount}), venc. {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-12",
-    "body": "[12] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Segunda rodada de lembrete: NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-13",
-    "body": "[13] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "NF {invoice_number} (R$ {amount}) com vencimento {due_date} segue pendente. Ref: {reference} — {cnpj_name}."
   },
   {
     "id": "reminded_10d-14",
-    "body": "[14] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Reforco de pendencia (+10d): fatura {invoice_number}, R$ {amount}, venc. {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-15",
-    "body": "[15] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Aguardamos retorno sobre NF {invoice_number}, valor R$ {amount}, venc. {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-16",
-    "body": "[16] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Cobranca NF {invoice_number}, R$ {amount}, prazo {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "reminded_10d-17",
-    "body": "[17] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Lembrete reforcado NF {invoice_number} (R$ {amount}), vencimento {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-18",
-    "body": "[18] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Documento {invoice_number} em aberto: R$ {amount}, venc. {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-19",
-    "body": "[19] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Por gentileza, regularize NF {invoice_number}, R$ {amount}, venc. {due_date}. Ref: {reference} — {cnpj_name}."
   },
   {
     "id": "reminded_10d-20",
-    "body": "[20] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Acompanhamento (+10d) fatura {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-21",
-    "body": "[21] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Titulo NF {invoice_number} (R$ {amount}) vence em {due_date} — pendencia ativa. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-22",
-    "body": "[22] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Segunda notificacao NF {invoice_number}, R$ {amount}, venc. {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "reminded_10d-23",
-    "body": "[23] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Pendencia de cobranca (+10d): NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-24",
-    "body": "[24] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "NF {invoice_number} aguarda pagamento (R$ {amount}), venc. {due_date}. Ref {reference} — {cnpj_name}."
   },
   {
     "id": "reminded_10d-25",
-    "body": "[25] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Reforco educado (+10d) NF {invoice_number}, R$ {amount}, venc. {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-26",
-    "body": "[26] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Fatura {invoice_number} (R$ {amount}) com vencimento {due_date} nao quitada. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-27",
-    "body": "[27] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Solicitacao de pagamento NF {invoice_number}, R$ {amount}, venc. {due_date}. Ref: {reference} — {cnpj_name}."
   },
   {
     "id": "reminded_10d-28",
-    "body": "[28] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Cobranca em follow-up: NF {invoice_number}, R$ {amount}, vencimento {due_date}. Ref {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-29",
-    "body": "[29] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Retorno sobre titulo {invoice_number} (R$ {amount}), venc. {due_date}. Ref: {reference} ({cnpj_name})."
   },
   {
     "id": "reminded_10d-30",
-    "body": "[30] Segundo lembrete (+10d): fatura {invoice_number} — R$ {amount}, venc. {due_date}. {cnpj_name} / {reference}."
+    "body": "Lembrete (+10d) NF {invoice_number}, valor R$ {amount}, venc. {due_date}. Ref {reference} — {cnpj_name}."
   }
 ]

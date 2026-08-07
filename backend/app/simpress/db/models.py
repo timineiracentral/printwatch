@@ -1,9 +1,20 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Numeric, String, Text, UniqueConstraint
+from sqlalchemy import (
+    Boolean,
+    Date,
+    DateTime,
+    ForeignKey,
+    Integer,
+    Numeric,
+    String,
+    Text,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.simpress.db.base import SimpressBase
@@ -77,6 +88,10 @@ class Invoice(SimpressBase):
     due_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     reference: Mapped[str | None] = mapped_column(String(255), nullable=True)
     zip_token: Mapped[str | None] = mapped_column(String(64), nullable=True, unique=True)
+    reminder_stage: Mapped[str] = mapped_column(
+        String(32), nullable=False, server_default=text("'new'")
+    )
+    launch_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
@@ -102,3 +117,40 @@ class SyncRun(SimpressBase):
     zips_downloaded: Mapped[int] = mapped_column(nullable=False, default=0)
     cnpj_warnings_json: Mapped[str | None] = mapped_column(Text, nullable=True)
     errors_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+
+class SendClaim(SimpressBase):
+    __tablename__ = "send_claims"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    invoice_id: Mapped[int] = mapped_column(ForeignKey("invoices.id"), nullable=False)
+    contact_id: Mapped[int] = mapped_column(ForeignKey("contacts.id"), nullable=False)
+    stage: Mapped[str] = mapped_column(String(32), nullable=False)
+    part: Mapped[str] = mapped_column(String(16), nullable=False)
+    provider_message_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint(
+            "invoice_id", "stage", "contact_id", "part", name="uq_send_claim"
+        ),
+    )
+
+
+class MessageAudit(SimpressBase):
+    __tablename__ = "message_audit"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    channel: Mapped[str] = mapped_column(String(32), nullable=False)
+    part: Mapped[str] = mapped_column(String(16), nullable=False)
+    stage: Mapped[str] = mapped_column(String(32), nullable=False)
+    contact_id: Mapped[int | None] = mapped_column(
+        ForeignKey("contacts.id"), nullable=True
+    )
+    contact_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    contact_phone: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    outcome: Mapped[str] = mapped_column(String(8), nullable=False)
+    http_status: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    provider_message_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    variant_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)

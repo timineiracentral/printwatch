@@ -77,3 +77,50 @@ def test_sync_fake_nao_altera_print_jobs_nem_core_paths(
     assert str(simpress_docs_path.parent) in simpress_db_path
     assert not any(simpress_docs_path.rglob("*.pdf"))
 
+
+def test_remind_batch_nao_altera_core_print_jobs(
+    simpress_session,
+    simpress_docs_path: Path,
+    fake_zap,
+    count_core_rows: Callable[[str], int],
+) -> None:
+    try:
+        send_pipeline = importlib.import_module("app.simpress.services.send_pipeline")
+    except ModuleNotFoundError as exc:
+        pytest.fail(f"send_pipeline não implementado: {exc}")
+
+    from tests.conftest_simpress import _seed_remind_pipeline
+
+    _seed_remind_pipeline(simpress_session, simpress_docs_path)
+
+    jobs_before = count_core_rows("print_jobs")
+
+    async def _instant_sleep(_seconds: float) -> None:
+        return None
+
+    asyncio.run(
+        send_pipeline.run_remind_batch(
+            simpress_session,
+            zap_factory=lambda: fake_zap,
+            sleep=_instant_sleep,
+        )
+    )
+
+    assert count_core_rows("print_jobs") == jobs_before
+
+
+def test_remind_modules_nao_importam_app_db() -> None:
+    """Grep gate: send/audit/cadence/zapresponder isolados de app.db (ISO-01)."""
+    root = Path(__file__).resolve().parents[1] / "app" / "simpress"
+    targets = [
+        root / "services" / "send_pipeline.py",
+        root / "services" / "audit_service.py",
+        root / "services" / "cadence_service.py",
+        root / "clients" / "zapresponder.py",
+    ]
+    pattern = "from app.db"
+    for path in targets:
+        text = path.read_text(encoding="utf-8")
+        assert pattern not in text, f"{path.name} importa app.db"
+        assert "import app.db" not in text, f"{path.name} importa app.db"
+

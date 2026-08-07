@@ -1,9 +1,10 @@
 """Regras de fatura Simpress — upsert, lista aberta, fechamento (SYNC-02)."""
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 from typing import Any, Optional
+from zoneinfo import ZoneInfo
 
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
@@ -13,12 +14,19 @@ from app.simpress.services import document_store
 
 OPEN_STATUSES = frozenset({"Vencido", "A Vencer"})
 CLOSED_STATUSES = frozenset({"Pago", "Cancelado"})
+_TZ = ZoneInfo("America/Sao_Paulo")
 
 
 def _utc_now() -> datetime:
     from datetime import timezone
 
     return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+def _sp_today() -> date:
+    from datetime import timezone
+
+    return datetime.now(timezone.utc).astimezone(_TZ).date()
 
 
 def _parse_dt(value: Any) -> datetime | None:
@@ -84,6 +92,8 @@ def upsert_open_invoice(db: Session, cnpj_id: int, cnpj_digits: str, row: dict[s
             due_at=_parse_dt(row.get("dataVencimento")),
             reference=(str(row["referencia"]).strip() if row.get("referencia") else None),
             zip_token=None,
+            reminder_stage="new",
+            launch_date=_sp_today(),
             created_at=now,
             updated_at=now,
         )

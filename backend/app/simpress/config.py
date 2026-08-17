@@ -20,6 +20,8 @@ class SimpressSettings:
     zap_base_url: str = os.environ.get(
         "ZAP_BASE_URL", "https://api.zapresponder.com.br"
     )
+    # ISO-02: webhook auth secret — env only, never on Invoice/schemas/UI
+    webhook_secret: str = os.environ.get("SIMPRESS_WEBHOOK_SECRET", "")
 
 
 simpress_settings = SimpressSettings()

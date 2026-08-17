@@ -92,6 +92,19 @@ class Invoice(SimpressBase):
         String(32), nullable=False, server_default=text("'new'")
     )
     launch_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    # Phase 19 SoT — portal_paid is derived from status, not a column (D-04)
+    admin_settled: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False, server_default=text("0")
+    )
+    user_paid_pending_recheck: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False, server_default=text("0")
+    )
+    user_paid_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    user_paid_contact_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    recheck_after: Mapped[date | None] = mapped_column(Date, nullable=True)
+    confirm_cycle: Mapped[int] = mapped_column(
+        Integer, default=0, nullable=False, server_default=text("0")
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 

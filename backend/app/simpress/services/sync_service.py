@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 
 from app.simpress.db.models import SyncRun
 from app.simpress.cnpj_id import normalize_cnpj
-from app.simpress.services import cnpjs_service, document_store, invoices_service
+from app.simpress.services import cnpjs_service, document_store, invoices_service, paid_service
 
 try:
     from app.simpress.clients.simpress_portal import SimpressPortalClient
@@ -60,7 +60,12 @@ def _sanitize_error(msg: str) -> str:
     text = str(msg)[:500]
     for pat in _SECRET_PATTERNS:
         text = pat.sub("[redacted]", text)
-    for env_key in ("SIMPRESS_EMAIL", "SIMPRESS_PASSWORD", "ZAP_API_KEY"):
+    for env_key in (
+        "SIMPRESS_EMAIL",
+        "SIMPRESS_PASSWORD",
+        "ZAP_API_KEY",
+        "SIMPRESS_WEBHOOK_SECRET",
+    ):
         import os
 
         val = os.environ.get(env_key, "")
@@ -166,9 +171,16 @@ async def run_sync(
                                         document_store.save_zip(db, inv, raw)
                                         zips_downloaded += 1
                                 elif status in invoices_service.CLOSED_STATUSES:
-                                    invoices_service.mark_closed_and_purge_zip(
-                                        db, row, status
+                                    contract_code, invoice_number = (
+                                        invoices_service._portal_keys(row)
                                     )
+                                    inv = invoices_service._find_invoice(
+                                        db, contract_code, invoice_number
+                                    )
+                                    if inv is not None:
+                                        paid_service.on_portal_paid(
+                                            db, inv, status=status
+                                        )
                             if page * page_size >= total:
                                 break
                             page += 1

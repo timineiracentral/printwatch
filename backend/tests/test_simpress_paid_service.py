@@ -52,23 +52,33 @@ def _signals(
     )
 
 
-def _seed_open_invoice(db: Any, *, zip_bytes: bytes | None = DEFAULT_ZIP_BYTES) -> Any:
+def _seed_open_invoice(
+    db: Any,
+    *,
+    zip_bytes: bytes | None = DEFAULT_ZIP_BYTES,
+    invoice_number: str = "NF-PAID-01",
+    cnpj_digits: str | None = None,
+) -> Any:
     from app.simpress.db.models import Cnpj, Invoice
+    from sqlalchemy import select
 
     now = datetime.now(timezone.utc).replace(tzinfo=None)
-    cnpj = Cnpj(
-        cnpj="11222333000181",
-        name="Paid SoT",
-        is_active=True,
-        created_at=now,
-        updated_at=now,
-    )
-    db.add(cnpj)
-    db.flush()
+    digits = cnpj_digits or "11222333000181"
+    cnpj = db.scalars(select(Cnpj).where(Cnpj.cnpj == digits)).first()
+    if cnpj is None:
+        cnpj = Cnpj(
+            cnpj=digits,
+            name="Paid SoT",
+            is_active=True,
+            created_at=now,
+            updated_at=now,
+        )
+        db.add(cnpj)
+        db.flush()
     inv = Invoice(
         cnpj_id=cnpj.id,
         contract_code="CTR-PAID",
-        invoice_number="NF-PAID-01",
+        invoice_number=invoice_number,
         cnpj=cnpj.cnpj,
         status="Vencido",
         amount=Decimal("100.00"),
@@ -143,10 +153,8 @@ def test_soft_to_hard_promote_clears_recheck(simpress_session: Any) -> None:
 def test_open_list_rules(simpress_session: Any) -> None:
     ps = _paid_service()
     invs = _invoices_service()
-    soft = _seed_open_invoice(simpress_session)
-    hard = _seed_open_invoice(simpress_session)
-    hard.invoice_number = "NF-PAID-HARD"
-    simpress_session.commit()
+    soft = _seed_open_invoice(simpress_session, invoice_number="NF-PAID-SOFT")
+    hard = _seed_open_invoice(simpress_session, invoice_number="NF-PAID-HARD")
 
     ps.apply_user_pago(
         simpress_session,
@@ -178,8 +186,8 @@ def test_apply_user_pago_sole_confirm_cycle_owner(simpress_session: Any) -> None
     assert inv.confirm_cycle == before + 1
     assert inv.recheck_after == date(2026, 8, 3) + __import__("datetime").timedelta(days=7)
     assert inv.user_paid_at is not None
-    # D-16: +7 from America/Sao_Paulo calendar click day
-    assert inv.recheck_after.tzinfo is None or inv.recheck_after  # date, not datetime
+    # D-16: +7 from America/Sao_Paulo calendar click day (date, not datetime)
+    assert isinstance(inv.recheck_after, date)
 
 
 def test_admin_settle_is_hard_and_purges(simpress_session: Any) -> None:

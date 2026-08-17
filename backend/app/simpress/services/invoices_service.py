@@ -129,9 +129,13 @@ def mark_closed_and_purge_zip(db: Session, row: dict[str, Any], status: str) -> 
 
 
 def list_open_invoices(db: Session, q: Optional[str] = None) -> list[Invoice]:
+    # D-07/D-08: exclude admin_settled; soft-pending stays on open list
     stmt = (
         select(Invoice)
-        .where(Invoice.status.in_(tuple(OPEN_STATUSES)))
+        .where(
+            Invoice.status.in_(tuple(OPEN_STATUSES)),
+            Invoice.admin_settled.is_(False),
+        )
         .order_by(Invoice.due_at.asc().nullslast(), Invoice.invoice_number.asc())
     )
     if q:

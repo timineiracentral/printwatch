@@ -1,0 +1,13 @@
+{
+  "note": "Placeholder inbound Zap Pago sample — replace with redacted live capture from spike 004 in plan 19-00b",
+  "provider": "zapresponder",
+  "event": "button_reply",
+  "message_id": "fake-msg-pago-0001",
+  "from": "5511999999999",
+  "number": "5511999999999",
+  "button": {
+    "label": "Pago",
+    "text": "Pago"
+  },
+  "timestamp": "2026-08-17T12:00:00Z"
+}

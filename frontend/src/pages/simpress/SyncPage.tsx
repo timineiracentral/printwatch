@@ -78,7 +78,7 @@ export function SyncPage() {
       />
 
       {flash ? (
-        <div className="mb-4 rounded-lg border border-[var(--accent)] bg-[var(--accent-tint)] px-4 py-2 text-sm text-[var(--accent)]">
+        <div className="mb-4 rounded-lg border border-[#F5D90A] bg-[#FFF8E6] px-4 py-2 text-sm text-[#8A6D00]">
           {flash}
         </div>
       ) : null}
@@ -119,16 +119,22 @@ export function SyncPage() {
         ) : (
           <>
             <div className="mb-4 flex flex-wrap items-center gap-2">
-              {summary.ok ? (
-                <Badge>Concluída com sucesso</Badge>
+              {inProgress ? (
+                <span className="text-sm text-[var(--text-secondary)]">Sincronizando...</span>
               ) : (
-                <Badge variant="warning">Concluída com erros</Badge>
+                <>
+                  {summary.ok ? (
+                    <Badge>Concluída com sucesso</Badge>
+                  ) : (
+                    <Badge variant="warning">Concluída com erros</Badge>
+                  )}
+                  {summary.finished_at ? (
+                    <span className="text-sm text-[var(--text-secondary)]">
+                      Concluída em {formatDateTime(summary.finished_at)}
+                    </span>
+                  ) : null}
+                </>
               )}
-              {summary.finished_at ? (
-                <span className="text-sm text-[var(--text-secondary)]">
-                  Concluída em {formatDateTime(summary.finished_at)}
-                </span>
-              ) : null}
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
@@ -173,13 +179,11 @@ export function SyncPage() {
                 </ul>
               </div>
             ) : null}
-            <div className="mt-4">
-              <h3 className="mb-2 text-xs font-medium uppercase text-[var(--text-secondary)]">
-                Erros
-              </h3>
-              {summary.errors.length === 0 ? (
-                <p className="text-sm text-[var(--text-secondary)]">Nenhum erro registrado.</p>
-              ) : (
+            {summary.errors.length > 0 ? (
+              <div className="mt-4">
+                <h3 className="mb-2 text-xs font-medium uppercase text-[var(--text-secondary)]">
+                  Erros
+                </h3>
                 <ul
                   role="alert"
                   className="list-inside list-disc space-y-1 text-sm text-[var(--destructive)]"
@@ -188,13 +192,13 @@ export function SyncPage() {
                     <li key={i}>{truncateError(e)}</li>
                   ))}
                 </ul>
-              )}
-              {hiddenErrors > 0 ? (
-                <p className="mt-2 text-xs text-[var(--text-tertiary)]">
-                  + {hiddenErrors} erros
-                </p>
-              ) : null}
-            </div>
+                {hiddenErrors > 0 ? (
+                  <p className="mt-2 text-xs text-[var(--text-tertiary)]">
+                    + {hiddenErrors} erros
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
           </>
         )}
       </section>

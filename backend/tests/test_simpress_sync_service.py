@@ -5,6 +5,7 @@ import asyncio
 import importlib
 import json
 import os
+from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
@@ -317,3 +318,70 @@ def test_erro_sanitizado_limita_cinco_e_finaliza_resumo(
     blob = json.dumps(errors, ensure_ascii=False)
     assert os.environ["SIMPRESS_EMAIL"] not in blob
     assert os.environ["SIMPRESS_PASSWORD"] not in blob
+
+
+def test_mark_closed_paid_atualiza_datas_e_purga(
+    simpress_session: Any, fake_portal: FakePortal, simpress_docs_path: Path
+) -> None:
+    _seed_cnpj(simpress_session)
+    fake_portal.rows_by_cnpj[_VALID_CNPJ] = [
+        portal_row(numero_nota="NF-CLOSE-DATES", status="Vencido")
+    ]
+    _run_sync(simpress_session, fake_portal)
+    stored = _invoice_by_nota(simpress_session, "NF-CLOSE-DATES")
+    assert stored is not None
+    zip_path = simpress_docs_path / f"{stored.zip_token}.zip"
+    assert zip_path.is_file()
+
+    invoices = _invoices_service()
+    closed = invoices.mark_closed_and_purge_zip(
+        simpress_session,
+        portal_row(
+            numero_nota="NF-CLOSE-DATES",
+            status="Pago",
+            data_emissao="2026-08-01T00:00:00",
+            data_vencimento="2026-09-01T00:00:00",
+        ),
+        "Pago",
+    )
+    assert closed is not None
+    assert closed.status == "Pago"
+    assert closed.issued_at == datetime(2026, 8, 1)
+    assert closed.due_at == datetime(2026, 9, 1)
+    assert closed.zip_token is None
+    assert not zip_path.exists()
+    assert invoices.mark_closed_and_purge_zip(
+        simpress_session,
+        portal_row(numero_nota="NF-NEVER", status="Cancelado"),
+        "Cancelado",
+    ) is None
+    assert _invoice_by_nota(simpress_session, "NF-NEVER") is None
+    open_notas = {inv.invoice_number for inv in _open_invoices(simpress_session)}
+    assert "NF-CLOSE-DATES" not in open_notas
+
+
+def test_status_codigo_textual_vencido_e_pago(
+    simpress_session: Any, fake_portal: FakePortal, simpress_docs_path: Path
+) -> None:
+    _seed_cnpj(simpress_session)
+    fake_portal.rows_by_cnpj[_VALID_CNPJ] = [
+        portal_row(numero_nota="NF-CODE", status="1"),
+        portal_row(numero_nota="NF-SOON-CODE", status="2"),
+    ]
+    _run_sync(simpress_session, fake_portal)
+
+    opened = _invoice_by_nota(simpress_session, "NF-CODE")
+    soon = _invoice_by_nota(simpress_session, "NF-SOON-CODE")
+    assert opened is not None and opened.status == "Vencido"
+    assert soon is not None and soon.status == "A Vencer"
+    assert opened.zip_token is not None
+
+    fake_portal.rows_by_cnpj[_VALID_CNPJ] = [
+        portal_row(numero_nota="NF-CODE", status="3"),
+        portal_row(numero_nota="NF-NEW-CANC", status="4"),
+    ]
+    _run_sync(simpress_session, fake_portal)
+    simpress_session.refresh(opened)
+    assert opened.status == "Pago"
+    assert opened.zip_token is None
+    assert _invoice_by_nota(simpress_session, "NF-NEW-CANC") is None

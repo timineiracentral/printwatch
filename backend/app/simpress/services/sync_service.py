@@ -171,15 +171,12 @@ async def run_sync(
                                         document_store.save_zip(db, inv, raw)
                                         zips_downloaded += 1
                                 elif status in invoices_service.CLOSED_STATUSES:
-                                    contract_code, invoice_number = (
-                                        invoices_service._portal_keys(row)
+                                    closed = invoices_service.mark_closed_and_purge_zip(
+                                        db, row, status
                                     )
-                                    inv = invoices_service._find_invoice(
-                                        db, contract_code, invoice_number
-                                    )
-                                    if inv is not None:
+                                    if closed is not None:
                                         paid_service.on_portal_paid(
-                                            db, inv, status=status
+                                            db, closed, status=status
                                         )
                             if page * page_size >= total:
                                 break

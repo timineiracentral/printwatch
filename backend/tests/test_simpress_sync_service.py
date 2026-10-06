@@ -415,3 +415,32 @@ def test_sync_paid_atualiza_datas_e_limpa_soft_pending(
     assert stored.due_at == datetime(2026, 9, 20)
     assert stored.zip_token is None
     assert stored.user_paid_pending_recheck is False
+
+
+def test_single_flight_segundo_caller_recebe_sync_in_progress(
+    simpress_session: Any, fake_portal: FakePortal
+) -> None:
+    sync_service = _sync_service()
+    _seed_cnpj(simpress_session)
+    fake_portal.rows_by_cnpj[_VALID_CNPJ] = [portal_row()]
+    fake_portal.block_listing()
+
+    async def _go() -> None:
+        first = asyncio.create_task(
+            sync_service.run_sync(simpress_session, portal_factory=lambda: fake_portal)
+        )
+        await asyncio.sleep(0.05)
+        try:
+            with pytest.raises(sync_service.SyncInProgress):
+                await sync_service.run_sync(
+                    simpress_session, portal_factory=lambda: fake_portal
+                )
+            assert fake_portal.contracts_called == 1
+            assert sync_service.is_sync_running() is True
+        finally:
+            fake_portal.unblock_listing()
+            await first
+
+    asyncio.run(_go())
+    assert fake_portal.contracts_called == 1
+    assert sync_service.is_sync_running() is False

@@ -7,6 +7,7 @@ export interface ConfirmDialogProps {
   message: string
   confirmLabel?: string
   loading?: boolean
+  destructive?: boolean
   onConfirm: () => void
   onClose: () => void
 }
@@ -17,6 +18,7 @@ export function ConfirmDialog({
   message,
   confirmLabel = 'Desativar',
   loading,
+  destructive,
   onConfirm,
   onClose,
 }: ConfirmDialogProps) {
@@ -31,7 +33,7 @@ export function ConfirmDialog({
             Cancelar
           </Button>
           <Button
-            variant="primary"
+            variant={destructive ? 'destructive' : 'primary'}
             onClick={onConfirm}
             disabled={loading}
             aria-busy={loading}

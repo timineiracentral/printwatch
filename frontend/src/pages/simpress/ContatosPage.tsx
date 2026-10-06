@@ -201,9 +201,10 @@ export function ContatosPage() {
         title="Desativar contato"
         message={
           confirmError ??
-          'O contato será marcado como inativo e deixará de aparecer nas listas.'
+          'O contato fica inativo e deixa de aparecer nas listas.'
         }
         confirmLabel="Desativar contato"
+        destructive
         loading={deactivate.isPending}
         onConfirm={() => {
           if (confirmId == null) return

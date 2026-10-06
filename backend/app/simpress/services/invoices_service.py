@@ -14,6 +14,7 @@ from app.simpress.services import document_store
 
 OPEN_STATUSES = frozenset({"Vencido", "A Vencer"})
 CLOSED_STATUSES = frozenset({"Pago", "Cancelado"})
+_STATUS_BY_CODE = {1: "Vencido", 2: "A Vencer", 3: "Pago", 4: "Cancelado"}
 _TZ = ZoneInfo("America/Sao_Paulo")
 
 
@@ -43,14 +44,15 @@ def _parse_dt(value: Any) -> datetime | None:
 
 
 def _normalize_status(raw: Any) -> str | None:
-    if raw is None:
+    if raw is None or isinstance(raw, bool):
         return None
     if isinstance(raw, int):
-        mapping = {1: "Vencido", 2: "A Vencer", 3: "Pago", 4: "Cancelado"}
-        return mapping.get(raw)
+        return _STATUS_BY_CODE.get(raw)
     text = str(raw).strip()
     if text in OPEN_STATUSES or text in CLOSED_STATUSES:
         return text
+    if text.isdigit():
+        return _STATUS_BY_CODE.get(int(text))
     return None
 
 
@@ -122,6 +124,12 @@ def mark_closed_and_purge_zip(db: Session, row: dict[str, Any], status: str) -> 
     if inv is None:
         return None
     inv.status = status
+    issued = _parse_dt(row.get("dataEmissao"))
+    due = _parse_dt(row.get("dataVencimento"))
+    if issued is not None:
+        inv.issued_at = issued
+    if due is not None:
+        inv.due_at = due
     inv.updated_at = _utc_now()
     document_store.delete_zip(db, inv)
     db.refresh(inv)

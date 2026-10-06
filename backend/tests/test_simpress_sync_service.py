@@ -385,3 +385,33 @@ def test_status_codigo_textual_vencido_e_pago(
     assert opened.status == "Pago"
     assert opened.zip_token is None
     assert _invoice_by_nota(simpress_session, "NF-NEW-CANC") is None
+
+
+def test_sync_paid_atualiza_datas_e_limpa_soft_pending(
+    simpress_session: Any, fake_portal: FakePortal
+) -> None:
+    _seed_cnpj(simpress_session)
+    fake_portal.rows_by_cnpj[_VALID_CNPJ] = [
+        portal_row(numero_nota="NF-SYNC-CLOSE", status="Vencido")
+    ]
+    _run_sync(simpress_session, fake_portal)
+    stored = _invoice_by_nota(simpress_session, "NF-SYNC-CLOSE")
+    assert stored is not None
+    stored.user_paid_pending_recheck = True
+    simpress_session.commit()
+
+    fake_portal.rows_by_cnpj[_VALID_CNPJ] = [
+        portal_row(
+            numero_nota="NF-SYNC-CLOSE",
+            status="Pago",
+            data_emissao="2026-08-02T00:00:00",
+            data_vencimento="2026-09-20T00:00:00",
+        )
+    ]
+    _run_sync(simpress_session, fake_portal)
+    simpress_session.refresh(stored)
+    assert stored.status == "Pago"
+    assert stored.issued_at == datetime(2026, 8, 2)
+    assert stored.due_at == datetime(2026, 9, 20)
+    assert stored.zip_token is None
+    assert stored.user_paid_pending_recheck is False

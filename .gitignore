@@ -72,3 +72,6 @@ backend/scripts/smoke_*.py
 .cursor/
 
 .docs/
+
+.gsd/
+.planning/

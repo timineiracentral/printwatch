@@ -68,7 +68,7 @@ completed: 2026-08-05
 2. **Task 2: Especificar storage e rota ZIP pública segura** - `96d9695`
 3. **Task 3: Especificar API single-flight, diagnóstico e isolamento** - `89146e9`
 
-**Plan metadata:** ver commit `docs(17-02)` abaixo
+**Plan metadata:** `4ca9b07` (docs: complete plan summary)
 
 ## Verificação RED
 

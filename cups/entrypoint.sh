@@ -23,6 +23,8 @@ if ! id "${CUPS_ADMIN_USER}" &>/dev/null; then
 fi
 
 mkdir -p /var/log/cups /var/spool/cups
+# Backend TailReader requires page_log at startup; cupsd may not create it until first job.
+touch /var/log/cups/page_log
 
 /usr/sbin/cupsd -t || exit 1
 exec /usr/sbin/cupsd -f

@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 KEYS = ("SIMPRESS_EMAIL", "SIMPRESS_PASSWORD", "ZAP_API_KEY")
-SSH_HOST = "paperclip-vm"
+SSH_HOST = "paperclip"  # SSH config Host; was paperclip-vm (unresolvable)
 REMOTE_DIR = "~/printwatch"
 
 

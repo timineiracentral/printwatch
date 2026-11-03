@@ -52,6 +52,17 @@ services:
       - backend
     restart: unless-stopped
 
+  # Túnel dedicado mineiracentral.org.br (separado do cuts/profbia).
+  # Public Hostname no Zero Trust: printwatch.mineiracentral.org.br → http://nginx:80
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+    depends_on:
+      - nginx
+    restart: unless-stopped
+
 volumes:
   cups_logs:
   cups_spool:

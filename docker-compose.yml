@@ -46,8 +46,9 @@ services:
     build:
       context: .
       dockerfile: nginx/Dockerfile
+    # Host :80 costuma estar ocupado (nginx do host na VM); túnel usa http://nginx:80 na rede Docker.
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - backend
     restart: unless-stopped
